@@ -7,3 +7,4 @@ import { watchLatestCommit } from "./commit-watcher";
 
 if (browserCheck()) init();
 if (DEV) watchLatestCommit();
+// one line of code and commit again
