@@ -216,7 +216,7 @@ export const realityUpgrades = [
     canLock: true,
     lockEvent: () => `purchase a ${formatX(5)} EP upgrade`,
     description: () => `Boost Tachyon Particle gain based on ${formatX(5)} Eternity Point multiplier`,
-    effect: () => Math.max(Math.sqrt(Decimal.log10(EternityUpgrade.epMult.effectValue)) / 9, 1),
+    effect: () => Decimal.max(Decimal.sqrt(Decimal.log10(EternityUpgrade.epMult.effectValue)).div(9), 1).toNumber(),
     formatEffect: value => formatX(value, 2, 2)
   },
   {

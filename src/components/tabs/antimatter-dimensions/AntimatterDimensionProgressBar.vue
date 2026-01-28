@@ -22,7 +22,7 @@ export default {
     update() {
       this.displayPercents = formatPercents(this.fill, 2);
       const setProgress = (current, goal, tooltip) => {
-        this.fill = Math.clampMax(current.pLog10() / Decimal.log10(goal), 1);
+        this.fill = Decimal.clampMax(current.pLog10().div(Decimal.log10(goal)), 1).toNumber();
         this.tooltip = tooltip;
       };
       const setLinearProgress = (current, goal, tooltip) => {
@@ -80,10 +80,10 @@ export default {
           if (player.break) {
             setProgress(Currency.infinityPoints.value, 5e11, "Percentage to second Strike");
           } else {
-            setProgress(Currency.antimatter.value, Decimal.NUMBER_MAX_VALUE, "Percentage to Infinity");
+            setProgress(Currency.antimatter.value, DC.NUMMAX, "Percentage to Infinity");
           }
         } else {
-          setProgress(Currency.antimatter.value, Decimal.NUMBER_MAX_VALUE, "Percentage to first Strike");
+          setProgress(Currency.antimatter.value, DC.NUMMAX, "Percentage to first Strike");
         }
       } else if (Enslaved.isCompleted) {
         // Show all other goals from the top down, starting at features in the highest prestige layer
@@ -103,7 +103,7 @@ export default {
           setProgress(player.infinityPoints, nextID.ipRequirement, text);
         }
       } else {
-        setProgress(Currency.antimatter.value, Decimal.NUMBER_MAX_VALUE, "Percentage to Infinity");
+        setProgress(Currency.antimatter.value, DC.NUMMAX, "Percentage to Infinity");
       }
     }
   }

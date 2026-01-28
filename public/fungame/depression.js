@@ -168,7 +168,7 @@ function load() {
       const cost = new Decimal(saveData.costs[i]);
       const baseCost = Decimal.pow(100, i);
       const costIncrease = cost.dividedBy(baseCost);
-      saveData.purchases[i] = Decimal.floor(Decimal.log2(costIncrease)).max(0);
+      saveData.purchases[i] = Decimal.floor(Decimal.log2(costIncrease)).max(0); 
     }
   }
   game = saveData;

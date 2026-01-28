@@ -100,7 +100,7 @@ export class ECTimeStudyState extends TimeStudyState {
     }
     return this.cachedCurrentRequirement;
   }
-
+  // MOD REFERNCE - PUT IN REQUIREMENT REMOVER HERE
   get allSecondaryRequirementsMet() {
     return Perk.studyECRequirement.isBought || !this.hasForbiddenStudies && this.isEntryGoalMet;
   }

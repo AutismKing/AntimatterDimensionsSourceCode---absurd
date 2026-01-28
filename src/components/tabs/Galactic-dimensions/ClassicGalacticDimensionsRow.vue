@@ -1,0 +1,135 @@
+<script>
+import GenericDimensionRowText from "@/components/GenericDimensionRowText";
+import PrimaryButton from "@/components/PrimaryButton";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
+
+export default {
+  name: "ClassicGalacticDimensionRow",
+  components: {
+    GenericDimensionRowText,
+    PrimaryButton,
+    PrimaryToggleButton
+  },
+  props: {
+    tier: {
+      type: Number,
+      required: true
+    }
+  },
+  data() {
+    return {
+      hasPrevTier: false,
+      isUnlocked: false,
+      canUnlock: false,
+      multiplier: new Decimal(0),
+      baseAmount: 0,
+      amount: new Decimal(0),
+      purchases: 0,
+      rateOfChange: new Decimal(0),
+      cost: new Decimal(0),
+      isAvailableForPurchase: false,
+      isCapped: false,
+      capCP: new Decimal(0),
+      hardcap: GalacticDimensions.HARDCAP_PURCHASES,
+    };
+  },
+  computed: {
+    shiftDown() {
+      return ui.view.shiftDown;
+    },
+    name() {
+      return `${GalacticDimension(this.tier).shortDisplayName} Galactic Dimension`;
+    },
+    costDisplay() {
+      if (this.isUnlocked || this.shiftDown) {
+        if (this.isCapped) return "Capped";
+        return this.showCostTitle ? `Cost: ${format(this.cost)} TetP` : `${format(this.cost)} TetP`;
+      }
+
+      if (this.canUnlock) {
+        return "Unlock";
+      }
+
+      return `Reach ${format(GalacticDimension(this.tier).cpRequirement)} TetP`;
+    },
+    hasLongText() {
+      return this.costDisplay.length > 20;
+    },
+    hardcapPurchases() {
+      return format(this.hardcap, 1, 1);
+    },
+    capTooltip() {
+      if (this.isCapped) return `Cap reached at ${format(this.capTetP)} TetP`;
+      return `Purchased ${quantifyHybridLarge("time", this.purchases)}`;
+    },
+    showRow() {
+      return this.isUnlocked || this.canUnlock || this.amount.gt(0) ||
+        this.hasPrevTier;
+    },
+    showCostTitle() {
+      return this.cost.exponent < 1e5;
+    }
+  },
+  methods: {
+    update() {
+      const tier = this.tier;
+      const dimension = GalacticDimension(tier);
+      this.hasPrevTier = tier === 1 || GalacticDimension(tier - 1).isUnlocked;
+      this.isUnlocked = dimension.isUnlocked;
+      this.canUnlock = dimension.canUnlock;
+      this.multiplier.copyFrom(dimension.multiplier);
+      this.baseAmount = dimension.baseAmount;
+      this.purchases = dimension.purchases;
+      this.amount.copyFrom(dimension.amount);
+      this.rateOfChange.copyFrom(dimension.rateOfChange);
+      this.cost.copyFrom(dimension.cost);
+      this.isAvailableForPurchase = dimension.isAvailableForPurchase;
+      this.isCapped = dimension.isCapped;
+      this.capTetP.copyFrom(dimension.hardcapTetPAmount);
+      this.hardcap.copyFrom(dimension.purchaseCap);
+    },
+    buySingleGalacticDimension() {
+      GalacticDimension(this.tier).buySingle();
+    },
+    buyMaxGalacticDimension() {
+      GalacticDimension(this.tier).buyMax(false);
+    },
+  }
+};
+</script>
+
+<template>
+  <div
+    v-show="showRow"
+    class="c-dimension-row l-dimension-single-row"
+    :class="{ 'c-dim-row--not-reached': !isUnlocked && !canUnlock }"
+  >
+    <GenericDimensionRowText
+      :tier="tier"
+      :name="name"
+      :multiplier-text="formatX(multiplier, 2, 1)"
+      :amount-text="format(amount, 2)"
+      :rate="rateOfChange"
+    />
+    <div class="l-dim-row-multi-button-container">
+      <PrimaryButton
+        :enabled="isAvailableForPurchase || (!isUnlocked && canUnlock)"
+        class="o-primary-btn--buy-cd o-primary-btn--buy-dim c-dim-tooltip-container"
+        :class="{ 'l-dim-row-small-text': hasLongText }"
+        @click="buySingleGalacticDimension"
+      >
+        {{ costDisplay }}
+        <div class="c-dim-purchase-count-tooltip">
+          {{ capTooltip }}
+        </div>
+      </PrimaryButton>
+      <PrimaryButton
+        :enabled="isAvailableForPurchase && isUnlocked"
+        class="o-primary-btn--cd-auto"
+        @click="buyMaxGalacticDimension"
+      >
+        Buy Max
+      </PrimaryButton>
+    </div>
+  </div>
+</template>

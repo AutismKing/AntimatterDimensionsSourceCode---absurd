@@ -154,15 +154,15 @@ export function gainedEternityPoints() {
 }
 
 export function requiredIPForEP(epAmount) {
-  return Decimal.pow10(308 * (Decimal.log(Decimal.divide(epAmount, totalEPMult()), 5) + 0.7))
+  return Decimal.pow10((Decimal.log(Decimal.divide(epAmount, totalEPMult()), 5).add(0.7)).times(308))
     .clampMin(Number.MAX_VALUE);
 }
 
 export function gainedGlyphLevel() {
   const glyphState = getGlyphLevelInputs();
-  let rawLevel = Math.floor(glyphState.rawLevel);
+  let rawLevel = Decimal.floor(glyphState.rawLevel);
   if (!isFinite(rawLevel)) rawLevel = 0;
-  let actualLevel = Math.floor(glyphState.actualLevel);
+  let actualLevel = Decimal.floor(glyphState.actualLevel);
   if (!isFinite(actualLevel)) actualLevel = 0;
   return {
     rawLevel,
@@ -333,7 +333,7 @@ export function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride
           ? blackHole.isActive
           : blackHole.id <= blackHolesActiveOverride;
         if (!isActive) break;
-        factor *= Math.pow(blackHole.power, BlackHoles.unpauseAccelerationFactor);
+        factor *= Decimal.pow(blackHole.power, BlackHoles.unpauseAccelerationFactor);
         factor *= VUnlocks.achievementBH.effectOrDefault(1);
       }
     }
@@ -345,7 +345,7 @@ export function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride
 
   if (effects.includes(GAME_SPEED_EFFECT.TIME_GLYPH)) {
     factor *= getAdjustedGlyphEffect("timespeed");
-    factor = Math.pow(factor, getAdjustedGlyphEffect("effarigblackhole"));
+    factor = Decimal.pow(factor, getAdjustedGlyphEffect("effarigblackhole"));
   }
 
   if (Enslaved.isStoringGameTime && effects.includes(GAME_SPEED_EFFECT.TIME_STORAGE)) {
@@ -359,8 +359,8 @@ export function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride
     if (Effarig.isRunning) {
       factor = Effarig.multiplier(factor).toNumber();
     } else if (Laitela.isRunning) {
-      const nerfModifier = Math.clampMax(Time.thisRealityRealTime.totalMinutes / 10, 1);
-      factor = Math.pow(factor, nerfModifier);
+      const nerfModifier = Decimal.clampMax(Time.thisRealityRealTime.totalMinutes / 10, 1);
+      factor = Decimal.pow(factor, nerfModifier);
     }
   }
 
@@ -369,7 +369,7 @@ export function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride
 
   // 1e-300 is now possible with max inverted BH, going below it would be possible with
   // an effarig glyph.
-  factor = Math.clamp(factor, 1e-300, 1e300);
+  factor = Decimal.clamp(factor, 1e-300, 1e300);
 
   return factor;
 }
@@ -382,7 +382,7 @@ export function getGameSpeedupForDisplay() {
     !BlackHoles.areNegative &&
     !Pelle.isDisabled("blackhole")
   ) {
-    return Math.max(Enslaved.autoReleaseSpeed, speedFactor);
+    return Decimal.max(Enslaved.autoReleaseSpeed, speedFactor);
   }
   return speedFactor;
 }
@@ -436,7 +436,7 @@ export function gameLoop(passDiff, options = {}) {
   let diff = passDiff;
   const thisUpdate = Date.now();
   const realDiff = diff === undefined
-    ? Math.clamp(thisUpdate - player.lastUpdate, 1, 8.64e7)
+    ? Decimal.clamp(thisUpdate - player.lastUpdate, 1, 8.64e7)
     : diff;
   if (!GameStorage.ignoreBackupTimer) player.backupTimer += realDiff;
 
@@ -505,7 +505,7 @@ export function gameLoop(passDiff, options = {}) {
         GAME_SPEED_EFFECT.BLACK_HOLE, GAME_SPEED_EFFECT.SINGULARITY_MILESTONE]);
       const amplification = Ra.unlocks.improvedStoredTime.effects.gameTimeAmplification.effectOrDefault(1);
       const beforeStore = player.celestials.enslaved.stored;
-      player.celestials.enslaved.stored = Math.clampMax(player.celestials.enslaved.stored +
+      player.celestials.enslaved.stored = Decimal.clampMax(player.celestials.enslaved.stored +
         diff * (totalTimeFactor - reducedTimeFactor) * amplification, Enslaved.timeCap);
       Enslaved.currentBlackHoleStoreAmountPerMs = (player.celestials.enslaved.stored - beforeStore) / diff;
       speedFactor = reducedTimeFactor;
@@ -515,7 +515,7 @@ export function gameLoop(passDiff, options = {}) {
     diff *= getGameSpeedupFactor();
     Enslaved.currentBlackHoleStoreAmountPerMs = 0;
   }
-  player.celestials.ra.peakGamespeed = Math.max(player.celestials.ra.peakGamespeed, getGameSpeedupFactor());
+  player.celestials.ra.peakGamespeed = Decimal.max(player.celestials.ra.peakGamespeed, getGameSpeedupFactor());
   Enslaved.isReleaseTick = false;
 
   // These need to all be done consecutively in order to minimize the chance of a reset occurring between real time
@@ -566,7 +566,7 @@ export function gameLoop(passDiff, options = {}) {
   InfinityDimensions.tick(diff);
   AntimatterDimensions.tick(diff);
 
-  const gain = Math.clampMin(FreeTickspeed.fromShards(Currency.timeShards.value).newAmount - player.totalTickGained, 0);
+  const gain = Decimal.clampMin(FreeTickspeed.fromShards(Currency.timeShards.value).newAmount - player.totalTickGained, 0);
   player.totalTickGained += gain;
 
   updatePrestigeRates();
@@ -646,19 +646,19 @@ export function gameLoop(passDiff, options = {}) {
 }
 
 function updatePrestigeRates() {
-  const currentIPmin = gainedInfinityPoints().dividedBy(Math.clampMin(0.0005, Time.thisInfinityRealTime.totalMinutes));
+  const currentIPmin = gainedInfinityPoints().dividedBy(Decimal.clampMin(0.0005, Time.thisInfinityRealTime.totalMinutes));
   if (currentIPmin.gt(player.records.thisInfinity.bestIPmin) && Player.canCrunch) {
     player.records.thisInfinity.bestIPmin = currentIPmin;
     player.records.thisInfinity.bestIPminVal = gainedInfinityPoints();
   }
 
-  const currentEPmin = gainedEternityPoints().dividedBy(Math.clampMin(0.0005, Time.thisEternityRealTime.totalMinutes));
+  const currentEPmin = gainedEternityPoints().dividedBy(Decimal.clampMin(0.0005, Time.thisEternityRealTime.totalMinutes));
   if (currentEPmin.gt(player.records.thisEternity.bestEPmin) && Player.canEternity) {
     player.records.thisEternity.bestEPmin = currentEPmin;
     player.records.thisEternity.bestEPminVal = gainedEternityPoints();
   }
 
-  const currentRSmin = Effarig.shardsGained / Math.clampMin(0.0005, Time.thisRealityRealTime.totalMinutes);
+  const currentRSmin = Effarig.shardsGained / Decimal.clampMin(0.0005, Time.thisRealityRealTime.totalMinutes);
   if (currentRSmin > player.records.thisReality.bestRSmin && isRealityAvailable()) {
     player.records.thisReality.bestRSmin = currentRSmin;
     player.records.thisReality.bestRSminVal = Effarig.shardsGained;
@@ -685,7 +685,7 @@ function passivePrestigeGen() {
     let infGen = DC.D0;
     if (BreakInfinityUpgrade.infinitiedGen.isBought) {
       // Multipliers are done this way to explicitly exclude ach87 and TS32
-      infGen = infGen.plus(0.5 * Time.deltaTimeMs / Math.clampMin(50, player.records.bestInfinity.time));
+      infGen = infGen.plus(0.5 * Time.deltaTimeMs / Decimal.clampMin(50, player.records.bestInfinity.time));
       infGen = infGen.timesEffectsOf(
         RealityUpgrade(5),
         RealityUpgrade(7),
@@ -738,7 +738,7 @@ function laitelaRealityTick(realDiff) {
       realityReward: Laitela.realityReward
     };
     laitelaInfo.thisCompletion = Time.thisRealityRealTime.totalSeconds;
-    laitelaInfo.fastestCompletion = Math.min(laitelaInfo.thisCompletion, laitelaInfo.fastestCompletion);
+    laitelaInfo.fastestCompletion = Decimal.min(laitelaInfo.thisCompletion, laitelaInfo.fastestCompletion);
     clearCelestialRuns();
     if (Time.thisRealityRealTime.totalSeconds < 30) {
       laitelaInfo.difficultyTier++;
@@ -836,13 +836,13 @@ function updateTachyonGalaxies() {
   const tachyonGalaxyMult = Effects.max(1, DilationUpgrade.doubleGalaxies);
   const tachyonGalaxyThreshold = 1000;
   const thresholdMult = getTachyonGalaxyMult();
-  player.dilation.baseTachyonGalaxies = Math.max(player.dilation.baseTachyonGalaxies,
-    1 + Math.floor(Decimal.log(Currency.dilatedTime.value.dividedBy(1000), thresholdMult)));
+  player.dilation.baseTachyonGalaxies = Decimal.max(player.dilation.baseTachyonGalaxies,
+    Decimal.floor(Decimal.log(Currency.dilatedTime.value.dividedBy(1000), thresholdMult)));
   player.dilation.nextThreshold = DC.E3.times(new Decimal(thresholdMult)
     .pow(player.dilation.baseTachyonGalaxies));
   player.dilation.totalTachyonGalaxies =
-    Math.min(player.dilation.baseTachyonGalaxies * tachyonGalaxyMult, tachyonGalaxyThreshold) +
-    Math.max(player.dilation.baseTachyonGalaxies * tachyonGalaxyMult - tachyonGalaxyThreshold, 0) / tachyonGalaxyMult;
+    Decimal.min(player.dilation.baseTachyonGalaxies.times(tachyonGalaxyMult), tachyonGalaxyThreshold).add(
+    Decimal.max(player.dilation.baseTachyonGalaxies.times(tachyonGalaxyMult).sub(tachyonGalaxyThreshold), 0).div(tachyonGalaxyMult));
 
   player.dilation.totalTachyonGalaxies *= DilationUpgrade.galaxyMultiplier.effectValue;
 }
@@ -900,7 +900,7 @@ export function simulateTime(seconds, real, fast) {
   // - Otherwise, tick count will be limited to the offline tick count (which may be set externally during save import)
   // Tick count is never *increased*, and only ever decreased if needed.
   if (seconds < 0) return;
-  let ticks = Math.floor(seconds * 20);
+  let ticks = Decimal.floor(seconds * 20);
   GameUI.notify.showBlackHoles = false;
 
   // Limit the tick count (this also applies if the black hole is unlocked)
@@ -1009,7 +1009,7 @@ export function simulateTime(seconds, real, fast) {
               text: "Speed up",
               condition: (current, max) => max - current > 500,
               click: () => {
-                const newRemaining = Math.clampMin(Math.floor(progress.remaining / 2), 500);
+                const newRemaining = Decimal.clampMin(Decimal.floor(progress.remaining / 2), 500);
                 // We subtract the number of ticks we skipped, which is progress.remaining - newRemaining.
                 // This, and the below similar code in "SKIP", are needed or the progress bar to be accurate
                 // (both with respect to the number of ticks it shows and with respect to how full it is).

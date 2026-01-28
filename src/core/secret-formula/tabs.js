@@ -37,6 +37,16 @@ export const tabs = [
         id: 2,
         hidable: true,
       },
+      {
+        key: "Galactic",
+        name: "Galactic Dimensions",
+        hideAt: 2.5,
+        symbol: "🌌",
+        component: "GalacticDimensionsTab",
+        // not yet condition: () => PlayerProgress.AbsurdityUnlocked(),
+        id: 3,
+        hidable: true,
+      },
     ]
   },
   {
@@ -237,7 +247,7 @@ export const tabs = [
           EternityChallenges.all.some(ec => ec.completions > 0),
         id: 2,
         hidable: true
-      }
+      } //add absurdity challenges
     ],
   },
   {

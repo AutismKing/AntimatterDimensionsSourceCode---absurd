@@ -42,7 +42,8 @@ export function antimatterDimensionCommonMultiplier() {
     AlchemyResource.dimensionality,
     PelleUpgrade.antimatterDimensionMult
   );
-
+  // MOD STARTS HERE
+  //multiplier = multiplier.pow(multiplier) plan: tetrate 1.1 afterwards with BE
   multiplier = multiplier.dividedByEffectOf(InfinityChallenge(6));
   multiplier = multiplier.times(getAdjustedGlyphEffect("powermult"));
   multiplier = multiplier.times(Currency.realityMachines.value.powEffectOf(AlchemyResource.force));
@@ -62,7 +63,7 @@ export function getDimensionFinalMultiplierUncached(tier) {
   }
 
   let multiplier = DC.D1;
-
+  
   multiplier = applyNDMultipliers(multiplier, tier);
   multiplier = applyNDPowers(multiplier, tier);
 
@@ -512,7 +513,7 @@ class AntimatterDimensionState extends DimensionState {
     */
   get isAffordable() {
     if (Laitela.continuumActive) return false;
-    if (!player.break && this.cost.gt(Decimal.NUMBER_MAX_VALUE)) return false;
+    if (!player.break && this.cost.gt(DC.NUMMAX)) return false;
     return this.cost.lte(this.currencyAmount);
   }
 
@@ -520,7 +521,7 @@ class AntimatterDimensionState extends DimensionState {
    * @returns {boolean}
    */
   get isAffordableUntil10() {
-    if (!player.break && this.cost.gt(Decimal.NUMBER_MAX_VALUE)) return false;
+    if (!player.break && this.cost.gt(DC.NUMMAX)) return false;
     return this.costUntil10.lte(this.currencyAmount);
   }
 
@@ -573,7 +574,7 @@ class AntimatterDimensionState extends DimensionState {
     const postBreak = (player.break && !NormalChallenge.isRunning) ||
       InfinityChallenge.isRunning ||
       Enslaved.isRunning;
-    return postBreak ? Decimal.MAX_VALUE : DC.E315;
+    return postBreak ? DC.BEMAX : DC.E315;
   }
 
   get productionPerSecond() {
