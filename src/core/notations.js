@@ -1,4 +1,5 @@
-import * as ADNotations from "@antimatter-dimensions/notations";
+import * as ADLNotations from "adnot-beport-large";
+import * as ADNotations from "adnot-beport-small";
 
 export const Notation = (function() {
   const N = ADNotations;
