@@ -16,8 +16,8 @@ export default {
       const log10GainFactorPerTick = logGainFactorPerTick.dividedBy(Math.LN10);
 
       // The uncapped factor is needed for galaxy speed calculations
-      const log10GainFactorPerTickUncapped = Decimal.divide(getGameSpeedupForDisplay() * updateRateMs *
-        (Math.log(player.replicanti.chance + 1)), getReplicantiInterval(false)).dividedBy(Math.LN10);
+      const log10GainFactorPerTickUncapped = Decimal.divide(getGameSpeedupForDisplay().times(updateRateMs).times(
+        (Math.log(player.replicanti.chance + 1))), getReplicantiInterval(false)).dividedBy(Math.LN10);
 
       const replicantiAmount = Replicanti.amount;
       const isAbove308 = Replicanti.isUncapped && replicantiAmount.log10() > LOG10_MAX_VALUE;
@@ -53,7 +53,7 @@ export default {
       }
 
       const galaxiesPerSecond = log10GainFactorPerTickUncapped.times(ticksPerSecond / LOG10_MAX_VALUE);
-      const timeFromZeroRG = galaxies => 50 * Math.log((galaxies + 49.5) / 49.5);
+      const timeFromZeroRG = galaxies => 50 * Decimal.ln((galaxies.add(49.5)).div(49.5));
       let baseGalaxiesPerSecond, effectiveMaxRG, effectiveCurrentRG;
       if (RealityUpgrade(6).isBought && !Pelle.isDoomed) {
         baseGalaxiesPerSecond = galaxiesPerSecond.divide(RealityUpgrade(6).effectValue);
