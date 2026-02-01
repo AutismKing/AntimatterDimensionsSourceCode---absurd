@@ -1236,7 +1236,7 @@ export const normalAchievements = [
     checkRequirement: () => Currency.realityMachines.gte(DC.NUMMAX),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     reward: "Gain more Reality Machines based on your current Reality Machines.",
-    effect: () => Math.clampMin(1, Currency.realityMachines.value.log2()),
+    effect: () => Decimal.clampMin(1, Currency.realityMachines.value.add(1).log2()),
     formatEffect: value => `${formatX(value, 2, 2)}`
   },
   {
