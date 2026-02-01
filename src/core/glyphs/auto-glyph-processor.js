@@ -241,7 +241,7 @@ function getGlyphLevelSources() {
   const epBase = Math.pow(Math.max(1, eternityPoints.pLog10()), 0.5) * epCoeff;
   const replPow = 0.4 + getAdjustedGlyphEffect("replicationglyphlevel");
   const replCoeff = 0.025;
-  const replBase = Math.pow(Math.max(1, player.records.thisReality.maxReplicanti.log10()), replPow) * replCoeff;
+  const replBase = Math.pow(Math.max(1, player.records.thisReality.maxReplicanti.add(1).log10()), replPow).times(replCoeff).toNumber();
   const dtPow = 1.3 + getAdjustedGlyphEffect("realityDTglyph");
   const dtCoeff = 0.025;
   const dtBase = Math.pow(Math.max(1, player.records.thisReality.maxDT.pLog10()), dtPow) * dtCoeff;

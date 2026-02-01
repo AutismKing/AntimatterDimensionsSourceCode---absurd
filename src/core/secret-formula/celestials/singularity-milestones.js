@@ -203,7 +203,7 @@ export const singularityMilestones = {
     repeat: 0,
     limit: 1,
     description: "Time Theorems boost Dark Matter and Dark Energy gain",
-    effect: () => Decimal.sqrt(Decimal.clampMin((new Decimal(Currency.timeTheorems.value.log10()).sub(1000)).div(50), 1)),
+    effect: () => Decimal.clampMin(new Decimal(Currency.infinitiesTotal.value.max(1).log10()).div(1000), 1),
     effectFormat: x => formatX(x, 2, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_LAITELA,
   },
