@@ -3,13 +3,13 @@ import { DC } from "./constants";
 export function effectiveBaseGalaxies() {
   // Note that this already includes the "50% more" active path effect
   let replicantiGalaxies = Replicanti.galaxies.bought;
-  replicantiGalaxies *= (1 + Effects.sum(
+  replicantiGalaxies = replicantiGalaxies.times(1 + Effects.sum(
     TimeStudy(132),
     TimeStudy(133)
   ));
   // "extra" galaxies unaffected by the passive/idle boosts come from studies 225/226 and Effarig Infinity
   replicantiGalaxies += Replicanti.galaxies.extra;
-  const nonActivePathReplicantiGalaxies = Math.min(Replicanti.galaxies.bought,
+  const nonActivePathReplicantiGalaxies = Decimal.min(Replicanti.galaxies.bought,
     ReplicantiUpgrade.galaxies.value);
   // Effects.sum is intentional here - if EC8 is not completed,
   // this value should not be contributed to total replicanti galaxies
@@ -35,35 +35,35 @@ export function getTickSpeedMultiplier() {
     PelleUpgrade.galaxyPower,
     PelleRifts.decay.milestones[1]
   );
-  if (galaxies < 3) {
+  if (galaxies.lt(3)) {
     // Magic numbers are to retain balancing from before while displaying
     // them now as positive multipliers rather than negative percentages
-    let baseMultiplier = 1 / 1.1245;
-    if (player.galaxies === 1) baseMultiplier = 1 / 1.11888888;
-    if (player.galaxies === 2) baseMultiplier = 1 / 1.11267177;
+    let baseMultiplier = DC.D1.div(1.1245);
+    if (player.galaxies.eq(1)) baseMultiplier = DC.D1.div(1.11888888);
+    if (player.galaxies.eq(2)) baseMultiplier = DC.D1.div(1.11267177);
     if (NormalChallenge(5).isRunning) {
-      baseMultiplier = 1 / 1.08;
-      if (player.galaxies === 1) baseMultiplier = 1 / 1.07632;
-      if (player.galaxies === 2) baseMultiplier = 1 / 1.072;
+      baseMultiplier = DC.D1.div(1.08);
+      if (player.galaxies.eq(1)) baseMultiplier = DC.D1.div(1.07632);
+      if (player.galaxies.eq(2)) baseMultiplier = DC.D1.div(1.072);
     }
-    const perGalaxy = 0.02 * effects;
-    if (Pelle.isDoomed) galaxies *= 0.5;
+    const perGalaxy = new Decimal(0.02).times(effects);
+    if (Pelle.isDoomed) galaxies = galaxies.times(0.5);
 
-    galaxies *= Pelle.specialGlyphEffect.power;
-    return DC.D0_01.clampMin(baseMultiplier - (galaxies * perGalaxy));
+    galaxies = galaxies.times(Pelle.specialGlyphEffect.power);
+    return DC.D0_01.clampMin(baseMultiplier.sub(galaxies.times(perGalaxy)));
   }
-  let baseMultiplier = 0.8;
-  if (NormalChallenge(5).isRunning) baseMultiplier = 0.83;
-  galaxies -= 2;
-  galaxies *= effects;
-  galaxies *= getAdjustedGlyphEffect("cursedgalaxies");
-  galaxies *= getAdjustedGlyphEffect("realitygalaxies");
-  galaxies *= 1 + ImaginaryUpgrade(9).effectOrDefault(0);
-  if (Pelle.isDoomed) galaxies *= 0.5;
+  let baseMultiplier = new Decimal(0.8);
+  if (NormalChallenge(5).isRunning) baseMultiplier = new Decimal(0.83);
+  galaxies = galaxies.sub(2);
+  galaxies = galaxies.times(effects);
+  galaxies = galaxies.times(getAdjustedGlyphEffect("cursedgalaxies"));
+  galaxies = galaxies.times(getAdjustedGlyphEffect("realitygalaxies"));
+  galaxies = galaxies.times(1 + ImaginaryUpgrade(9).effectOrDefault(0));
+  if (Pelle.isDoomed) galaxies = galaxies.times(0.5);
 
-  galaxies *= Pelle.specialGlyphEffect.power;
+  galaxies = galaxies.times(Pelle.specialGlyphEffect.power);
   const perGalaxy = DC.D0_965;
-  return perGalaxy.pow(galaxies - 2).times(baseMultiplier);
+  return perGalaxy.pow(galaxies.sub(2)).times(baseMultiplier);
 }
 
 export function buyTickSpeed() {
@@ -179,7 +179,7 @@ export const Tickspeed = {
     let boughtTickspeed;
     if (Laitela.continuumActive) boughtTickspeed = this.continuumValue;
     else boughtTickspeed = player.totalTickBought;
-    return boughtTickspeed + player.totalTickGained;
+    return new Decimal(boughtTickspeed).add(player.totalTickGained).toNumber();
   },
 
   get perSecond() {

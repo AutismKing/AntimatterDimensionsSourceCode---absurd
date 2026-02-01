@@ -141,7 +141,7 @@ export const Achievements = {
   autoAchieveUpdate(diff) {
     if (!PlayerProgress.realityUnlocked()) return;
     if (!player.reality.autoAchieve || RealityUpgrade(8).isLockingMechanics) {
-      player.reality.achTimer = Math.clampMax(player.reality.achTimer + diff, this.period);
+      player.reality.achTimer = Decimal.clampMax(player.reality.achTimer.plus(diff), this.period);
       return;
     }
     if (Achievements.preReality.every(a => a.isUnlocked)) return;
@@ -168,8 +168,9 @@ export const Achievements = {
     const unlockedRows = Achievements.allRows
       .countWhere(row => row.every(ach => ach.isUnlocked));
     const basePower = Math.pow(1.25, unlockedRows) * Math.pow(1.03, Achievements.effectiveCount);
-    const exponent = getAdjustedGlyphEffect("effarigachievement") * Ra.unlocks.achievementPower.effectOrDefault(1);
-    return Math.pow(basePower, exponent);
+    const exponent = getAdjustedGlyphEffect("effarigachievement") * Ra.unlocks.achievementPower.effectOrDefault(1) *
+      Ra.unlocks.achievementMultPower.effectOrDefault(1) * Ra.unlocks.spaceTheoremAchPower.effectOrDefault(1);
+    return Decimal.pow(basePower, exponent);
   }),
 
   get power() {
@@ -185,5 +186,5 @@ export const Achievements = {
 };
 
 EventHub.logic.on(GAME_EVENT.PERK_BOUGHT, () => {
-  player.reality.achTimer = Math.clampMax(player.reality.achTimer, Achievements.period);
+  player.reality.achTimer = Decimal.clampMax(player.reality.achTimer, Achievements.period);
 });
