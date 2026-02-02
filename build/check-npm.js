@@ -52,4 +52,4 @@ if (newHash !== currentHash) {
     rl.close();
     clearTimeout(timeout);
   });
-} //change for github
+} 
