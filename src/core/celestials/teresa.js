@@ -4,7 +4,7 @@ import { GameDatabase } from "../secret-formula/game-database";
 import { Quotes } from "./quotes";
 
 export const Teresa = {
-  timePoured: 0,
+  timePoured: new Decimal(0),
   lastUnlock: "effarig",
   pouredAmountCap: 1e24,
   displayName: "Teresa",
@@ -13,11 +13,11 @@ export const Teresa = {
     return Achievement(147).isUnlocked;
   },
   pourRM(diff) {
-    if (this.pouredAmount >= Teresa.pouredAmountCap) return;
-    this.timePoured += diff;
+    if (this.pouredAmount.gte(Teresa.pouredAmountCap)) return;
+    this.timePoured = this.timePoured.add(diff);
     const rm = Currency.realityMachines.value;
-    const rmPoured = Math.min((this.pouredAmount + 1e6) * 0.01 * Math.pow(this.timePoured, 2), rm.toNumber());
-    this.pouredAmount += Math.min(rmPoured, Teresa.pouredAmountCap - this.pouredAmount);
+    const rmPoured = Decimal.min((this.pouredAmount.plus(1e6)).times(0.01).times(Decimal.pow(this.timePoured, 2)), rm);;
+    this.pouredAmount = this.pouredAmount.add(Decimal.min(rmPoured, Teresa.pouredAmountCap.sub(this.pouredAmount)))
     Currency.realityMachines.subtract(rmPoured);
     this.checkForUnlocks();
   },

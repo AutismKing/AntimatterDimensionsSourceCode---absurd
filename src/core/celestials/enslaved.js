@@ -6,13 +6,13 @@ import { Quotes } from "./quotes";
 export const ENSLAVED_UNLOCKS = {
   FREE_TICKSPEED_SOFTCAP: {
     id: 0,
-    price: TimeSpan.fromYears(1e35).totalMilliseconds,
+    price: TimeSpan.fromYears(new Decimal(1e35)).totalMilliseconds,
     secondaryRequirement: () => true,
     description: () => `Increase the softcap to Tickspeed upgrades from Time Dimensions by ${formatInt(1e5)}`,
   },
   RUN: {
     id: 1,
-    price: TimeSpan.fromYears(1e40).totalMilliseconds,
+    price: TimeSpan.fromYears(new Decimal(1e40)).totalMilliseconds,
     secondaryRequirement() {
       const hasLevelRequirement = player.records.bestReality.glyphLevel >= 5000;
       const hasRarityRequirement = strengthToRarity(player.records.bestReality.glyphStrength) >= 100;
@@ -32,13 +32,12 @@ export const Enslaved = {
   possessiveName: "The Nameless Ones'",
   boostReality: false,
   BROKEN_CHALLENGES: [2, 3, 4, 5, 7, 8, 10, 11, 12],
-  nextTickDiff: 50,
+  nextTickDiff: new Decimal(50),
   isReleaseTick: false,
   autoReleaseTick: 0,
-  autoReleaseSpeed: 0,
-  timeCap: 1e300,
+  autoReleaseSpeed: new Decimal(0),
   glyphLevelMin: 5000,
-  currentBlackHoleStoreAmountPerMs: 0,
+  currentBlackHoleStoreAmountPerMs: new Decimal(0),
   tachyonNerf: 0.3,
   toggleStoreBlackHole() {
     if (!this.canModifyGameTimeStorage) return;
@@ -54,12 +53,16 @@ export const Enslaved = {
     if (!this.canModifyRealTimeStorage) return;
     player.celestials.enslaved.autoStoreReal = !player.celestials.enslaved.autoStoreReal;
   },
+  get timeCap() {
+    if (EndgameMilestone.gameSpeedUncap.isReached) return Decimal.pow(10, 1e300);
+    return new Decimal(1e300);
+  },
   get canModifyGameTimeStorage() {
-    return Enslaved.isUnlocked && !Pelle.isDoomed && !BlackHoles.arePaused && !EternityChallenge(12).isRunning &&
-      !Enslaved.isRunning && !Laitela.isRunning;
+    return Enslaved.isUnlocked && (!Pelle.isDoomed || PelleDestructionUpgrade.blackHole.isBought) &&
+      !BlackHoles.arePaused && !EternityChallenge(12).isRunning && !Enslaved.isRunning && !Laitela.isRunning;
   },
   get canModifyRealTimeStorage() {
-    return Enslaved.isUnlocked && !Pelle.isDoomed;
+    return Enslaved.isUnlocked && (!Pelle.isDoomed || PelleDestructionUpgrade.blackHole.isBought);
   },
   get isStoredRealTimeCapped() {
     return player.celestials.enslaved.storedReal < this.storedRealTimeCap;
@@ -81,7 +84,7 @@ export const Enslaved = {
     return 1000 * 3600 * 8 + addedCap;
   },
   get isAutoReleasing() {
-    return player.celestials.enslaved.isAutoReleasing && !BlackHoles.areNegative && !Pelle.isDisabled("blackhole");
+    return player.celestials.enslaved.isAutoReleasing && !BlackHoles.areNegative && (!Pelle.isDisabled("blackhole") || PelleCelestialUpgrade.raNameless3.isBought);
   },
   storeRealTime() {
     if (Pelle.isDoomed) return;
@@ -107,7 +110,7 @@ export const Enslaved = {
   },
   canRelease(auto) {
     return !Enslaved.isStoringRealTime && !EternityChallenge(12).isRunning && !Laitela.isRunning &&
-      !(Enslaved.isRunning && auto) && !Pelle.isDoomed;
+      !(Enslaved.isRunning && auto) && (!Pelle.isDoomed || PelleDestructionUpgrade.blackHole.isBought);
   },
   // "autoRelease" should only be true when called with the Ra upgrade
   useStoredTime(autoRelease) {
@@ -121,29 +124,29 @@ export const Enslaved = {
     let release = player.celestials.enslaved.stored;
     if (Enslaved.isRunning) {
       release = Enslaved.storedTimeInsideEnslaved(release);
-      if (Time.thisReality.totalYears + TimeSpan.fromMilliseconds(release).totalYears > 1) {
+      if (Time.thisReality.totalYears.add(TimeSpan.fromMilliseconds(new Decimal(release)).totalYears.gt(1))) {
         EnslavedProgress.storedTime.giveProgress();
       }
     }
-    if (autoRelease) release *= 0.01;
-    this.nextTickDiff = Math.clampMax(release, this.timeCap);
+    if (autoRelease) release = release.times(player.celestials.enslaved.pulseAmount);
+    this.nextTickDiff = Decimal.clampMax(release, this.timeCap);
     this.isReleaseTick = true;
     // Effective gamespeed from stored time assumes a "default" 50 ms update rate for consistency
-    const effectiveGamespeed = release / 50;
-    player.celestials.ra.peakGamespeed = Math.max(player.celestials.ra.peakGamespeed, effectiveGamespeed);
-    this.autoReleaseSpeed = release / player.options.updateRate / 5;
-    player.celestials.enslaved.stored *= autoRelease ? 0.99 : 0;
+    const effectiveGamespeed = release.div(50);
+    player.celestials.ra.peakGamespeed = Decimal.max(player.celestials.ra.peakGamespeed, effectiveGamespeed);
+    this.autoReleaseSpeed = (release.div(player.options.updateRate)).div(player.celestials.enslaved.pulseTime);
+    player.celestials.enslaved.stored = player.celestials.enslaved.stored.times(autoRelease ? 1 - player.celestials.enslaved.pulseAmount : 0);
   },
   has(info) {
     return player.celestials.enslaved.unlocks.includes(info.id);
   },
   canBuy(info) {
-    return player.celestials.enslaved.stored >= info.price && info.secondaryRequirement() && !this.has(info);
+    return player.celestials.enslaved.stored.gte(info.price) && info.secondaryRequirement() && !this.has(info);
   },
   buyUnlock(info) {
     if (!this.canBuy(info)) return false;
     if (info.id === ENSLAVED_UNLOCKS.RUN.id) this.quotes.unlockRun.show();
-    player.celestials.enslaved.stored -= info.price;
+    player.celestials.enslaved.stored = player.celestials.enslaved.stored.sub(info.price);
     player.celestials.enslaved.unlocks.push(info.id);
     return true;
   },
@@ -178,18 +181,18 @@ export const Enslaved = {
     return !EnslavedProgress.hintsUnlocked.hasProgress && Enslaved.has(ENSLAVED_UNLOCKS.RUN) && !Enslaved.isCompleted;
   },
   get isUnlocked() {
-    return EffarigUnlock.eternity.isUnlocked;
+    return EffarigUnlock.eternity.isUnlocked || EndgameMilestone.celestialEarlyUnlock.isReached;
   },
   get realityBoostRatio() {
     return Math.max(1, Math.floor(player.celestials.enslaved.storedReal /
-      Math.max(1000, Time.thisRealityRealTime.totalMilliseconds)));
+      Math.max(1000, Time.thisRealityRealTime.totalMilliseconds.toNumber())));
   },
   get canAmplify() {
     return this.realityBoostRatio > 1 && !Pelle.isDoomed && !isInCelestialReality();
   },
   storedTimeInsideEnslaved(stored) {
-    if (stored <= 1e3) return stored;
-    return Math.pow(10, Math.pow(Math.log10(stored / 1e3), 0.55)) * 1e3;
+    if (stored.lte(1e3)) return stored;
+    return Decimal.pow(10, Decimal.pow(Decimal.log10(stored.div(1e3)), 0.55)).times(1e3);
   },
   feelEternity() {
     if (this.feltEternity) {
@@ -210,19 +213,19 @@ export const Enslaved = {
     player.celestials.enslaved.feltEternity = value;
   },
   get nextHintCost() {
-    return TimeSpan.fromYears(1e40 * Math.pow(3, this.hintCostIncreases)).totalMilliseconds;
+    return TimeSpan.fromYears(new Decimal(1e40 * Math.pow(3, this.hintCostIncreases))).totalMilliseconds;
   },
   get hintCostIncreases() {
     const hintTime = player.celestials.enslaved.zeroHintTime - Date.now();
-    return Math.clampMin(hintTime / TimeSpan.fromDays(1).totalMilliseconds, 0);
+    return Math.clampMin(hintTime / TimeSpan.fromDays(new Decimal(1)).totalMilliseconds.toNumber(), 0);
   },
   spendTimeForHint() {
-    if (player.celestials.enslaved.stored < this.nextHintCost) return false;
-    player.celestials.enslaved.stored -= this.nextHintCost;
+    if (player.celestials.enslaved.stored.lt(this.nextHintCost)) return false;
+    player.celestials.enslaved.stored.subtract(this.nextHintCost);
     if (Enslaved.hintCostIncreases === 0) {
-      player.celestials.enslaved.zeroHintTime = Date.now() + TimeSpan.fromDays(1).totalMilliseconds;
+      player.celestials.enslaved.zeroHintTime = Date.now() + TimeSpan.fromDays(new Decimal(1)).totalMilliseconds.toNumber();
     } else {
-      player.celestials.enslaved.zeroHintTime += TimeSpan.fromDays(1).totalMilliseconds;
+      player.celestials.enslaved.zeroHintTime += TimeSpan.fromDays(new Decimal(1)).totalMilliseconds.toNumber();
     }
     return true;
   },
@@ -254,7 +257,7 @@ class EnslavedProgressState extends BitUpgradeState {
   giveProgress() {
     // Bump the last hint time appropriately if the player found the hint
     if (this.hasHint && !this.hasProgress) {
-      player.celestials.enslaved.zeroHintTime -= Math.log(2) / Math.log(3) * TimeSpan.fromDays(1).totalMilliseconds;
+      player.celestials.enslaved.zeroHintTime -= Math.log(2) / Math.log(3) * TimeSpan.fromDays(new Decimal(1)).totalMilliseconds.toNumber();
       GameUI.notify.success("You found a crack in The Nameless Ones' Reality!", 10000);
     }
     player.celestials.enslaved.progressBits |= (1 << this.id);

@@ -12,6 +12,7 @@ export default {
       isDoomed: false,
       realTimeDoomed: TimeSpan.zero,
       totalAntimatter: new Decimal(0),
+      totalAntimatterOutsideDoom: new Decimal(0),
       realTimePlayed: TimeSpan.zero,
       timeSinceCreation: 0,
       uniqueNews: 0,
@@ -23,6 +24,7 @@ export default {
         banked: new Decimal(0),
         projectedBanked: new Decimal(0),
         bankRate: new Decimal(0),
+        totalInfinityAntimatter: new Decimal(0),
         hasBest: false,
         best: TimeSpan.zero,
         this: TimeSpan.zero,
@@ -32,6 +34,7 @@ export default {
       eternity: {
         isUnlocked: false,
         count: new Decimal(0),
+        totalEternityAntimatter: new Decimal(0),
         hasBest: false,
         best: TimeSpan.zero,
         this: TimeSpan.zero,
@@ -41,6 +44,8 @@ export default {
       reality: {
         isUnlocked: false,
         count: 0,
+        totalRealityAntimatter: new Decimal(0),
+        hasBest: false,
         best: TimeSpan.zero,
         bestReal: TimeSpan.zero,
         this: TimeSpan.zero,
@@ -70,6 +75,12 @@ export default {
         ? `${this.formatDecimalAmount(num)} ${pluralize("Eternity", num.floor())}`
         : "no Eternities";
     },
+    realityCountString() {
+      const num = new Decimal(this.reality.count);
+      return num.gt(0)
+        ? `${this.formatDecimalAmount(num)} ${pluralize("Reality", num.floor())}`
+        : "no Realities";
+    },
     fullGameCompletions() {
       return player.records.fullGameCompletions;
     },
@@ -77,15 +88,17 @@ export default {
       return Time.toDateTimeString(player.records.gameCreatedTime);
     },
     saveAge() {
-      return TimeSpan.fromMilliseconds(this.timeSinceCreation);
+      return TimeSpan.fromMilliseconds(new Decimal(this.timeSinceCreation));
     },
   },
   methods: {
     update() {
       const records = player.records;
       this.totalAntimatter.copyFrom(records.totalAntimatter);
-      this.realTimePlayed.setFrom(records.realTimePlayed);
-      this.fullTimePlayed = TimeSpan.fromMilliseconds(records.previousRunRealTime + records.realTimePlayed);
+      this.totalAntimatterOutsideDoom.copyFrom(player.records.totalAntimatterOutsideDoom);
+      this.realTimePlayed.setFrom(new Decimal(records.realTimePlayed));
+      this.fullTimePlayed = TimeSpan.fromMilliseconds(
+        new Decimal(records.previousRunRealTime + records.realTimePlayed));
       this.uniqueNews = NewsHandler.uniqueTickersSeen;
       this.totalNews = player.news.totalSeen;
       this.secretAchievementCount = SecretAchievements.all.filter(a => a.isUnlocked).length;

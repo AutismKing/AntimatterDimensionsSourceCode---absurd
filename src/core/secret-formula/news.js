@@ -1312,7 +1312,7 @@ export const news = [
     id: "a230",
     get text() {
       return `You started playing this game nearly
-        ${TimeSpan.fromMilliseconds(Date.now() - player.records.gameCreatedTime).toString()}
+        ${TimeSpan.fromMilliseconds(new Decimal(Date.now() - player.records.gameCreatedTime)).toString()}
         ago. Thank you for playing!`;
     },
     dynamic: true

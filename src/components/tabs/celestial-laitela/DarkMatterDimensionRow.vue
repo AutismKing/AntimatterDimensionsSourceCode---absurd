@@ -65,7 +65,7 @@ export default {
     },
     intervalText() {
       const interval = this.hoverOverAscension ? this.intervalAfterAscension : this.interval;
-      const str = interval > 1000 ? `${format(interval / 1000, 2, 2)}s` : `${format(interval, 2, 2)}ms`;
+      const str = `${TimeSpan.fromMilliseconds(interval, 2, 2).toStringShort()}`;
       const line1 = this.hoverOverAscension ? `<b>${str}</b>` : str;
 
       let line2;

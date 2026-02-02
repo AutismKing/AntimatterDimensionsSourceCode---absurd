@@ -80,11 +80,11 @@ export default {
         case SINGULARITY_MILESTONE_RESOURCE.MANUAL_TIME:
           thisSingularityTime = Math.clampMin(0, this.currentCondenseTime);
           extraTime = Math.ceil(condenseCount - 1) * this.baseCondenseTime;
-          return `In ${TimeSpan.fromSeconds(thisSingularityTime + extraTime).toStringShort()} (manual)`;
+          return `In ${TimeSpan.fromSeconds(new Decimal(thisSingularityTime.add(extraTime))).toStringShort()} (manual)`;
         case SINGULARITY_MILESTONE_RESOURCE.AUTO_TIME:
-          thisSingularityTime = Math.clampMin(0, this.currentCondenseTime + this.autoCondenseDelay);
-          extraTime = Math.ceil(condenseCount - 1) * (this.baseCondenseTime + this.autoCondenseDelay);
-          timeText = `In ${TimeSpan.fromSeconds(thisSingularityTime + extraTime).toStringShort()}`;
+          thisSingularityTime = Decimal.clampMin(0, this.currentCondenseTime.add(this.autoCondenseDelay));
+          extraTime = Decimal.ceil(condenseCount.sub(1)).times(this.baseCondenseTime.add(this.autoCondenseDelay));
+          timeText = `In ${TimeSpan.fromSeconds(new Decimal(thisSingularityTime.add(extraTime))).toStringShort()}`;
           return this.autoSingActive ? timeText : `Auto-Singularity is OFF`;
         default:
           throw new Error("Unrecognized Singularity Milestone mode");

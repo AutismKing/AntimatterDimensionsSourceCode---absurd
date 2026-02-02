@@ -303,9 +303,9 @@ export const normalTimeStudies = [
     requiresST: [121, 122],
     description: "You gain more Eternity Points based on time spent this Eternity",
     effect: () => {
-      const perkEffect = TimeSpan.fromMinutes(Perk.studyIdleEP.effectOrDefault(0));
+      const perkEffect = TimeSpan.fromMinutes(new Decimal(Perk.studyIdleEP.effectOrDefault(0)));
       const totalSeconds = Time.thisEternity.plus(perkEffect).totalSeconds;
-      return Math.sqrt(1.39 * totalSeconds);
+      return Decimal.sqrt(new Decimal(1.39).times(totalSeconds));
     },
     formatEffect: value => formatX(value, 1, 1)
   },
@@ -319,7 +319,7 @@ export const normalTimeStudies = [
     description: () => (Achievement(138).isUnlocked
       ? `You can get ${formatPercents(0.5)} more Replicanti Galaxies`
       : `Automatic Replicanti Galaxies are disabled, but you can get ${formatPercents(0.5)} more`),
-    effect: () => Math.floor(player.replicanti.boughtGalaxyCap / 2)
+    effect: () => Decimal.floor(player.replicanti.boughtGalaxyCap.div(2))
   },
   {
     id: 132,
@@ -328,7 +328,7 @@ export const normalTimeStudies = [
     requirement: [122],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
     requiresST: [131, 133],
-    description: () => (Pelle.isDoomed
+    description: () => ((Pelle.isDoomed && !PelleDestructionUpgrade.timestudy132.isBought)
       ? `Replicanti Galaxies are ${formatPercents(0.4)} stronger`
       : `Replicanti Galaxies are ${formatPercents(0.4)} stronger and Replicanti are 
         ${Perk.studyPassive.isBought ? formatX(3) : formatX(1.5, 1, 1)} faster`),
@@ -382,7 +382,7 @@ export const normalTimeStudies = [
     requiresST: [141, 142],
     description: "Multiplier to Infinity Points, which increases over this Infinity",
     effect: () => {
-      const perkEffect = TimeSpan.fromMinutes(Perk.studyIdleEP.effectOrDefault(0));
+      const perkEffect = TimeSpan.fromMinutes(new Decimal(Perk.studyIdleEP.effectOrDefault(0)));
       const totalSeconds = Time.thisInfinity.plus(perkEffect).totalSeconds;
       return thisInfinityMult(totalSeconds);
     },
