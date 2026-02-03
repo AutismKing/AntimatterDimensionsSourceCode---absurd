@@ -3,7 +3,7 @@ export const DeltaTimeState = {
   unscaledDeltaTime: new TimeSpan(new Decimal(0)),
   update(deltaTime, gameDeltaTime) {
     this.unscaledDeltaTime = TimeSpan.fromMilliseconds(new Decimal(deltaTime));
-    this.deltaTime = TimeSpan.fromMilliseconds(gameDeltaTime);
+    this.deltaTime = TimeSpan.fromMilliseconds(new Decimal(gameDeltaTime));
   }
 };
 
@@ -13,7 +13,7 @@ export const Time = {
    * @returns {TimeSpan}
    */
   fromMilliseconds(getValue) {
-    return TimeSpan.fromMilliseconds(getValue());
+    return TimeSpan.fromMilliseconds(new Decimal(getValue()));
   },
   /**
    * @param {TimeSpan} timespan

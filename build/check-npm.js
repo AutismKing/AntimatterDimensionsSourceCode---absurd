@@ -52,4 +52,7 @@ if (newHash !== currentHash) {
     rl.close();
     clearTimeout(timeout);
   });
-} //AGAIN???
+} //// We're always either in EC4 or EC12 when displaying this text.
+      //return `${TimeSpan.fromSeconds(this.currentResource.toNumber()).toString()} /
+        //${TimeSpan.fromSeconds(this.maximumResource.toNumber()).toString()} time spent`;
+    //}
