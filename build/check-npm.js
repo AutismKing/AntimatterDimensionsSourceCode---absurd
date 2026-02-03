@@ -52,4 +52,4 @@ if (newHash !== currentHash) {
     rl.close();
     clearTimeout(timeout);
   });
-} //4th times the charm
+} //AGAIN???
