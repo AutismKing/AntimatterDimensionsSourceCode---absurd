@@ -54,7 +54,6 @@ export const Enslaved = {
     player.celestials.enslaved.autoStoreReal = !player.celestials.enslaved.autoStoreReal;
   },
   get timeCap() {
-    if (EndgameMilestone.gameSpeedUncap.isReached) return Decimal.pow(10, 1e300);
     return new Decimal(1e300);
   },
   get canModifyGameTimeStorage() {
