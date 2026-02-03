@@ -4,12 +4,12 @@ export default {
   data() {
     return {
       darkMatter: new Decimal(0),
-      darkMatterMult: 0,
-      darkMatterMultGain: 0,
+      darkMatterMult: new Decimal(0),
+      darkMatterMultGain: new Decimal(0),
       autobuyerUnlocked: false,
       annihilationButtonVisible: false,
       matterRequirement: 0,
-      darkMatterMultRatio: 0,
+      darkMatterMultRatio: new Decimal(0),
       autoAnnihilationInput: player.auto.annihilation.multiplier,
       isEnabled: true,
     };

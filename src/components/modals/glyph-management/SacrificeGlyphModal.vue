@@ -14,8 +14,8 @@ export default {
   },
   data() {
     return {
-      currentGlyphSacrifice: 0,
-      gain: 0,
+      currentGlyphSacrifice: new Decimal(0),
+      gain: new Decimal(0),
       confirmedSacrifice: false
     };
   },

@@ -10,25 +10,25 @@ export default {
   data() {
     return {
       isUnlocked: false,
-      ascension: 0,
+      ascension: new Decimal(0),
       hasAscended: false,
-      powerDMPerAscension: 0,
-      interval: 0,
+      powerDMPerAscension: new Decimal(0),
+      interval: new Decimal(0),
       powerDM: new Decimal(0),
-      powerDE: 0,
-      intervalCost: 0,
-      powerDMCost: 0,
-      powerDECost: 0,
+      powerDE: new Decimal(0),
+      intervalCost: new Decimal(0),
+      powerDMCost: new Decimal(0),
+      powerDECost: new Decimal(0),
       amount: new Decimal(0),
       canBuyInterval: false,
       canBuyPowerDM: false,
       canBuyPowerDE: false,
       isIntervalCapped: false,
       timer: 0,
-      timerPecent: 0,
-      intervalAscensionBump: 10000,
-      intervalAfterAscension: 0,
-      darkEnergyPerSecond: 0,
+      timerPercent: new Decimal(0),
+      intervalAscensionBump: new Decimal(10000),
+      intervalAfterAscension: new Decimal(0),
+      darkEnergyPerSecond: new Decimal(0),
       portionDE: 0,
       productionPerSecond: new Decimal(0),
       percentPerSecond: 0,
@@ -119,9 +119,9 @@ export default {
       this.canBuyPowerDE = dim.canBuyPowerDE;
       this.isIntervalCapped = dim.interval <= dim.intervalPurchaseCap;
       this.timer = dim.timeSinceLastUpdate;
-      this.timerPercent = this.timer / this.interval;
-      this.intervalAscensionBump = SingularityMilestone.ascensionIntervalScaling.effectOrDefault(1200);
-      this.intervalAfterAscension = dim.intervalAfterAscension;
+      this.timerPercent = new Decimal(this.timer).div(this.interval).toNumber();
+      this.intervalAscensionBump.copyFrom(SingularityMilestone.ascensionIntervalScaling.effectOrDefault(new Decimal(1200)));
+      this.intervalAfterAscension.copyFrom(dim.intervalAfterAscension);
       this.darkEnergyPerSecond = dim.productionPerSecond;
       this.portionDE = this.darkEnergyPerSecond / Currency.darkEnergy.productionPerSecond;
       this.productionPerSecond = this.dimensionProduction(this.tier);
@@ -145,7 +145,7 @@ export default {
       return cost.gt(Number.MAX_VALUE) ? Notations.current.infinite : format(cost, 2);
     },
     dimensionProduction(tier) {
-      if (tier === 4) return SingularityMilestone.dim4Generation.effectOrDefault(0);
+      if (tier === 4) return SingularityMilestone.dim4Generation.effectOrDefault(new Decimal(0));
       const prodDim = DarkMatterDimension(tier + 1);
       return prodDim.amount.times(prodDim.powerDM).divide(prodDim.interval).times(1000);
     },

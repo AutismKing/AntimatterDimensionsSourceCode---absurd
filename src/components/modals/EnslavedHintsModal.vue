@@ -59,7 +59,7 @@ export default {
     update() {
       this.currentStored = player.celestials.enslaved.stored;
       this.nextHintCost = Enslaved.nextHintCost;
-      this.canGetHint = this.currentStored >= this.nextHintCost;
+      this.canGetHint = this.currentStored.gte(new Decimal(this.nextHintCost));
       this.shownEntries = [];
 
       this.realityHintsLeft = EnslavedProgress.all.length;

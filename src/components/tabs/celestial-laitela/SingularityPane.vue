@@ -3,22 +3,22 @@ export default {
   name: "SingularityPane",
   data() {
     return {
-      darkEnergy: 0,
-      darkEnergyGainPerSecond: 0,
-      singularities: 0,
-      singularityCapIncreases: 0,
+      darkEnergy: new Decimal(),
+      darkEnergyGainPerSecond: new Decimal(),
+      singularities: new Decimal(),
+      singularityCapIncreases: new Decimal(),
       canPerformSingularity: false,
       unlockedBulkSingularity: false,
-      singularityCap: 0,
-      baseTimeToSingularity: 0,
-      currentTimeToSingularity: 0,
-      extraTimeAfterSingularity: 0,
-      singularitiesGained: 0,
+      singularityCap: new Decimal(),
+      baseTimeToSingularity: new Decimal(),
+      currentTimeToSingularity: new Decimal(),
+      extraTimeAfterSingularity: new Decimal(),
+      singularitiesGained: new Decimal(),
       autoSingularityFactor: 0,
-      perStepFactor: 0,
+      perStepFactor: new Decimal(),
       isAutoEnabled: false,
       hasAutoSingularity: false,
-      nextLowerStep: 0,
+      nextLowerStep: new Decimal(),
       willCondenseOnDecrease: false,
     };
   },
@@ -67,7 +67,7 @@ export default {
         : null;
     },
     increaseTooltip() {
-      return this.singularityCapIncreases >= 50
+      return this.singularityCapIncreases.gte(50)
         ? "You cannot increase the cap any further!"
         : null;
     }

@@ -11,7 +11,7 @@ export default {
       realityTime: 0,
       maxDimTier: 0,
       isRunning: false,
-      realityReward: 1,
+      realityReward: new Decimal(1),
       singularitiesUnlocked: false,
       bestSet: [],
       tierNotCompleted: true,

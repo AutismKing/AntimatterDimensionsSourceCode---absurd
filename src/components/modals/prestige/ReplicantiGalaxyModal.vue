@@ -10,7 +10,7 @@ export default {
     return {
       replicanti: new Decimal(),
       divideReplicanti: false,
-      canBeBought: 0,
+      canBeBought: new Decimal(),
     };
   },
   computed: {

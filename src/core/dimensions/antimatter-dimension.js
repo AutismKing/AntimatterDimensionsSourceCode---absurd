@@ -42,8 +42,7 @@ export function antimatterDimensionCommonMultiplier() {
     AlchemyResource.dimensionality,
     PelleUpgrade.antimatterDimensionMult
   );
-  // MOD STARTS HERE
-  //multiplier = multiplier.pow(multiplier) plan: tetrate 1.1 afterwards with BE
+
   multiplier = multiplier.dividedByEffectOf(InfinityChallenge(6));
   multiplier = multiplier.times(getAdjustedGlyphEffect("powermult"));
   multiplier = multiplier.times(Currency.realityMachines.value.powEffectOf(AlchemyResource.force));

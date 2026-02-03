@@ -10,7 +10,7 @@ export default {
     return {
       gainedInfinities: new Decimal(),
       gainedInfinityPoints: new Decimal(),
-      startingBoosts: 0,
+      startingBoosts: new Decimal(0),
       startingAM: 10,
       willStartWithGalaxy: false
     };

@@ -22,7 +22,7 @@ export default {
     return {
       laitelaFastest: 3600,
       teresaBestAM: new Decimal(),
-      teresaRunMult: 0,
+      teresaRunMult: new Decimal(0),
       effarigDone: false,
       effarigLayer: "",
       enslavedDone: false,

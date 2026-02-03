@@ -10,9 +10,9 @@ export default {
     return {
       type: GALAXY_TYPE.NORMAL,
       galaxies: {
-        normal: 0,
-        replicanti: 0,
-        dilation: 0
+        normal: new Decimal(),
+        replicanti: new Decimal(),
+        dilation: new Decimal()
       },
       requirement: {
         tier: 1,
@@ -112,7 +112,7 @@ export default {
       manualRequestGalaxyReset(this.canBulkBuy && bulk);
     },
     formatGalaxies(num) {
-      return num > 1e8 ? format(num, 2) : formatInt(num);
+      return new Decimal(num).gt(1e8) ? format(num, 2) : formatInt(num);
     },
   }
 };

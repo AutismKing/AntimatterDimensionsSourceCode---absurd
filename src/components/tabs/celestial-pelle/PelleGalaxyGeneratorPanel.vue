@@ -11,9 +11,9 @@ export default {
   data() {
     return {
       isUnlocked: false,
-      galaxies: 0,
-      generatedGalaxies: 0,
-      galaxiesPerSecond: 0,
+      galaxies: new Decimal(0),
+      generatedGalaxies: new Decimal(0),
+      galaxiesPerSecond: new Decimal(0),
       cap: 0,
       isCapped: false,
       capRift: null,

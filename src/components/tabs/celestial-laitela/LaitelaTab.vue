@@ -27,14 +27,14 @@ export default {
       darkMatterGain: new Decimal(0),
       isDMCapped: false,
       maxDarkMatter: new Decimal(0),
-      darkEnergy: 0,
+      darkEnergy: new Decimal(0),
       matterExtraPurchasePercentage: 0,
       autobuyersUnlocked: false,
       singularityPanelVisible: false,
       singularitiesUnlocked: false,
-      singularityCap: 0,
-      singularityWaitTime: 0,
-      showAnnihilation: false
+      singularityCap: new Decimal(0),
+      singularityWaitTime: "",
+      showAnnihilation: false,
     };
   },
   computed: {

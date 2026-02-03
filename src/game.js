@@ -179,7 +179,8 @@ export function resetChallengeStuff() {
 }
 
 export function ratePerMinute(amount, time) {
-  return Decimal.divide(amount, time / (60 * 1000));
+  if (new Decimal(time).eq(0)) return DC.D0;
+  return Decimal.divide(amount, new Decimal(time).div(60 * 1000).clampMin(1e-300));
 }
 
 // eslint-disable-next-line max-params
@@ -318,7 +319,7 @@ export function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride
 
   if (effects.includes(GAME_SPEED_EFFECT.FIXED_SPEED)) {
     if (EternityChallenge(12).isRunning) {
-      return 1 / 1000;
+      return new Decimal(1 / 1000);
     }
   }
 
@@ -433,11 +434,13 @@ export function gameLoop(passDiff, options = {}) {
     return;
   }
 
-  let diff = passDiff;
   const thisUpdate = Date.now();
+  const passDiff = passedDiff === undefined
+    ? Math.clamp(thisUpdate - player.lastUpdate, 1, 8.64e7) : passedDiff;
+  let diff = new Decimal(passDiff);
   const realDiff = diff === undefined
-    ? Decimal.clamp(thisUpdate - player.lastUpdate, 1, 8.64e7)
-    : diff;
+    ? Math.clamp(thisUpdate - player.lastUpdate, 1, 8.64e7)
+    : new Decimal(diff).toNumber();
   if (!GameStorage.ignoreBackupTimer) player.backupTimer += realDiff;
 
   // For single ticks longer than a minute from the GameInterval loop, we assume that the device has gone to sleep or
@@ -468,7 +471,7 @@ export function gameLoop(passDiff, options = {}) {
     Enslaved.nextTickDiff = realDiff;
   }
   if (Enslaved.isReleaseTick || diff === undefined) {
-    diff = Enslaved.nextTickDiff;
+    diff = new Decimal(Enslaved.nextTickDiff);
   }
 
   Autobuyers.tick();
@@ -495,7 +498,9 @@ export function gameLoop(passDiff, options = {}) {
     } else {
       // This is only called from simulateTime() and is calculated externally in order to avoid weirdness when game
       // speed is directly nerfed
-      speedFactor = options.blackHoleSpeedup;
+      speedFactor = new Decimal(options.blackHoleSpeedup);
+      if (speedFactor.lt(0)) throw Error("The Speed Factor of BH is" + speedFactor.toString() + " which will cause game to crash.")
+      if (speedFactor.eq(0)) console.log("The Speed Factor of BH is 0! Will it cause crash?")
     }
 
     if (Enslaved.isStoringGameTime && !fixedSpeedActive) {
@@ -505,15 +510,15 @@ export function gameLoop(passDiff, options = {}) {
         GAME_SPEED_EFFECT.BLACK_HOLE, GAME_SPEED_EFFECT.SINGULARITY_MILESTONE]);
       const amplification = Ra.unlocks.improvedStoredTime.effects.gameTimeAmplification.effectOrDefault(1);
       const beforeStore = player.celestials.enslaved.stored;
-      player.celestials.enslaved.stored = Decimal.clampMax(player.celestials.enslaved.stored +
-        diff * (totalTimeFactor - reducedTimeFactor) * amplification, Enslaved.timeCap);
-      Enslaved.currentBlackHoleStoreAmountPerMs = (player.celestials.enslaved.stored - beforeStore) / diff;
+      player.celestials.enslaved.stored = Decimal.clampMax(player.celestials.enslaved.stored.plus(
+        new Decimal(diff).times(totalTimeFactor).sub(reducedTimeFactor)).times(amplification), Enslaved.timeCap);
+      Enslaved.currentBlackHoleStoreAmountPerMs = (player.celestials.enslaved.stored.sub(beforeStore)).div(diff);
       speedFactor = reducedTimeFactor;
     }
-    diff *= speedFactor;
+    diff = new Decimal(diff).times(speedFactor);
   } else if (fixedSpeedActive) {
-    diff *= getGameSpeedupFactor();
-    Enslaved.currentBlackHoleStoreAmountPerMs = 0;
+    diff = new Decimal(diff).times(getGameSpeedupFactor());
+    Enslaved.currentBlackHoleStoreAmountPerMs = DC.D0;
   }
   player.celestials.ra.peakGamespeed = Decimal.max(player.celestials.ra.peakGamespeed, getGameSpeedupFactor());
   Enslaved.isReleaseTick = false;
@@ -524,17 +529,17 @@ export function gameLoop(passDiff, options = {}) {
   if (!Achievement(188).isUnlocked) {
     player.records.realTimeDoomed += realDiff;
     player.records.realTimePlayed += realDiff;
-    player.records.totalTimePlayed += diff;
+    player.records.totalTimePlayed = player.records.totalTimePlayed.add(diff);
     player.records.thisInfinity.realTime += realDiff;
-    player.records.thisInfinity.time += diff;
+    player.records.thisInfinity.time = player.records.thisInfinity.time.add(diff);
     player.records.thisEternity.realTime += realDiff;
     if (Enslaved.isRunning && Enslaved.feltEternity && !EternityChallenge(12).isRunning) {
-      player.records.thisEternity.time += diff * (1 + Currency.eternities.value.clampMax(1e66).toNumber());
+      player.records.thisEternity.time = player.records.thisEternity.time.add(new Decimal(diff).times(Currency.eternities.value.clampMax(1e66).plus(1)));
     } else {
-      player.records.thisEternity.time += diff;
+      player.records.thisEternity.time = player.records.thisEternity.time.add(diff);
     }
     player.records.thisReality.realTime += realDiff;
-    player.records.thisReality.time += diff;
+    player.records.thisReality.time = player.records.thisReality.time.add(diff);
   }
 
   DeltaTimeState.update(realDiff, diff);
@@ -683,9 +688,9 @@ function passivePrestigeGen() {
 
   if (!EternityChallenge(4).isRunning) {
     let infGen = DC.D0;
-    if (BreakInfinityUpgrade.infinitiedGen.isBought) {
+    if (BreakInfinityUpgrade.infinitiedGen.isBought && (!Pelle.isDoomed || PelleDestructionUpgrade.passiveInfGen.isBought)) {
       // Multipliers are done this way to explicitly exclude ach87 and TS32
-      infGen = infGen.plus(0.5 * Time.deltaTimeMs / Decimal.clampMin(50, player.records.bestInfinity.time));
+      infGen = infGen.plus(new Decimal(0.5).times(Time.deltaTimeMs).div(Decimal.clampMin(50, player.records.bestInfinity.time)));
       infGen = infGen.timesEffectsOf(
         RealityUpgrade(5),
         RealityUpgrade(7),
@@ -724,23 +729,23 @@ function applyAutoUnlockPerks() {
 function laitelaRealityTick(realDiff) {
   const laitelaInfo = player.celestials.laitela;
   if (!Laitela.isRunning) return;
-  if (laitelaInfo.entropy >= 0) {
-    laitelaInfo.entropy += (realDiff / 1000) * Laitela.entropyGainPerSecond;
+  if (laitelaInfo.entropy.gte(0)) {
+    laitelaInfo.entropy = laitelaInfo.entropy.add(new Decimal(realDiff / 1000).times(Laitela.entropyGainPerSecond));
   }
 
   // Setting entropy to -1 on completion prevents the modal from showing up repeatedly
-  if (laitelaInfo.entropy >= 1) {
+  if (laitelaInfo.entropy.gte(1)) {
     let completionText = `Lai'tela's Reality has been destabilized after ${Time.thisRealityRealTime.toStringShort()}.`;
-    laitelaInfo.entropy = -1;
+    laitelaInfo.entropy = new Decimal(-1);
     const oldInfo = {
       fastestCompletion: laitelaInfo.fastestCompletion,
       difficultyTier: laitelaInfo.difficultyTier,
       realityReward: Laitela.realityReward
     };
-    laitelaInfo.thisCompletion = Time.thisRealityRealTime.totalSeconds;
-    laitelaInfo.fastestCompletion = Decimal.min(laitelaInfo.thisCompletion, laitelaInfo.fastestCompletion);
+    laitelaInfo.thisCompletion = Time.thisRealityRealTime.totalSeconds.toNumber();
+    laitelaInfo.fastestCompletion = Math.min(laitelaInfo.thisCompletion, laitelaInfo.fastestCompletion);
     clearCelestialRuns();
-    if (Time.thisRealityRealTime.totalSeconds < 30) {
+    if (Time.thisRealityRealTime.totalSeconds.toNumber() < 30) {
       laitelaInfo.difficultyTier++;
       laitelaInfo.fastestCompletion = 300;
       completionText += laitelaBeatText(Laitela.maxAllowedDimension + 1);
@@ -844,23 +849,23 @@ function updateTachyonGalaxies() {
     Decimal.min(player.dilation.baseTachyonGalaxies.times(tachyonGalaxyMult), tachyonGalaxyThreshold).add(
     Decimal.max(player.dilation.baseTachyonGalaxies.times(tachyonGalaxyMult).sub(tachyonGalaxyThreshold), 0).div(tachyonGalaxyMult));
 
-  player.dilation.totalTachyonGalaxies *= DilationUpgrade.galaxyMultiplier.effectValue;
+  player.dilation.totalTachyonGalaxies = player.dilation.totalTachyonGalaxies.times(DilationUpgrade.galaxyMultiplier.effectValue);
 }
 
 export function getTTPerSecond() {
   // All TT multipliers (note that this is equal to 1 pre-Ra)
-  let ttMult = Effects.product(
+  let ttMult = new Decimal(Effects.product(
     Ra.unlocks.continuousTTBoost.effects.ttGen,
     Ra.unlocks.achievementTTMult,
     Achievement(137),
     Achievement(156),
-  );
+  ));
   if (GlyphAlteration.isAdded("dilation")) ttMult *= getSecondaryGlyphEffect("dilationTTgen");
 
   // Glyph TT generation
   const glyphTT = Teresa.isRunning || Enslaved.isRunning || Pelle.isDoomed
-    ? 0
-    : getAdjustedGlyphEffect("dilationTTgen") * ttMult;
+    ? DC.D0
+    : new Decimal(getAdjustedGlyphEffect("dilationTTgen")).times(ttMult);
 
   // Dilation TT generation
   const dilationTT = DilationUpgrade.ttGenerator.isBought

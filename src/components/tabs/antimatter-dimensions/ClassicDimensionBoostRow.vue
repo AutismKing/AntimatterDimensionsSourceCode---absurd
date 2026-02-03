@@ -10,11 +10,11 @@ export default {
     return {
       requirement: {
         tier: 1,
-        amount: 0
+        amount: new Decimal(0)
       },
       isBuyable: false,
-      purchasedBoosts: 0,
-      imaginaryBoosts: 0,
+      purchasedBoosts: new Decimal(0),
+      imaginaryBoosts: new Decimal(0),
       lockText: null,
       unlockedByBoost: null,
       creditsClosed: false,
