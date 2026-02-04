@@ -56,3 +56,4 @@ if (newHash !== currentHash) {
       //return `${TimeSpan.fromSeconds(this.currentResource.toNumber()).toString()} /
         //${TimeSpan.fromSeconds(this.maximumResource.toNumber()).toString()} time spent`;
     //}
+//test a;lso abov ething is for if somehting bad
