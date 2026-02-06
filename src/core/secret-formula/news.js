@@ -7,7 +7,7 @@ import { DC } from "../constants";
 // AI = created with gpt2
 
 function newsAnimSpd(seconds) {
-  return seconds / player.options.news.speed;
+  return new Decimal(seconds).toNumber() / player.options.news.speed;
 }
 
 

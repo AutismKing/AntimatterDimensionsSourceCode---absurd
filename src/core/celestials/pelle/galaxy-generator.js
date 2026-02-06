@@ -22,11 +22,11 @@ export const GalaxyGenerator = {
   },
 
   get galaxies() {
-    return this.generatedGalaxies - this.spentGalaxies;
+    return this.generatedGalaxies.sub(this.spentGalaxies);
   },
 
   get gainPerSecond() {
-    if (!Pelle.hasGalaxyGenerator) return 0;
+    if (!Pelle.hasGalaxyGenerator) return new Decimal(0);
     return new Decimal(GalaxyGeneratorUpgrades.additive.effectValue).timesEffectsOf(
       GalaxyGeneratorUpgrades.multiplicative,
       GalaxyGeneratorUpgrades.antimatterMult,
@@ -48,7 +48,7 @@ export const GalaxyGenerator = {
   },
 
   get isCapped() {
-    return this.generationCap === this.generatedGalaxies;
+    return new Decimal(this.generationCap).eq(this.generatedGalaxies);
   },
 
   get sacrificeActive() {
@@ -99,7 +99,7 @@ export const GalaxyGenerator = {
     );
 
     if (!this.capRift) {
-      PelleRifts.all.forEach(r => r.reducedTo = Math.min(r.reducedTo + 0.03 * diff / 1000, 2));
+      PelleRifts.all.forEach(r => r.reducedTo = new Decimal(diff).div(1e4).times(0.03).add(r.reducedTo).clampMax(2).toNumber());
       if (PelleRifts.vacuum.milestones[0].canBeApplied && !this.hasReturnedGlyphSlot) {
         Glyphs.refreshActive();
         EventHub.dispatch(GAME_EVENT.GLYPHS_EQUIPPED_CHANGED);

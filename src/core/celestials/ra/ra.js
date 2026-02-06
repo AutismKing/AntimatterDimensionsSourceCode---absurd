@@ -386,15 +386,15 @@ export const Ra = {
 export const GlyphAlteration = {
   // Adding a secondary effect to some effects
   get additionThreshold() {
-    return 1e36;
+    return new Decimal(1e36);
   },
   // One-time massive boost of a single effect
   get empowermentThreshold() {
-    return 1e43;
+    return new Decimal(1e43);
   },
   // Scaling boost from sacrifice quantity
   get boostingThreshold() {
-    return 1e60;
+    return new Decimal(1e60);
   },
   getSacrificePower(type) {
     if (Pelle.isDisabled("alteration")) return 0;

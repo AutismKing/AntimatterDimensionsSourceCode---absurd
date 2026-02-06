@@ -176,7 +176,7 @@ class TimeDimensionState extends DimensionState {
 
     let base = this.costMultiplier;
     if (this._tier <= 4) base *= 2.2;
-    const exponent = this.e6000ScalingAmount + (bought - this.e6000ScalingAmount) * TimeDimensions.scalingPast1e6000;
+    const exponent = new Decimal(bought - this.e6000ScalingAmount).mul(TimeDimensions.scalingPast1e6000).add(this.e6000ScalingAmount);
     const cost = Decimal.pow(base, exponent).times(this.baseCost);
 
     if (PelleRifts.paradox.milestones[0].canBeApplied && this._tier > 4) {
@@ -323,7 +323,7 @@ export const TimeDimensions = {
 
   tick(diff) {
     for (let tier = 8; tier > 1; tier--) {
-      TimeDimension(tier).produceDimensions(TimeDimension(tier - 1), diff / 10);
+      TimeDimension(tier).produceDimensions(TimeDimension(tier - 1), new Decimal(diff).div(10));
     }
 
     if (EternityChallenge(7).isRunning) {

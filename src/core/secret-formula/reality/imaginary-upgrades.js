@@ -101,7 +101,7 @@ export const imaginaryUpgrades = [
   {
     name: "Suspicion of Interference",
     id: 11,
-    cost: 5e7,
+    cost: new Deimcal(5e7),
     requirement: () => `${format(1e90)} total Relic Shards
       (You have ${format(player.celestials.effarig.relicShards, 2)})`,
     hasFailed: () => false,
@@ -115,7 +115,7 @@ export const imaginaryUpgrades = [
   {
     name: "Consequences of Illusions",
     id: 12,
-    cost: 5e7,
+    cost: new Deimcal(5e7),
     requirement: () => `Make a level ${formatInt(9000)} Glyph with a single Glyph level factor weight at
     ${formatInt(100)}`,
     hasFailed: () => false,
@@ -130,7 +130,7 @@ export const imaginaryUpgrades = [
   {
     name: "Transience of Information",
     id: 13,
-    cost: 5e7,
+    cost: new Deimcal(5e7),
     requirement: () => `Reach ${format(Number.MAX_VALUE, 2)} projected Reality Machines within
       The Nameless Ones' Reality`,
     hasFailed: () => !Enslaved.isRunning,
@@ -146,7 +146,7 @@ export const imaginaryUpgrades = [
   {
     name: "Recollection of Intrusion",
     id: 14,
-    cost: 3.5e8,
+    cost: new Deimcal(3.5e8),
     formatCost: x => format(x, 1),
     requirement: () => `Reach a tickspeed of ${format("1e75000000000")} / sec within Eternity Challenge 5`,
     hasFailed: () => false,
@@ -159,7 +159,7 @@ export const imaginaryUpgrades = [
   {
     name: "Fabrication of Ideals",
     id: 15,
-    cost: 1e9,
+    cost: new Deimcal(1e9),
     requirement: () => `Reach ${format("1e1500000000000")} antimatter without
       ever having any 1st Infinity Dimensions`,
     hasFailed: () => player.requirementChecks.reality.maxID1.gt(0),
@@ -178,7 +178,7 @@ export const imaginaryUpgrades = [
   {
     name: "Massless Momentum",
     id: 16,
-    cost: 3.5e9,
+    cost: new Deimcal(3.5e9),
     formatCost: x => format(x, 1),
     requirement: () => `Destabilize Lai'tela's Reality in under ${formatInt(30)} seconds twice`,
     hasFailed: () => false,
@@ -189,7 +189,7 @@ export const imaginaryUpgrades = [
   {
     name: "Chiral Oscillation",
     id: 17,
-    cost: 6e9,
+    cost: new Deimcal(6e9),
     requirement: () => `Automatically condense at least ${formatInt(20)} Singularities at once`,
     hasFailed: () => false,
     checkRequirement: () => Singularity.singularitiesGained >= 20 &&
@@ -200,7 +200,7 @@ export const imaginaryUpgrades = [
   {
     name: "Dimensional Symmetry",
     id: 18,
-    cost: 1.5e10,
+    cost: new Deimcal(1.5e10),
     formatCost: x => format(x, 1),
     requirement: () => `Have ${formatInt(80000)} total Galaxies`,
     hasFailed: () => false,
@@ -212,7 +212,7 @@ export const imaginaryUpgrades = [
   {
     name: "Deterministic Radiation",
     id: 19,
-    cost: 2.8e10,
+    cost: new Deimcal(2.8e10),
     formatCost: x => format(x, 1),
     requirement: () => `Reach ${formatInt(3.85e6)} Tickspeed Continuum without ever having more than
       ${formatInt(8)} Time Studies in this Reality`,
@@ -227,7 +227,7 @@ export const imaginaryUpgrades = [
   {
     name: "Vacuum Acceleration",
     id: 20,
-    cost: 3e12,
+    cost: new Deimcal(3e12),
     requirement: () => `Have a Continuum increase of at least ${formatPercents(1)}`,
     hasFailed: () => false,
     checkRequirement: () => Laitela.matterExtraPurchaseFactor >= 2,
@@ -240,7 +240,7 @@ export const imaginaryUpgrades = [
   {
     name: "Existential Elimination",
     id: 21,
-    cost: 1e13,
+    cost: new Deimcal(1e13),
     requirement: () => `Reach ${format("1e7400000000000")} antimatter with Continuum disabled for the entire Reality`,
     hasFailed: () => !player.requirementChecks.reality.noContinuum,
     checkRequirement: () => player.requirementChecks.reality.noContinuum &&
@@ -256,7 +256,7 @@ export const imaginaryUpgrades = [
   {
     name: "Total Termination",
     id: 22,
-    cost: 1.5e14,
+    cost: new Deimcal(1.5e14),
     formatCost: x => format(x, 1),
     requirement: () => `Reach ${format("1e150000000000")} antimatter in Effarig's Reality with
       at least ${formatInt(4)} Cursed Glyphs equipped`,
@@ -266,13 +266,13 @@ export const imaginaryUpgrades = [
       Currency.antimatter.value.exponent >= 1.5e11,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     description: () => `All Glyph Sacrifice totals are increased to ${format(1e100)}`,
-    effect: 1e100,
+    effect: new Deimcal(1e100),
     isDisabledInDoomed: true
   },
   {
     name: "Planar Purification",
     id: 23,
-    cost: 6e14,
+    cost: new Deimcal(6e14),
     requirement: () => `Reach Glyph level ${formatInt(20000)} in Ra's Reality with
       at most ${formatInt(0)} Glyphs equipped`,
     hasFailed: () => !Ra.isRunning || player.requirementChecks.reality.maxGlyphs > 0,
@@ -287,7 +287,7 @@ export const imaginaryUpgrades = [
   {
     name: "Absolute Annulment",
     id: 24,
-    cost: 6e14,
+    cost: new Deimcal(6e14),
     // We unfortunately don't have the UI space to be more descriptive on this button without causing text overflow,
     // so hopefully the additional modals (from the upgrade lock) will mostly communicate the idea that this is under
     // the same conditions as hard V's Post-destination
@@ -307,7 +307,7 @@ export const imaginaryUpgrades = [
   {
     name: "Omnipresent Obliteration",
     id: 25,
-    cost: 1.6e15,
+    cost: new Deimcal(1.6e15),
     formatCost: x => format(x, 1),
     requirement: () => `Reach Reality in Lai'tela's Reality with all Dimensions disabled and
       at least ${formatInt(4)} empty Glyph slots`,

@@ -87,7 +87,7 @@ export const pelleRifts = {
         description: "Increase max Replicanti Galaxies based on total Rift milestones",
         effect: () => {
           const x = PelleRifts.totalMilestones();
-          return x ** 2 - 2 * x;
+          return new Decimal(x ** 2 - 2 * x);
         },
         formatEffect: x => `Max RG count +${formatInt(x)}`
       },

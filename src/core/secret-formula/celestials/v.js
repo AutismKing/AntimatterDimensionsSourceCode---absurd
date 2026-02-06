@@ -19,7 +19,7 @@ export const v = {
       resource: () => Currency.realities.value,
       requirement: 10000,
       format: x => formatInt(x),
-      progress: () => Currency.realities.value / 10000,
+      progress: () => new Decimal(Currency.realities.value).div(10000).toNumber(),
     },
     eternities: {
       id: 2,
@@ -70,8 +70,8 @@ export const v = {
       // This achievement has internally negated values since the check is always greater than
       values: [-5, -4, -3, -2, -1, 0],
       condition: () => V.isRunning && TimeStudy.reality.isBought,
-      currentValue: () => -Glyphs.activeWithoutCompanion.length,
-      formatRecord: x => (x >= -5 ? formatInt(-x) : "Not reached"),
+      currentValue: () => new Decimal(-Glyphs.activeWithoutCompanion.length),
+      formatRecord: x => (x.gte(-5) ? formatInt(x.neg()) : "Not reached"),
       shardReduction: () => 0,
       maxShardReduction: () => 0,
       mode: V_REDUCTION_MODE.SUBTRACTION
@@ -150,8 +150,8 @@ export const v = {
       // This achievement has internally negated values since the check is always greater than
       values: [1, 4, 7, 10, 13],
       condition: () => V.isRunning && TimeStudy.reality.isBought,
-      currentValue: () => -player.requirementChecks.reality.maxGlyphs,
-      formatRecord: x => formatInt(-x),
+      currentValue: () => new Decimal(-player.requirementChecks.reality.maxGlyphs),
+      formatRecord: x => formatInt(x.neg()),
       shardReduction: () => 0,
       maxShardReduction: () => 0,
       mode: V_REDUCTION_MODE.SUBTRACTION,
@@ -164,7 +164,7 @@ export const v = {
         Black Hole or slower, without discharging or entering EC12.`,
       values: [100, 150, 200, 250, 300],
       condition: () => V.isRunning,
-      currentValue: () => (
+      currentValue: () => new Decimal(
         // Dirty hack I know lmao
         Currency.timeTheorems.gte(400000)
           ? -Math.log10(player.requirementChecks.reality.slowestBH)
@@ -183,7 +183,7 @@ export const v = {
       description: value => `Reach a Glyph of level ${formatInt(value)}.`,
       values: [6500, 7000, 8000, 9000, 10000],
       condition: () => V.isRunning,
-      currentValue: () => gainedGlyphLevel().actualLevel,
+      currentValue: () => new Decimal(gainedGlyphLevel().actualLevel),
       formatRecord: x => formatInt(x),
       shardReduction: tiers => Math.floor(500 * tiers),
       maxShardReduction: () => 500,
