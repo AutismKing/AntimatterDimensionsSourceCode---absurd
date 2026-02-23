@@ -13,3 +13,4 @@ if (firebaseConfig) {
     `export const firebaseConfig = ${firebaseConfig};`
   );
 }
+// github failed so trying again
