@@ -41,7 +41,7 @@ export function replicantiGalaxy(auto) {
   if (galaxyGain < 1) return;
   player.replicanti.timer = 0;
   Replicanti.amount = Achievement(126).isUnlocked && !Pelle.isDoomed
-    ? Decimal.pow10(Replicanti.amount.add(1).log10().sub(new Decimal(LOG10_MAX_VALUE).times(galaxyGain)))
+    ? Decimal.pow10(Replicanti.amount.log10() - LOG10_MAX_VALUE * galaxyGain)
     : DC.D1;
   addReplicantiGalaxies(galaxyGain);
 }
@@ -60,7 +60,7 @@ function fastReplicantiBelow308(log10GainFactor, isAutobuyerActive) {
   const shouldBuyRG = isAutobuyerActive && !RealityUpgrade(6).isLockingMechanics;
   // More than e308 galaxies per tick causes the game to die, and I don't think it's worth the performance hit of
   // Decimalifying the entire calculation.  And yes, this can and does actually happen super-lategame.
-  const uncappedAmount = DC.E1.pow(log10GainFactor.plus(Replicanti.amount.add(1).log10()));
+  const uncappedAmount = DC.E1.pow(log10GainFactor.plus(Replicanti.amount.log10()));
   // Checking for uncapped equaling zero is because Decimal.pow returns zero for overflow for some reason
   if (log10GainFactor.gt(Number.MAX_VALUE) || uncappedAmount.eq(0)) {
     if (shouldBuyRG) {
@@ -72,18 +72,18 @@ function fastReplicantiBelow308(log10GainFactor, isAutobuyerActive) {
   }
 
   if (!shouldBuyRG) {
-    const remainingGain = log10GainFactor.minus(replicantiCap().log10().sub(Replicanti.amount.add(1).log10())).clampMin(0);
+    const remainingGain = log10GainFactor.minus(replicantiCap().log10() - Replicanti.amount.log10()).clampMin(0);
     Replicanti.amount = Decimal.min(uncappedAmount, replicantiCap());
     return remainingGain;
   }
 
-  const gainNeededPerRG = DC.NUMMAX.log10();
-  const replicantiExponent = log10GainFactor.add(Replicanti.amount.add(1).log10());
-  const toBuy = Decimal.floor(Decimal.min(new Decimal(replicantiExponent.div(gainNeededPerRG)),
-    Replicanti.galaxies.max.sub(player.replicanti.galaxies)));
-  const maxUsedGain = gainNeededPerRG.times(toBuy).add(replicantiCap().log10()).sub(Replicanti.amount.log10());
+  const gainNeededPerRG = Decimal.NUMBER_MAX_VALUE.log10();
+  const replicantiExponent = log10GainFactor.toNumber() + Replicanti.amount.log10();
+  const toBuy = Decimal.floor(Decimal.min(new Decimal(replicantiExponent / gainNeededPerRG),
+    Replicanti.galaxies.max.sub(player.replicanti.galaxies))).toNumber();
+  const maxUsedGain = gainNeededPerRG * toBuy + replicantiCap().log10() - Replicanti.amount.log10();
   const remainingGain = log10GainFactor.minus(maxUsedGain).clampMin(0);
-  Replicanti.amount = Decimal.pow10(replicantiExponent.sub(gainNeededPerRG.times(toBuy)))
+  Replicanti.amount = Decimal.pow10(replicantiExponent - gainNeededPerRG * toBuy)
     .clampMax(replicantiCap());
   addReplicantiGalaxies(toBuy);
   return remainingGain;
@@ -104,11 +104,11 @@ export function getReplicantiInterval(overCapOverride, intervalIn) {
   }
 
   if (overCap) {
-    let increases = (amount.log10().sub(replicantiCap().log10())).div(ReplicantiGrowth.scaleLog10);
-    if (PelleStrikes.eternity.hasStrike && !PelleStrikes.eternity.isDestroyed() && amount.gte(DC.E2000)) {
+    let increases = (amount.log10() - replicantiCap().log10()) / ReplicantiGrowth.scaleLog10;
+    if (PelleStrikes.eternity.hasStrike && amount.gte(DC.E2000)) {
       // The above code assumes in this case there's 10x scaling for every 1e308 increase;
       // in fact, before e2000 it's only 2x.
-      increases = increases.sub(Decimal.log10(5).times(new Decimal(2000).sub(replicantiCap().log10())).div(ReplicantiGrowth.scaleLog10));
+      increases -= Math.log10(5) * (2000 - replicantiCap().log10()) / ReplicantiGrowth.scaleLog10;
     }
     interval = interval.times(Decimal.pow(ReplicantiGrowth.scaleFactor, increases));
   }
@@ -154,7 +154,7 @@ export function totalReplicantiSpeedMult(overCap) {
   totalMult = totalMult.times(getAdjustedGlyphEffect("replicationspeed"));
   if (GlyphAlteration.isAdded("replication")) {
     totalMult = totalMult.times(
-      Decimal.clampMin(Decimal.log10(Replicanti.amount.add(1)).times(getSecondaryGlyphEffect("replicationdtgain")), 1));
+      Math.clampMin(Decimal.log10(Replicanti.amount) * getSecondaryGlyphEffect("replicationdtgain"), 1));
   }
   totalMult = totalMult.timesEffectsOf(AlchemyResource.replication, Ra.unlocks.continuousTTBoost.effects.replicanti);
 
@@ -166,8 +166,8 @@ export function replicantiCap() {
     ? Currency.infinitiesTotal.value
       .pow(TimeStudy(31).isBought ? 120 : 30)
       .clampMin(1)
-      .times(DC.NUMMAX)
-    : DC.NUMMAX;
+      .times(Decimal.NUMBER_MAX_VALUE)
+    : Decimal.NUMBER_MAX_VALUE;
 }
 
 // eslint-disable-next-line complexity
@@ -219,8 +219,8 @@ export function replicantiLoop(diff) {
       const intervalRatio = getReplicantiInterval(true).div(interval);
       remainingGain = remainingGain.div(intervalRatio);
       Replicanti.amount =
-        Decimal.exp(remainingGain.div(LOG10_E).times(postScale).plus(1).ln().div(postScale).add(
-        Replicanti.amount.clampMin(1).ln()));
+        Decimal.exp(remainingGain.div(LOG10_E).times(postScale).plus(1).ln() / postScale +
+        Replicanti.amount.clampMin(1).ln());
     }
   } else if (tickCount.gt(1)) {
     // Multiple ticks but "slow" gain: This happens at low replicanti chance and amount with a fast interval, which
@@ -246,11 +246,11 @@ export function replicantiLoop(diff) {
 
   if (!isUncapped) Replicanti.amount = Decimal.min(replicantiCap(), Replicanti.amount);
 
-  if (Pelle.isDoomed && Replicanti.amount.add(1).log10().sub(replicantiBeforeLoop.log10()).gt(308)) {
+  if (Pelle.isDoomed && Replicanti.amount.log10() - replicantiBeforeLoop.log10() > 308) {
     Replicanti.amount = replicantiBeforeLoop.times(1e308);
   }
 
-  if (areRGsBeingBought && Replicanti.amount.gte(DC.NUMMAX)) {
+  if (areRGsBeingBought && Replicanti.amount.gte(Decimal.NUMBER_MAX_VALUE)) {
     const buyer = Autobuyer.replicantiGalaxy;
     const isAuto = buyer.canTick && buyer.isEnabled;
     // There might be a manual and auto tick simultaneously; pass auto === true iff the autobuyer is ticking and
@@ -439,11 +439,11 @@ export const ReplicantiUpgrade = {
       let increase = EternityChallenge(6).isRunning
         ? DC.E2.pow(galaxies).times(DC.E2)
         : DC.E5.pow(galaxies).times(DC.E25);
-      if (galaxies >= this.distantRGStart) {
-        increase = increase.times(DC.E50.pow(galaxies - this.distantRGStart + 5));
+      if (galaxies.gte(this.distantRGStart)) {
+        increase = increase.times(DC.E50.pow(galaxies.sub(this.distantRGStart).add(5)));
       }
-      if (galaxies >= this.remoteRGStart) {
-        increase = increase.times(DC.E5.pow(Math.pow(galaxies - this.remoteRGStart + 1, 2)));
+      if (galaxies.gte(this.remoteRGStart)) {
+        increase = increase.times(DC.E5.pow(Decimal.pow(galaxies.sub(this.remoteRGStart).add(1), 2)));
       }
       return increase;
     }
@@ -539,20 +539,20 @@ export const Replicanti = {
       return player.replicanti.galaxies;
     },
     get extra() {
-      return Math.floor((Effects.sum(
+      return Decimal.floor((new Decimal().plusEffectsOf(
         TimeStudy(225),
         TimeStudy(226)
-      ) + Effarig.bonusRG) * TimeStudy(303).effectOrDefault(1));
+      ).add(Effarig.bonusRG)).times(TimeStudy(303).effectOrDefault(1)));
     },
     get total() {
-      return this.bought + this.extra;
+      return this.bought.add(this.extra);
     },
     get max() {
-      return ReplicantiUpgrade.galaxies.value + ReplicantiUpgrade.galaxies.extra;
+      return ReplicantiUpgrade.galaxies.value.add(ReplicantiUpgrade.galaxies.extra);
     },
     get canBuyMore() {
-      if (!Replicanti.amount.gte(DC.NUMMAX)) return false;
-      return this.bought < this.max;
+      if (!Replicanti.amount.gte(Decimal.NUMBER_MAX_VALUE)) return false;
+      return this.bought.lt(this.max);
     },
     get areBeingBought() {
       const buyer = Autobuyer.replicantiGalaxy;
@@ -561,13 +561,13 @@ export const Replicanti = {
         (!player.options.confirmations.replicantiGalaxy && this.isPlayerHoldingR);
     },
     get gain() {
-      if (!this.canBuyMore) return 0;
+      if (!this.canBuyMore) return DC.D0;
       if (Achievement(126).isUnlocked) {
-        const maxGain = Replicanti.galaxies.max - player.replicanti.galaxies;
-        const logReplicanti = Replicanti.amount.add(1).log10();
-        return Math.min(maxGain, Math.floor(logReplicanti / LOG10_MAX_VALUE));
+        const maxGain = Replicanti.galaxies.max.sub(player.replicanti.galaxies);
+        const logReplicanti = Replicanti.amount.log10();
+        return Decimal.min(maxGain, Math.floor(logReplicanti / LOG10_MAX_VALUE));
       }
-      return 1;
+      return DC.D1;
     },
   },
   get isUncapped() {

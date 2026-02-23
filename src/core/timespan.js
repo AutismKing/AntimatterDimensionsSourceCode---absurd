@@ -117,7 +117,6 @@ window.TimeSpan = class TimeSpan {
    * @returns {Decimal}
    */
   get totalYears() {
-    if (this._ms.lt(1e300)) return new Decimal(this._ms.toNumber() / 31536e6);
     return this._ms.div(31536e6);
   }
 
@@ -125,7 +124,6 @@ window.TimeSpan = class TimeSpan {
    * @returns {Decimal}
    */
   get totalDays() {
-    if (this._ms.lt(1e300)) return new Decimal(this._ms.toNumber() / 864e5);
     return this._ms.div(864e5);
   }
 
@@ -133,7 +131,6 @@ window.TimeSpan = class TimeSpan {
    * @returns {Decimal}
    */
   get totalHours() {
-    if (this._ms.lt(1e300)) return new Decimal(this._ms.toNumber() / 36e5);
     return this._ms.div(36e5);
   }
 
@@ -141,7 +138,6 @@ window.TimeSpan = class TimeSpan {
    * @returns {Decimal}
    */
   get totalMinutes() {
-    if (this._ms.lt(1e300)) return new Decimal(this._ms.toNumber() / 6e4);
     return this._ms.div(6e4);
   }
 
@@ -149,7 +145,6 @@ window.TimeSpan = class TimeSpan {
    * @returns {Decimal}
    */
   get totalSeconds() {
-    if (this._ms.lt(1e300)) return new Decimal(this._ms.toNumber() / 1e3);
     return this._ms.div(1e3);
   }
 
@@ -245,20 +240,11 @@ window.TimeSpan = class TimeSpan {
     if (format(0) === "END" && !isSpeedrun) return "END";
 
     const totalSeconds = this.totalSeconds;
-    if (totalSeconds.lt(1e-7) && !totalSeconds.eq(0)) {
-      // Well I give up on fixing notation. I choose to make a new one.
-      // TODO: make it a new notation
-      // If the number is smaller than 1e1.8e-308, it will displayed as something like "1e-NaN".
-      // If this really happened we need to fix it.
-      const ms = totalSeconds.times(1000);
-      if (isFinite(ms.exponent)) return `${format(ms.mantissa, 0, 1)}e${format(ms.exponent)} ms`;
-      return ms.toString() + "ms";
-    }
-    if (totalSeconds.gt(1e-7) && totalSeconds.lt(1e-3)) {
+    if (totalSeconds.gt(5e-7) && totalSeconds.lt(1e-3)) {
       // This conditional happens when when the time is less than 1 millisecond
-      // but big enough not to round to 0 with 4 decimal places (so showing decimal places
+      // but big enough not to round to 0 with 3 decimal places (so showing decimal places
       // won't just show 0 and waste space).
-      return `${format(totalSeconds.times(1000), 0, 4)} ms`;
+      return `${format(totalSeconds.times(1000), 0, 3)} ms`;
     }
     if (totalSeconds.lt(1)) {
       // This catches all the cases when totalSeconds is less than 1 but not
@@ -316,11 +302,11 @@ window.TimeSpan = class TimeSpan {
   }
 
   static get maxValue() {
-    return new TimeSpan(DC.BEMAX);
+    return new TimeSpan(Decimal.MAX_VALUE);
   }
 
   static get minValue() {
-    return new TimeSpan(new Decimal(1).div(DC.BEMAX));
+    return new TimeSpan(new Decimal(1).div(Decimal.MAX_VALUE));
   }
 };
 

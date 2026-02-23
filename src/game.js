@@ -334,8 +334,8 @@ export function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride
           ? blackHole.isActive
           : blackHole.id <= blackHolesActiveOverride;
         if (!isActive) break;
-        factor *= Decimal.pow(blackHole.power, BlackHoles.unpauseAccelerationFactor);
-        factor *= VUnlocks.achievementBH.effectOrDefault(1);
+        factor = factor.times(Math.pow(blackHole.power, BlackHoles.unpauseAccelerationFactor));
+        factor = factor.times(VUnlocks.achievementBH.effectOrDefault(1));
       }
     }
   }
@@ -345,7 +345,7 @@ export function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride
   }
 
   if (effects.includes(GAME_SPEED_EFFECT.TIME_GLYPH)) {
-    factor *= getAdjustedGlyphEffect("timespeed");
+    factor = factor.times(getAdjustedGlyphEffect("timespeed"));
     factor = Decimal.pow(factor, getAdjustedGlyphEffect("effarigblackhole"));
   }
 

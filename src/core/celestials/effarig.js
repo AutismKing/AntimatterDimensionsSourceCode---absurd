@@ -71,12 +71,12 @@ export const Effarig = {
     return countValuesFromBitmask(genEffectBitmask) + countValuesFromBitmask(nongenEffectBitmask);
   },
   get shardsGained() {
-    if (!TeresaUnlocks.effarig.canBeApplied) return new Decimal(0);
-    return Decimal.floor(Decimal.pow(Currency.eternityPoints.value.log10().div(7500), this.glyphEffectAmount)).times(
+    if (!TeresaUnlocks.effarig.canBeApplied) return 0;
+    return Decimal.floor(Decimal.pow(Currency.eternityPoints.exponent / 7500, this.glyphEffectAmount)).times(
       AlchemyResource.effarig.effectValue);
   },
   get maxRarityBoost() {
-    return 5 * (Decimal.pow(Decimal.log10(Decimal.log10(Currency.relicShards.value.plus(10))))).toNumber();
+    return 5 * Math.log10(Math.log10(Currency.relicShards.value.plus(10)));
   },
   nerfFactor(power) {
     let c;
@@ -92,7 +92,7 @@ export const Effarig = {
         c = 25;
         break;
     }
-    return (DC.D1.sub(new Decimal(c).div(Decimal.sqrt(power.add(1).pLog10()).add(c)))).times(3).toNumber();
+    return 3 * (1 - c / (c + Math.sqrt(power.pLog10())));
   },
   get tickDilation() {
     return 0.7 + 0.1 * this.nerfFactor(Currency.timeShards.value);
@@ -101,16 +101,16 @@ export const Effarig = {
     return 0.25 + 0.25 * this.nerfFactor(Currency.infinityPower.value);
   },
   get tickspeed() {
-    const base = Tickspeed.baseValue.reciprocal().log10().add(3);
-    return Decimal.pow10(Decimal.pow(base, this.tickDilation)).reciprocal();
+    const base = 3 + Tickspeed.baseValue.reciprocal().log10();
+    return Decimal.pow10(Math.pow(base, this.tickDilation)).reciprocal();
   },
   multiplier(mult) {
     const base = new Decimal(mult).pLog10();
-    return Decimal.pow10(Decimal.pow(base, this.multDilation));
+    return Decimal.pow10(Math.pow(base, this.multDilation));
   },
   get bonusRG() {
     // Will return 0 if Effarig Infinity is uncompleted
-    return Decimal.floor(replicantiCap().pLog10().div(LOG10_MAX_VALUE).sub(1)).toNumber();
+    return Math.floor(replicantiCap().pLog10() / LOG10_MAX_VALUE - 1);
   },
   quotes: Quotes.effarig,
   symbol: "Ϙ"

@@ -248,7 +248,7 @@ Currency.antimatter = new class extends DecimalCurrency {
 Currency.matter = new class extends DecimalCurrency {
   get value() { return player.matter; }
   set value(value) {
-    player.matter = Decimal.min(value, DC.BEMAX);
+    player.matter = Decimal.min(value, Decimal.MAX_VALUE);
   }
 }();
 
@@ -420,7 +420,7 @@ Currency.relicShards = new class extends NumberCurrency {
 Currency.imaginaryMachines = new class extends NumberCurrency {
   get value() { return player.reality.imaginaryMachines; }
   set value(value) {
-    player.reality.imaginaryMachines = Math.clampMax(value, MachineHandler.currentIMCap);
+    player.reality.imaginaryMachines = Decimal.clampMax(newValue, MachineHandler.currentIMCap);
   }
 }();
 

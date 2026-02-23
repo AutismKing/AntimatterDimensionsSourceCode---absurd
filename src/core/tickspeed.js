@@ -8,14 +8,14 @@ export function effectiveBaseGalaxies() {
     TimeStudy(133)
   ));
   // "extra" galaxies unaffected by the passive/idle boosts come from studies 225/226 and Effarig Infinity
-  replicantiGalaxies += Replicanti.galaxies.extra;
+  replicantiGalaxies = replicantiGalaxies.add(Replicanti.galaxies.extra);
   const nonActivePathReplicantiGalaxies = Decimal.min(Replicanti.galaxies.bought,
     ReplicantiUpgrade.galaxies.value);
   // Effects.sum is intentional here - if EC8 is not completed,
   // this value should not be contributed to total replicanti galaxies
-  replicantiGalaxies = replicantiGalaxies.add(nonActivePathReplicantiGalaxies.times(Effects.sum(EternityChallenge(8).reward)));
+  replicantiGalaxies = replicantiGalaxies.add(nonActivePathReplicantiGalaxies).times(Effects.sum(EternityChallenge(8).reward));
   let freeGalaxies = player.dilation.totalTachyonGalaxies;
-  freeGalaxies = freeGalaxies.times(Decimal.max(0, Replicanti.amount.add(1).log10().div(1e6)).times(AlchemyResource.alternation.effectValue).add(1));
+  freeGalaxies = freeGalaxies.times(1 + Math.max(0, Replicanti.amount.log10() / 1e6) * AlchemyResource.alternation.effectValue);
   return Decimal.max(player.galaxies.add(GalaxyGenerator.galaxies).add(replicantiGalaxies).add(freeGalaxies), 0);
 }
 
@@ -23,7 +23,7 @@ export function getTickSpeedMultiplier() {
   if (InfinityChallenge(3).isRunning) return DC.D1;
   if (Ra.isRunning) return DC.C1D1_1245;
   let galaxies = effectiveBaseGalaxies();
-  const effects = Effects.product(
+  const effects = DC.D1.timesEffectsOf(
     InfinityUpgrade.galaxyBoost,
     InfinityUpgrade.galaxyBoost.chargedEffect,
     BreakInfinityUpgrade.galaxyBoost,
@@ -31,6 +31,8 @@ export function getTickSpeedMultiplier() {
     TimeStudy(232),
     Achievement(86),
     Achievement(178),
+    Achievement(193),
+    EndgameMastery(52),
     InfinityChallenge(5).reward,
     PelleUpgrade.galaxyPower,
     PelleRifts.decay.milestones[1]
@@ -129,7 +131,7 @@ export const Tickspeed = {
     return this.isUnlocked &&
       !EternityChallenge(9).isRunning &&
       !Laitela.continuumActive &&
-      (player.break || this.cost.lt(DC.NUMMAX));
+      (player.break || this.cost.lt(Decimal.NUMBER_MAX_VALUE));
   },
 
   get isAffordable() {
@@ -179,7 +181,7 @@ export const Tickspeed = {
     let boughtTickspeed;
     if (Laitela.continuumActive) boughtTickspeed = this.continuumValue;
     else boughtTickspeed = player.totalTickBought;
-    return new Decimal(boughtTickspeed).add(player.totalTickGained).toNumber();
+    return boughtTickspeed + player.totalTickGained;
   },
 
   get perSecond() {
@@ -216,7 +218,7 @@ export const FreeTickspeed = {
     const tickmult = (1 + (Effects.min(1.33, TimeStudy(171)) - 1) *
       Math.max(getAdjustedGlyphEffect("cursedtickspeed"), 1));
     const logTickmult = Math.log(tickmult);
-    const logShards = Decimal.max(1, shards).ln().toNumber();
+    const logShards = shards.ln();
     const uncapped = Math.max(0, logShards / logTickmult);
     if (uncapped <= FreeTickspeed.softcap) {
       this.multToNext = tickmult;

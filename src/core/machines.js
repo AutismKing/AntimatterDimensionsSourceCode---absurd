@@ -19,12 +19,12 @@ export const MachineHandler = {
   get uncappedRM() {
     let log10FinalEP = player.records.thisReality.maxEP.plus(gainedEternityPoints()).log10();
     if (!PlayerProgress.realityUnlocked()) {
-      if (log10FinalEP.gt(8000)) log10FinalEP = new Decimal(8000);
-      if (log10FinalEP.gt(6000)) log10FinalEP = log10FinalEP.sub((log10FinalEP.sub(6000)).times(0.75));
+      if (log10FinalEP > 8000) log10FinalEP = 8000;
+      if (log10FinalEP > 6000) log10FinalEP -= (log10FinalEP - 6000) * 0.75;
     }
-    let rmGain = DC.E3.pow(log10FinalEP.div(4000).sub(1));
+    let rmGain = DC.E3.pow(log10FinalEP / 4000 - 1);
     // Increase base RM gain if <10 RM
-    if (rmGain.gte(1) && rmGain.lt(10)) rmGain = new Decimal(27).div(4000).times(log10FinalEP).sub(26);
+    if (rmGain.gte(1) && rmGain.lt(10)) rmGain = new Decimal(27 / 4000 * log10FinalEP - 26);
     rmGain = rmGain.times(this.realityMachineMultiplier);
     return rmGain.floor();
   },
@@ -39,9 +39,7 @@ export const MachineHandler = {
 
   get baseIMCap() {
     return (Decimal.pow(Decimal.clampMin(new Decimal(this.uncappedRM.log10()).sub(1000), 0), 2).times(
-      Decimal.pow(Decimal.clampMin(new Decimal(this.uncappedRM.log10()).sub(100000), 1), 0.2)).times(
-      Decimal.pow(Decimal.clampMin(new Decimal(this.uncappedRM.log10()).div(1000000000), 1),
-      new Decimal(Decimal.log10(this.uncappedRM.log10())).div(7.5)))).pow()
+      Decimal.pow(Decimal.clampMin(new Decimal(this.uncappedRM.log10()).sub(100000), 1), 0.2)));
   },
 
   get currentIMCap() {
@@ -69,18 +67,18 @@ export const MachineHandler = {
   },
 
   gainedImaginaryMachines(diff) {
-    return (this.currentIMCap - Currency.imaginaryMachines.value) *
-      (1 - Math.pow(2, (-diff / 1000 / this.scaleTimeForIM)));
+    return (this.currentIMCap.sub(Currency.imaginaryMachines.value)).times(
+      new Decimal(1).sub(Decimal.pow(2, new Decimal(0).sub(diff).div(1000).div(this.scaleTimeForIM))));
   },
 
   estimateIMTimer(cost) {
     const imCap = this.currentIMCap;
-    if (imCap <= cost) return Infinity;
+    if (imCap.lte(cost)) return Infinity;
     const currentIM = Currency.imaginaryMachines.value;
     // This is doing log(a, 1/2) - log(b, 1/2) where a is % left to imCap of cost and b is % left to imCap of current
     // iM. log(1 - x, 1/2) should be able to estimate the time taken for iM to increase from 0 to imCap * x since every
     // fixed interval the difference between current iM to max iM should decrease by a factor of 1/2.
-    return Math.max(0, Math.log2(imCap / (imCap - cost)) - Math.log2(imCap / (imCap - currentIM))) *
-      this.scaleTimeForIM;
+    return Decimal.max(0, new Decimal(Decimal.log2(imCap.div(imCap.sub(cost)))).sub(
+      Decimal.log2(imCap.div(imCap.sub(currentIM))))).times(this.scaleTimeForIM);
   }
 };

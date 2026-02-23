@@ -92,7 +92,7 @@ function bigCrunchUpdateStatistics() {
   );
 
   player.records.bestInfinity.time =
-    Math.min(player.records.bestInfinity.time, player.records.thisInfinity.time);
+    Decimal.min(player.records.bestInfinity.time, player.records.thisInfinity.time);
   player.records.bestInfinity.realTime =
     Math.min(player.records.bestInfinity.realTime, player.records.thisInfinity.realTime);
 
@@ -125,13 +125,13 @@ export function bigCrunchResetValues(enteringAntimatterChallenge) {
   // code structure similar to what it was before to avoid new bugs.
   secondSoftReset(enteringAntimatterChallenge);
 
-  let remainingGalaxies = 0;
+  let remainingGalaxies = DC.D0;
   if (Achievement(95).isUnlocked && !Pelle.isDoomed) {
     Replicanti.amount = currentReplicanti;
-    remainingGalaxies += Math.min(currentReplicantiGalaxies, 1);
+    remainingGalaxies = remainingGalaxies.add(Decimal.min(currentReplicantiGalaxies, 1));
   }
   if (TimeStudy(33).isBought && !Pelle.isDoomed) {
-    remainingGalaxies += Math.floor(currentReplicantiGalaxies / 2);
+    remainingGalaxies = remainingGalaxies.add(Decimal.floor(currentReplicantiGalaxies.div(2)));
   }
 
   if (PelleUpgrade.replicantiGalaxyNoReset.canBeApplied) {
@@ -139,7 +139,7 @@ export function bigCrunchResetValues(enteringAntimatterChallenge) {
   }
   // I don't think this Math.clampMax is technically needed, but if we add another source
   // of keeping Replicanti Galaxies then it might be.
-  player.replicanti.galaxies = Math.clampMax(remainingGalaxies, currentReplicantiGalaxies);
+  player.replicanti.galaxies = Decimal.clampMax(remainingGalaxies, currentReplicantiGalaxies);
 }
 
 function bigCrunchCheckUnlocks() {
@@ -175,9 +175,10 @@ export function preProductionGenerateIP(diff) {
       genCount = Decimal.div(diff, genPeriod);
     } else {
       // Partial progress (fractions from 0 to 1) are stored in player.partInfinityPoint
-      player.partInfinityPoint += diff / genPeriod;
-      genCount = Math.floor(player.partInfinityPoint);
-      player.partInfinityPoint -= genCount;
+      const diffnum = Decimal.clamp(new Decimal(diff), 1e-300, 1e300);
+      player.partInfinityPoint = player.partInfinityPoint.add(diffnum.div(genPeriod.clampMax(1e300)));
+      genCount = Decimal.floor(player.partInfinityPoint);
+      player.partInfinityPoint = player.partInfinityPoint.sub(genCount);
     }
     let gainedPerGen = player.records.bestInfinity.time >= 999999999999 ? DC.D0 : InfinityUpgrade.ipGen.effectValue;
     if (Laitela.isRunning) gainedPerGen = dilatedValueOf(gainedPerGen);

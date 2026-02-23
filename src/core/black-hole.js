@@ -206,7 +206,7 @@ class BlackHoleState {
     if (BlackHoles.arePaused) return `<i class="fas fa-pause"></i> Paused`;
     if (this.isPermanent) return `<i class="fas fa-infinity"></i> Permanent`;
 
-    const timeString = TimeSpan.fromSeconds(new Decimal(this.timeToNextStateChange)).toStringShort(true);
+    const timeString = TimeSpan.fromSeconds(this.timeToNextStateChange).toStringShort(true);
     if (this.isActive) return `<i class="fas fa-play"></i> Active (${timeString})`;
     return `<i class="fas fa-redo"></i> Inactive (${timeString})`;
   }
@@ -468,9 +468,9 @@ export const BlackHoles = {
     let middle;
     for (let iter = 0; iter < 100; ++iter) {
       middle = (start + end) / 2;
-      const error = evaluationFunction(middle) - target;
-      if (Math.abs(error) < tolerance) break;
-      if (error < 0) {
+      const error = evaluationFunction(middle).sub(target);
+      if (error.abs().lt(tolerance)) break;
+      if (error.lt(0)) {
         // eslint-disable-next-line no-param-reassign
         start = middle;
       } else {

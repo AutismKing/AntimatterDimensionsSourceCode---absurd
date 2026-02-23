@@ -78,8 +78,8 @@ export default {
         case SINGULARITY_MILESTONE_RESOURCE.CONDENSE_COUNT:
           return `Condense ${quantify("time", condenseCount, 2, 2)}`;
         case SINGULARITY_MILESTONE_RESOURCE.MANUAL_TIME:
-          thisSingularityTime = Math.clampMin(0, this.currentCondenseTime);
-          extraTime = Math.ceil(condenseCount - 1) * this.baseCondenseTime;
+          thisSingularityTime = Decimal.clampMin(0, this.currentCondenseTime);
+          extraTime = Decimal.ceil(condenseCount.sub(1)).mul(this.baseCondenseTime);
           return `In ${TimeSpan.fromSeconds(new Decimal(thisSingularityTime.add(extraTime))).toStringShort()} (manual)`;
         case SINGULARITY_MILESTONE_RESOURCE.AUTO_TIME:
           thisSingularityTime = Decimal.clampMin(0, this.currentCondenseTime.add(this.autoCondenseDelay));

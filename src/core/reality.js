@@ -291,7 +291,7 @@ function updateRealityRecords(realityProps) {
     player.records.bestReality.glyphLevel = realityProps.gainedGlyphLevel.actualLevel;
     player.records.bestReality.glyphLevelSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
   }
-  player.records.bestReality.time = Math.min(player.records.thisReality.time, player.records.bestReality.time);
+  player.records.bestReality.time = Decimal.min(player.records.thisReality.time, player.records.bestReality.time);
   if (player.records.thisReality.realTime < player.records.bestReality.realTime) {
     player.records.bestReality.realTime = player.records.thisReality.realTime;
     player.records.bestReality.speedSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
@@ -792,8 +792,8 @@ export function applyRUPG10() {
     if (autobuyer.data.interval !== undefined) autobuyer.data.interval = 100;
   }
 
-  player.dimensionBoosts = Math.max(4, player.dimensionBoosts);
-  player.galaxies = Math.max(1, player.galaxies);
+  player.dimensionBoosts = Decimal.max(DC.D4, player.dimensionBoosts);
+  player.galaxies = Decimal.max(1, player.galaxies);
   player.break = true;
   Currency.eternities.bumpTo(100);
   Replicanti.amount = Replicanti.amount.clampMin(1);

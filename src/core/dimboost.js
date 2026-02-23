@@ -97,28 +97,28 @@ export class DimBoost {
   }
 
   static bulkRequirement(bulk) {
-    const targetResets = DimBoost.purchasedBoosts + bulk;
-    const tier = Math.min(targetResets + 3, this.maxDimensionsUnlockable);
-    let amount = 20;
+    const targetResets = DimBoost.purchasedBoosts.add(bulk);
+    const tier = Decimal.min(targetResets.add(3), this.maxDimensionsUnlockable).toNumber();
+    let amount = DC.D20;
     const discount = Effects.sum(
       TimeStudy(211),
       TimeStudy(222)
     );
     if (tier === 6 && NormalChallenge(10).isRunning) {
-      amount += Math.round((targetResets - 3) * (20 - discount));
+      amount = amount.add(targetResets.sub(3).mul(DC.D20.sub(discount)).round());
     } else if (tier === 8) {
-      amount += Math.round((targetResets - 5) * (15 - discount));
+      amount = amount.add(targetResets.sub(5).mul(DC.D15.sub(discount)).round());
     }
     if (EternityChallenge(5).isRunning) {
-      amount += Math.pow(targetResets - 1, 3) + targetResets - 1;
+      amount = Decimal.pow(targetResets.sub(1), 3).add(targetResets).add(amount).sub(1);
     }
 
-    amount -= Effects.sum(InfinityUpgrade.resetBoost);
-    if (InfinityChallenge(5).isCompleted) amount -= 1;
+    amount = amount.sub(Effects.sum(InfinityUpgrade.resetBoost));
+    if (InfinityChallenge(5).isCompleted) amount = amount.sub(1);
 
-    amount *= InfinityUpgrade.resetBoost.chargedEffect.effectOrDefault(1);
+    amount = amount.times(InfinityUpgrade.resetBoost.chargedEffect.effectOrDefault(1));
 
-    amount = Math.round(amount);
+    amount = Decimal.round(amount);
 
     return new DimBoostRequirement(tier, amount);
   }
@@ -129,16 +129,16 @@ export class DimBoost {
     const allNDUnlocked = EternityMilestone.unlockAllND.isReached;
 
     let newUnlock = "";
-    if (!allNDUnlocked && boosts < DimBoost.maxDimensionsUnlockable - 4) {
-      newUnlock = `unlock the ${boosts + 5}th Dimension`;
-    } else if (boosts === 4 && !NormalChallenge(10).isRunning && !EternityChallenge(3).isRunning) {
+    if (!allNDUnlocked && boosts.lt(DimBoost.maxDimensionsUnlockable - 4)) {
+      newUnlock = `unlock the ${formatInt(boosts.add(5))}th Dimension`;
+    } else if (boosts.eq(4) && !NormalChallenge(10).isRunning && !EternityChallenge(3).isRunning) {
       newUnlock = "unlock Sacrifice";
     }
 
     const formattedMultText = `give a ${formatX(DimBoost.power, 2, 1)} multiplier `;
     let dimensionRange = `to the 1st Dimension`;
-    if (boosts > 0) dimensionRange = `to Dimensions 1-${Math.min(boosts + 1, 8)}`;
-    if (boosts >= DimBoost.maxDimensionsUnlockable - 1) dimensionRange = `to all Dimensions`;
+    if (boosts.gt(0)) dimensionRange = `to Dimensions 1-${Decimal.min(boosts.add(1), 8)}`;
+    if (boosts.gte(DimBoost.maxDimensionsUnlockable - 1)) dimensionRange = `to all Dimensions`;
 
     let boostEffects;
     if (NormalChallenge(8).isRunning) boostEffects = newUnlock;
@@ -147,38 +147,40 @@ export class DimBoost {
 
     if (boostEffects === "") return "Dimension Boosts are currently useless";
     const areDimensionsKept = (Perk.antimatterNoReset.isBought || Achievement(111).canBeApplied) &&
-      (!Pelle.isDoomed || PelleUpgrade.dimBoostResetsNothing.isBought);
+      ((!Pelle.isDoomed || PelleAchievementUpgrade.achievement111.isBought) || PelleUpgrade.dimBoostResetsNothing.isBought);
     if (areDimensionsKept) return boostEffects[0].toUpperCase() + boostEffects.substring(1);
     return `Reset your Dimensions to ${boostEffects}`;
   }
 
   static get purchasedBoosts() {
-    return Math.floor(player.dimensionBoosts);
+    return Decimal.fromDecimal(player.dimensionBoosts.floor());
   }
 
   static get imaginaryBoosts() {
-    return Ra.isRunning ? 0 : ImaginaryUpgrade(12).effectOrDefault(0) * ImaginaryUpgrade(23).effectOrDefault(1);
+    return Ra.isRunning
+      ? DC.D0
+      : new Decimal(ImaginaryUpgrade(12).effectOrDefault(0) * ImaginaryUpgrade(23).effectOrDefault(1));
   }
 
   static get totalBoosts() {
-    return Math.floor(this.purchasedBoosts + this.imaginaryBoosts);
+    return Decimal.floor(this.purchasedBoosts.add(this.imaginaryBoosts));
   }
 
   static get startingDimensionBoosts() {
-    if (InfinityUpgrade.skipResetGalaxy.isBought) return 4;
-    if (InfinityUpgrade.skipReset3.isBought) return 3;
-    if (InfinityUpgrade.skipReset2.isBought) return 2;
-    if (InfinityUpgrade.skipReset1.isBought) return 1;
-    return 0;
+    if (InfinityUpgrade.skipResetGalaxy.isBought) return DC.D4;
+    if (InfinityUpgrade.skipReset3.isBought) return DC.D3;
+    if (InfinityUpgrade.skipReset2.isBought) return DC.D2;
+    if (InfinityUpgrade.skipReset1.isBought) return DC.D1;
+    return DC.D0;
   }
 }
 
 // eslint-disable-next-line max-params
 export function softReset(tempBulk, forcedADReset = false, forcedAMReset = false, enteringAntimatterChallenge = false) {
   if (Currency.antimatter.gt(Player.infinityLimit)) return;
-  const bulk = Math.min(tempBulk, DimBoost.maxBoosts - player.dimensionBoosts);
+  const bulk = Decimal.min(tempBulk, DimBoost.maxBoosts.sub(player.dimensionBoosts));
   EventHub.dispatch(GAME_EVENT.DIMBOOST_BEFORE, bulk);
-  player.dimensionBoosts = Math.max(0, player.dimensionBoosts + bulk);
+  player.dimensionBoosts = (Decimal.max(DC.D0, player.dimensionBoosts.add(bulk)));
   resetChallengeStuff();
   const canKeepDimensions = Pelle.isDoomed
     ? PelleUpgrade.dimBoostResetsNothing.canBeApplied
@@ -202,12 +204,12 @@ export function softReset(tempBulk, forcedADReset = false, forcedAMReset = false
 
 export function skipResetsIfPossible(enteringAntimatterChallenge) {
   if (enteringAntimatterChallenge || Player.isInAntimatterChallenge) return;
-  if (InfinityUpgrade.skipResetGalaxy.isBought && player.dimensionBoosts < 4) {
-    player.dimensionBoosts = 4;
-    if (player.galaxies === 0) player.galaxies = 1;
-  } else if (InfinityUpgrade.skipReset3.isBought && player.dimensionBoosts < 3) player.dimensionBoosts = 3;
-  else if (InfinityUpgrade.skipReset2.isBought && player.dimensionBoosts < 2) player.dimensionBoosts = 2;
-  else if (InfinityUpgrade.skipReset1.isBought && player.dimensionBoosts < 1) player.dimensionBoosts = 1;
+  if (InfinityUpgrade.skipResetGalaxy.isBought && player.dimensionBoosts.lt(4)) {
+    player.dimensionBoosts = DC.D4;
+    if (player.galaxies.lt(1)) player.galaxies = DC.D1;
+  } else if (InfinityUpgrade.skipReset3.isBought && player.dimensionBoosts.lt(3)) player.dimensionBoosts = DC.D3;
+  else if (InfinityUpgrade.skipReset2.isBought && player.dimensionBoosts.lt(2)) player.dimensionBoosts = DC.D2;
+  else if (InfinityUpgrade.skipReset1.isBought && player.dimensionBoosts.lt(1)) player.dimensionBoosts = DC.D1;
 }
 
 export function manualRequestDimensionBoost(bulk) {
