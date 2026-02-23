@@ -13,4 +13,4 @@ if (firebaseConfig) {
     `export const firebaseConfig = ${firebaseConfig};`
   );
 }
-// github failed so trying again
+// github failed so trying again. edit 2: 3rd times the charm?
