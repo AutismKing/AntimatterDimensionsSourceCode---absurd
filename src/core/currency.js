@@ -1,6 +1,3 @@
-import { DC } from "./constants";
-
-
 /**
  * @abstract
  */
