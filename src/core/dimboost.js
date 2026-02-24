@@ -39,7 +39,7 @@ export class DimBoost {
   }
 
   static multiplierToNDTier(tier) {
-    const normalBoostMult = DimBoost.power.pow(this.purchasedBoosts + 1 - tier).clampMin(1);
+    const normalBoostMult = DimBoost.power.pow(this.purchasedBoosts.add(1).sub(tier)).clampMin(1);
     const imaginaryBoostMult = DimBoost.power.times(ImaginaryUpgrade(24).effectOrDefault(1))
       .pow(this.imaginaryBoosts).clampMin(1);
     return normalBoostMult.times(imaginaryBoostMult);
@@ -50,14 +50,14 @@ export class DimBoost {
   }
 
   static get canUnlockNewDimension() {
-    return DimBoost.purchasedBoosts + 4 < DimBoost.maxDimensionsUnlockable;
+    return DimBoost.purchasedBoosts.add(4).lt(DimBoost.maxDimensionsUnlockable);
   }
 
   static get maxBoosts() {
     if (Ra.isRunning) {
       // Ra makes boosting impossible. Note that this function isn't called
       // when giving initial boosts, so the player will still get those.
-      return 0;
+      return DC.D0;
     }
     if (InfinityChallenge(1).isRunning) {
       // Usually, in Challenge 8, the only boosts that are useful are the first 5
@@ -66,25 +66,25 @@ export class DimBoost {
       // (they unlock new dimensions).
       // There's no actual problem with bulk letting the player get
       // more boosts than this; it's just that boosts beyond this are pointless.
-      return 2;
+      return DC.D2;
     }
     if (NormalChallenge(8).isRunning) {
       // See above. It's important we check for this after checking for IC1 since otherwise
       // this case would trigger when we're in IC1.
-      return 5;
+      return DC.D5;
     }
-    return Infinity;
+    return DC.BEMAX;
   }
 
   static get canBeBought() {
-    if (DimBoost.purchasedBoosts >= this.maxBoosts) return false;
+    if (DimBoost.purchasedBoosts.gte(this.maxBoosts)) return false;
     if (player.records.thisInfinity.maxAM.gt(Player.infinityGoal) &&
        (!player.break || Player.isInAntimatterChallenge)) return false;
     return true;
   }
 
   static get lockText() {
-    if (DimBoost.purchasedBoosts >= this.maxBoosts) {
+    if (DimBoost.purchasedBoosts.gte(this.maxBoosts)) {
       if (Ra.isRunning) return "Locked (Ra's Reality)";
       if (InfinityChallenge(1).isRunning) return "Locked (Infinity Challenge 1)";
       if (NormalChallenge(8).isRunning) return "Locked (8th Antimatter Dimension Autobuyer Challenge)";
@@ -244,22 +244,65 @@ function maxBuyDimBoosts() {
     softReset(1);
     return;
   }
-  // Linearly extrapolate dimboost costs. req1 = a * 1 + b, req2 = a * 2 + b
-  // so a = req2 - req1, b = req1 - a = 2 req1 - req2, num = (dims - b) / a
-  const increase = req2.amount - req1.amount;
-  const dim = AntimatterDimension(req1.tier);
-  let maxBoosts = Math.min(Number.MAX_VALUE,
-    1 + Math.floor((dim.totalAmount.toNumber() - req1.amount) / increase));
-  if (DimBoost.bulkRequirement(maxBoosts).isSatisfied) {
-    softReset(maxBoosts);
-    return;
+
+  const tier = DimBoost.maxDimensionsUnlockable;
+  let amount = DC.D20;
+  let discount = Effects.sum(
+    TimeStudy(211),
+    TimeStudy(222)
+  );
+  let multiplierPerDB;
+  if (tier === 6) {
+    multiplierPerDB = DC.D20.sub(discount);
+  } else if (tier === 8) {
+    multiplierPerDB = DC.D15.sub(discount);
   }
-  // But in case of EC5 it's not, so do binary search for appropriate boost amount
-  let minBoosts = 2;
-  while (maxBoosts !== minBoosts + 1) {
-    const middle = Math.floor((maxBoosts + minBoosts) / 2);
-    if (DimBoost.bulkRequirement(middle).isSatisfied) minBoosts = middle;
-    else maxBoosts = middle;
+
+  amount = amount.sub(Effects.sum(InfinityUpgrade.resetBoost));
+  if (InfinityChallenge(5).isCompleted) amount = amount.sub(1);
+
+  multiplierPerDB = multiplierPerDB.times(InfinityUpgrade.resetBoost.chargedEffect.effectOrDefault(1));
+  amount = amount.times(InfinityUpgrade.resetBoost.chargedEffect.effectOrDefault(1));
+
+  const ad = AntimatterDimension(tier).totalAmount;
+  let calcBoosts;
+  calcBoosts = ad.sub(amount).div(multiplierPerDB);
+
+
+  if (EternityChallenge(5).isRunning) {
+    const ad = AntimatterDimension(tier).totalAmount;
+    let estimateTotalAmount = Decimal.floor(Decimal.cbrt(ad.div(InfinityUpgrade.resetBoost.chargedEffect.effectOrDefault(1)))).add(1);
+    const freeBoost = NormalChallenge(10).isRunning ? new Decimal(2) : new Decimal(4);
+    const divisor1 = NormalChallenge(10).isRunning ? new Decimal(20) : new Decimal(15);
+    const divisor2 = Effects.sum(TimeStudy(211), TimeStudy(222));
+    const multi = divisor1.sub(divisor2);
+    const extraEffect = InfinityChallenge(5).isCompleted ? new Decimal(1) : new Decimal(0);
+    const cubicSum = DC.D20.add(estimateTotalAmount.sub(freeBoost.add(1)).mul(multi));
+    const listedCost = estimateTotalAmount.lt(freeBoost) ? new Decimal(0) : (Decimal.pow(estimateTotalAmount.sub(1), 3).add(estimateTotalAmount).add(cubicSum).sub(1).sub(Effects.sum(InfinityUpgrade.resetBoost)).sub(extraEffect)).times(InfinityUpgrade.resetBoost.chargedEffect.effectOrDefault(1));
+    if (listedCost.gt(0)) {
+      if (listedCost.lt(ad)) {
+        estimateTotalAmount = estimateTotalAmount.add(1);
+      }
+      if (listedCost.gte(ad)) {
+        estimateTotalAmount = estimateTotalAmount.sub(1);
+        if (listedCost.gte(ad)) {
+          estimateTotalAmount = estimateTotalAmount.add(1);
+        }
+      }
+      calcBoosts = estimateTotalAmount;
+    } else {
+      calcBoosts = freeBoost;
+      // Dimension boosts 1-4 dont use 8th dims, 1-2 dont use 6th dims, so add those extras afterwards.
+    }
+    calcBoosts = calcBoosts.sub(1);
+  } else {
+    calcBoosts = calcBoosts.add(NormalChallenge(10).isRunning ? 2 : 4);
+    // Dimension boosts 1-4 dont use 8th dims, 1-2 dont use 6th dims, so add those extras afterwards.
   }
+  
+  // Add one cause (x-b)/i is off by one otherwise
+  if (calcBoosts.floor().add(1).lte(DimBoost.purchasedBoosts)) return;
+  calcBoosts = calcBoosts.sub(DimBoost.purchasedBoosts);
+  const minBoosts = Decimal.min(DC.BEMAX, calcBoosts.floor().add(1));
   softReset(minBoosts);
 }
