@@ -1,5 +1,3 @@
-import { DC } from "../../constants";
-
 function rebuyableCost(initialCost, increment, id) {
   return Decimal.multiply(initialCost, Decimal.pow(increment, player.dilation.rebuyables[id]));
 }
