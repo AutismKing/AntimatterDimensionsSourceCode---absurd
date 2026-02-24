@@ -1,5 +1,3 @@
-import { DC } from "../constants";
-
 import { DimensionState } from "./dimension";
 
 // Multiplier applied to all Antimatter Dimensions, regardless of tier. This is cached using a Lazy
