@@ -1,5 +1,3 @@
-import { DC } from "../constants";
-
 // A = always there
 // L = locked
 // R = random chance condition
