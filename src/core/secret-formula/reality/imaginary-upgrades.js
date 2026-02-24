@@ -1,5 +1,3 @@
-import { DC } from "../../constants";
-
 const rebuyable = props => {
   props.cost = () => props.initialCost * Math.pow(props.costMult, player.reality.imaginaryRebuyables[props.id]);
   const { effect } = props;
