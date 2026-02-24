@@ -38,12 +38,12 @@ window.player = {
   challenge: {
     normal: {
       current: 0,
-      bestTimes: Array.repeat(Number.MAX_VALUE, 11),
+      bestTimes: Array.repeat(DC.BEMAX, 11),
       completedBits: 0,
     },
     infinity: {
       current: 0,
-      bestTimes: Array.repeat(Number.MAX_VALUE, 8),
+      bestTimes: Array.repeat(DC.BEMAX, 8),
       completedBits: 0,
     },
     eternity: {
@@ -203,8 +203,8 @@ window.player = {
   infinityPoints: DC.D0,
   infinities: DC.D0,
   infinitiesBanked: DC.D0,
-  dimensionBoosts: 0,
-  galaxies: 0,
+  dimensionBoosts: DC.D0,
+  galaxies: DC.D0,
   news: {
     // This is properly handled in NewsHandler.addSeenNews which adds properties as needed
     seen: {},
@@ -224,7 +224,7 @@ window.player = {
   chall9TickspeedCostBumps: 0,
   chall8TotalSacrifice: DC.D1,
   ic2Count: 0,
-  partInfinityPoint: 0,
+  partInfinityPoint: DC.D0,
   partInfinitied: 0,
   break: false,
   secretUnlocks: {
@@ -269,35 +269,35 @@ window.player = {
   },
   records: {
     gameCreatedTime: Date.now(),
-    totalTimePlayed: 0,
-    timePlayedAtBHUnlock: Number.MAX_VALUE,
+    totalTimePlayed: DC.D0,
+    timePlayedAtBHUnlock: DC.BEMAX,
     realTimePlayed: 0,
     realTimeDoomed: 0,
     fullGameCompletions: 0,
     previousRunRealTime: 0,
     totalAntimatter: DC.E1,
     recentInfinities: Array.range(0, 10).map(() =>
-      [Number.MAX_VALUE, Number.MAX_VALUE, DC.D1, DC.D1, ""]),
+      [DC.BEMAX, Number.MAX_VALUE, DC.D1, DC.D1, ""]),
     recentEternities: Array.range(0, 10).map(() =>
-      [Number.MAX_VALUE, Number.MAX_VALUE, DC.D1, DC.D1, "", DC.D0]),
+      [DC.BEMAX, Number.MAX_VALUE, DC.D1, DC.D1, "", DC.D0]),
     recentRealities: Array.range(0, 10).map(() =>
-      [Number.MAX_VALUE, Number.MAX_VALUE, DC.D1, 1, "", 0, 0]),
+      [DC.BEMAX, Number.MAX_VALUE, DC.D1, 1, "", 0, 0]),
     thisInfinity: {
-      time: 0,
+      time: DC.D0,
       realTime: 0,
-      lastBuyTime: 0,
+      lastBuyTime: DC.D0,
       maxAM: DC.D0,
       bestIPmin: DC.D0,
       bestIPminVal: DC.D0,
     },
     bestInfinity: {
-      time: Number.MAX_VALUE,
+      time: DC.BEMAX,
       realTime: Number.MAX_VALUE,
       bestIPminEternity: DC.D0,
       bestIPminReality: DC.D0,
     },
     thisEternity: {
-      time: 0,
+      time: DC.D0,
       realTime: 0,
       maxAM: DC.D0,
       maxIP: DC.D0,
@@ -307,12 +307,12 @@ window.player = {
       bestInfinitiesPerMs: DC.D0,
     },
     bestEternity: {
-      time: Number.MAX_VALUE,
+      time: DC.BEMAX,
       realTime: Number.MAX_VALUE,
       bestEPminReality: DC.D0,
     },
     thisReality: {
-      time: 0,
+      time: DC.D0,
       realTime: 0,
       maxAM: DC.D0,
       maxIP: DC.D0,
@@ -320,11 +320,11 @@ window.player = {
       bestEternitiesPerMs: DC.D0,
       maxReplicanti: DC.D0,
       maxDT: DC.D0,
-      bestRSmin: 0,
-      bestRSminVal: 0,
+      bestRSmin: DC.D0,
+      bestRSminVal: DC.D0,
     },
     bestReality: {
-      time: Number.MAX_VALUE,
+      time: DC.BEMAX,
       realTime: Number.MAX_VALUE,
       glyphStrength: 0,
       RM: DC.D0,
@@ -376,8 +376,8 @@ window.player = {
     chanceCost: DC.E150,
     interval: 1000,
     intervalCost: DC.E140,
-    boughtGalaxyCap: 0,
-    galaxies: 0,
+    boughtGalaxyCap: DC.D0,
+    galaxies: DC.D0,
     galCost: DC.E170,
   },
   timestudy: {
@@ -404,8 +404,8 @@ window.player = {
     tachyonParticles: DC.D0,
     dilatedTime: DC.D0,
     nextThreshold: DC.E3,
-    baseTachyonGalaxies: 0,
-    totalTachyonGalaxies: 0,
+    baseTachyonGalaxies: DC.D0,
+    totalTachyonGalaxies: DC.D0,
     upgrades: new Set(),
     rebuyables: {
       1: 0,
@@ -422,19 +422,19 @@ window.player = {
   reality: {
     realityMachines: DC.D0,
     maxRM: DC.D0,
-    imaginaryMachines: 0,
-    iMCap: 0,
+    imaginaryMachines: DC.D0,
+    iMCap: DC.D0,
     glyphs: {
       active: [],
       inventory: [],
       sac: {
-        power: 0,
-        infinity: 0,
-        time: 0,
-        replication: 0,
-        dilation: 0,
-        effarig: 0,
-        reality: 0
+        power: DC.D0,
+        infinity: DC.D0,
+        time: DC.D0,
+        replication: DC.D0,
+        dilation: DC.D0,
+        effarig: DC.D0,
+        reality: DC.D0
       },
       undo: [],
       sets: new Array(7).fill({
@@ -534,7 +534,7 @@ window.player = {
       forceUnlock: false,
       currentInfoPane: AutomatorPanels.INTRO_PAGE,
     },
-    achTimer: 0,
+    achTimer: DC.D0,
     hasCheckedFilter: false,
   },
   blackHole: Array.range(0, 2).map(id => ({
@@ -553,7 +553,7 @@ window.player = {
   blackHoleNegative: 1,
   celestials: {
     teresa: {
-      pouredAmount: 0,
+      pouredAmount: DC.D0,
       quoteBits: 0,
       unlockBits: 0,
       run: false,
@@ -563,7 +563,7 @@ window.player = {
       lastRepeatedMachines: DC.D0
     },
     effarig: {
-      relicShards: 0,
+      relicShards: DC.D0,
       unlockBits: 0,
       run: false,
       quoteBits: 0,
@@ -577,7 +577,7 @@ window.player = {
     },
     enslaved: {
       isStoring: false,
-      stored: 0,
+      stored: DC.D0,
       isStoringReal: false,
       storedReal: 0,
       autoStoreReal: false,
@@ -604,7 +604,7 @@ window.player = {
       STSpent: 0,
       runGlyphs: [[], [], [], [], [], [], [], [], []],
       // The -10 is for glyph count, as glyph count for V is stored internally as a negative number
-      runRecords: [-10, 0, 0, 0, 0, 0, 0, 0, 0],
+      runRecords: [DC.E1.neg(), DC.D0, DC.D0, DC.D0, DC.D0, DC.D0, DC.D0, DC.D0, DC.D0],
       wantsFlipped: true,
     },
     ra: {
@@ -657,7 +657,7 @@ window.player = {
       run: false,
       charged: new Set(),
       disCharge: false,
-      peakGamespeed: 1,
+      peakGamespeed: DC.D1,
       petWithRemembrance: ""
     },
     laitela: {
@@ -668,28 +668,28 @@ window.player = {
       dimensions: Array.range(0, 4).map(() =>
         ({
           amount: DC.D0,
-          intervalUpgrades: 0,
-          powerDMUpgrades: 0,
-          powerDEUpgrades: 0,
+          intervalUpgrades: DC.D0,
+          powerDMUpgrades: DC.D0,
+          powerDEUpgrades: DC.D0,
           timeSinceLastUpdate: 0,
-          ascensionCount: 0
+          ascensionCount: DC.D0
         })),
-      entropy: 0,
+      entropy: DC.D0,
       thisCompletion: 3600,
       fastestCompletion: 3600,
       difficultyTier: 0,
       upgrades: {},
-      darkMatterMult: 1,
-      darkEnergy: 0,
+      darkMatterMult: DC.D1,
+      darkEnergy: DC.D0,
       singularitySorting: {
         displayResource: 0,
         sortResource: 0,
         showCompleted: 0,
         sortOrder: 0,
       },
-      singularities: 0,
-      singularityCapIncreases: 0,
-      lastCheckedMilestones: 0,
+      singularities: DC.D0,
+      singularityCapIncreases: DC.D0,
+      lastCheckedMilestones: DC.D0,
       milestoneGlow: true,
     },
     pelle: {
@@ -745,8 +745,8 @@ window.player = {
       progressBits: 0,
       galaxyGenerator: {
         unlocked: false,
-        spentGalaxies: 0,
-        generatedGalaxies: 0,
+        spentGalaxies: DC.D0,
+        generatedGalaxies: DC.D0,
         phase: 0,
         sacrificeActive: false
       },
