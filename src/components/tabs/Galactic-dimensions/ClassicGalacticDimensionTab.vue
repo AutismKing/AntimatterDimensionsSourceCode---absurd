@@ -1,5 +1,5 @@
 <script>
-import GalacticDimensionRow from "./ClassicGalacticDimensionRow";
+import GalacticDimensionRow from "./ClassicGalacticDimensionsRow";
 import PrimaryButton from "@/components/PrimaryButton";
 
 export default {
