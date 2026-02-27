@@ -218,6 +218,9 @@ Currency.antimatter = new class extends DecimalCurrency {
     super.add(amount);
     if (amount.gt(0)) {
       player.records.totalAntimatter = player.records.totalAntimatter.add(amount);
+      player.records.totalRealityAntimatter = player.records.totalRealityAntimatter.add(amount);
+      player.records.totalEternityAntimatter = player.records.totalEternityAntimatter.add(amount);
+      player.records.totalInfinityAntimatter = player.records.totalInfinityAntimatter.add(amount);
       player.requirementChecks.reality.noAM = false;
     }
   }
@@ -464,13 +467,13 @@ Currency.replicanti = new class extends DecimalCurrency {
   set value(value) { player.replicanti.amount = value; }
 }();
 
-Currency.galaxyGeneratorGalaxies = new class extends NumberCurrency {
+Currency.galaxyGeneratorGalaxies = new class extends DecimalCurrency {
   get value() {
-    return player.galaxies + GalaxyGenerator.galaxies;
+    return player.galaxies.add(GalaxyGenerator.galaxies);
   }
 
   set value(value) {
-    const spent = player.galaxies + GalaxyGenerator.galaxies - value;
-    player.celestials.pelle.galaxyGenerator.spentGalaxies += spent;
+    const spent = player.galaxies.add(GalaxyGenerator.galaxies).sub(value);
+    player.celestials.pelle.galaxyGenerator.spentGalaxies = player.celestials.pelle.galaxyGenerator.spentGalaxies.add(spent);
   }
 }();
