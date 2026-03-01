@@ -7,7 +7,7 @@ export const ra = {
       chunkGain: "Eternity Points",
       memoryGain: "current RM",
       requiredUnlock: () => undefined,
-      rawMemoryChunksPerSecond: () => 4 * Math.pow(Currency.eternityPoints.value.pLog10() / 1e4, 3),
+      rawMemoryChunksPerSecond: () => Decimal.times(4 , Decimal.pow(Currency.eternityPoints.value.pLog10().div(1e4), 3)),
       memoryProductionMultiplier: () => Ra.unlocks.teresaXP.effectOrDefault(1)
     },
     effarig: {
@@ -17,7 +17,7 @@ export const ra = {
       chunkGain: "Relic Shards gained",
       memoryGain: "best Glyph level",
       requiredUnlock: () => Ra.unlocks.effarigUnlock,
-      rawMemoryChunksPerSecond: () => 4 * Math.pow(Effarig.shardsGained, 0.1),
+      rawMemoryChunksPerSecond: () => Decimal.times(4 , Decimal.pow(Effarig.shardsGained, 0.1)),
       memoryProductionMultiplier: () => Ra.unlocks.effarigXP.effectOrDefault(1)
     },
     enslaved: {
@@ -27,7 +27,7 @@ export const ra = {
       chunkGain: "Time Shards",
       memoryGain: "total time played",
       requiredUnlock: () => Ra.unlocks.enslavedUnlock,
-      rawMemoryChunksPerSecond: () => 4 * Math.pow(Currency.timeShards.value.pLog10() / 3e5, 2),
+      rawMemoryChunksPerSecond: () => Decimal.times(4, Decimal.pow(Currency.timeShards.value.pLog10().div(3e5), 2)),
       memoryProductionMultiplier: () => Ra.unlocks.enslavedXP.effectOrDefault(1)
     },
     v: {
@@ -37,7 +37,7 @@ export const ra = {
       chunkGain: "Infinity Power",
       memoryGain: "total Memory levels",
       requiredUnlock: () => Ra.unlocks.vUnlock,
-      rawMemoryChunksPerSecond: () => 4 * Math.pow(Currency.infinityPower.value.pLog10() / 1e7, 1.5),
+      rawMemoryChunksPerSecond: () => Decimal.times(4, Decimal.pow(Currency.infinityPower.value.pLog10().div(1e7), 1.5)),
       memoryProductionMultiplier: () => Ra.unlocks.vXP.effectOrDefault(1)
     }
   },
@@ -63,7 +63,7 @@ export const ra = {
     teresaXP: {
       id: 2,
       reward: "All Memory Chunks produce more Memories based on Reality Machines",
-      effect: () => 1 + Math.pow(Currency.realityMachines.value.pLog10() / 100, 0.5),
+      effect: () => Decimal.add(1, Decimal.pow(Currency.realityMachines.value.pLog10().div(100), 0.5)),
       pet: "teresa",
       level: 5,
       displayIcon: `Ϟ`
