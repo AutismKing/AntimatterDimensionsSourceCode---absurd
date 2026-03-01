@@ -52,8 +52,8 @@ if (newHash !== currentHash) {
     rl.close();
     clearTimeout(timeout);
   });
-} //// We're always either in EC4 or EC12 when displaying this text.
-      //return `${TimeSpan.fromSeconds(this.currentResource.toNumber()).toString()} /
-        //${TimeSpan.fromSeconds(this.maximumResource.toNumber()).toString()} time spent`;
-    //}
-//test a;lso abov ething is for if somehting bad
+}  /*We're always either in EC4 or EC12 when displaying this text.
+      return `${TimeSpan.fromSeconds(this.currentResource.toNumber()).toString()} /
+        ${TimeSpan.fromSeconds(this.maximumResource.toNumber()).toString()} time spent`;
+    }
+test a;lso abov ething is for if somehting bad

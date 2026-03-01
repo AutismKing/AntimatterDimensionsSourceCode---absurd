@@ -56,12 +56,12 @@ class GalacticDimensionState extends DimensionState {
         this.data.isUnlocked = value;
     }
 
-    get TetPRequirement() {
+    get GPRequirement() {
         return this._unlockRequirement;
     }
 
-    get TetrationPointRequirementReached() {
-        return player.Absurdity.TetrationPoints.gte(this.TetPRequirement);
+    get GalacticPointRequirementReached() {
+        return player.GalacticPoints.gte(this.GPRequirement);
     }
 
     get canUnlock() {
@@ -73,7 +73,7 @@ class GalacticDimensionState extends DimensionState {
     }
 
     get isAffordable() {
-        return Currency.TetrationPoints.gte(this.cost);
+        return Currency.GalacticPoints.gte(this.cost);
     }
 
     get rateofChange() {
@@ -129,7 +129,7 @@ class GalacticDimensionState extends DimensionState {
     return this.cost.gte(this.purchaseCap);
   }
 
-  get hardcapTetPAmount() {
+  get hardcapGPAmount() {
     return this.purchaseCap;
   }
 
@@ -161,7 +161,7 @@ class GalacticDimensionState extends DimensionState {
     if (!this.isUnlocked) return this.unlock();
     if (!this.isAvailableForPurchase) return false;
 
-    Currency.TetrationPoints.purchase(this.cost);
+    Currency.GalacticPoints.purchase(this.cost);
     this.cost = Decimal.round(this.cost.times(this.costMultiplier));
     this.amount = this.amount.plus(1);
     this.baseAmount += 1;
@@ -175,7 +175,7 @@ class GalacticDimensionState extends DimensionState {
     let purchasesUntilHardcap = this.purchaseCap.toNumber() - this.purchases;
     
     const costScaling = new LinearCostScaling(
-      Currency.TetrationPoints.value,
+      Currency.GalacticPoints.value,
       this.cost,
       this.costMultiplier,
       purchasesUntilHardcap
@@ -183,7 +183,7 @@ class GalacticDimensionState extends DimensionState {
 
     if (costScaling.purchases <= 0) return false;
 
-    Currency.TetrationPoints.purchase(costScaling.totalCost);
+    Currency.GalacticPoints.purchase(costScaling.totalCost);
     this.cost = this.cost.times(costScaling.totalCostMultiplier);
     this.amount = this.amount.plus(costScaling.purchases);
     this.baseAmount += costScaling.purchases;

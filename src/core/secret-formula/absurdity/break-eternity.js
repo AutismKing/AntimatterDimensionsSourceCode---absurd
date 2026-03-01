@@ -1,4 +1,6 @@
-/*import { const } from "../../globals";
+/*import { Player } from "../../player";
+
+import { const } from "../../globals";
 
 
 
@@ -56,4 +58,40 @@ export const breaketernityupgrade = [
      cost: 10000,
      description: "IP is powered based on your replicanti"
      effect: () => Decimal.pow(Decimal.log10(player.replicanti.amount), 0.05)
+   },
+   {
+     id: 15,
+     cost: 10000,
+     description: "replicanti is powered based on your time theorem"
+     effect: () => Decimal.pow(Decimal.log10(player.timeStudy.theorem), 0.05)
+   },
+   {
+     id: 16,
+     cost: 10000,
+     description: "EP is powered based on your TP"
+     effect: () => Decimal.pow(Decimal.log10(player.tachyonparticles.amount), 0.05)
+   },
+   {
+     id: 17,
+     cost: 10000,
+     description: "Power game speed based on your tesseract amount"
+     effect: () => Decimal.pow((player.tesseracts.amount), 0.05)
+   },
+   {
+     id: 18,
+     cost: 10000,
+     description: "Power glyph sac based on your highest ever glyph level"
+     effect: () => Decimal.pow((player.statistics.highest.glyph.level), 0.05)
+   },
+   {
+     id: 19,
+     cost: 10000,
+     description: "Power singularities based on dim boosts"
+     effect: () => Decimal.pow((player.dimensionboosts.amount), 0.05)
+   },
+   {
+     id: 20,
+     cost: 10000,
+     description: "Power DM annihalation mult based on galactic points"
+     effect: () => Decimal.pow((player.GP.amount), 0.05)
 ]
