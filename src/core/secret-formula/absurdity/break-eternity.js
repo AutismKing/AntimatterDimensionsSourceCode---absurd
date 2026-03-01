@@ -6,6 +6,6 @@
    // {
     //  id: 3
    //   cost: 1000
-   //   effect: () => Singularity * 6
+   //   effect: () => 6
    // }
 //]
