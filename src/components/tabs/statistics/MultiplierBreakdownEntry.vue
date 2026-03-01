@@ -145,7 +145,7 @@ export default {
       for (const entry of this.entries) {
         const multFrac = log10Mult === 0
           ? 0
-          : Decimal.log10(entry.data.mult) / log10Mult;
+          : Decimal.log10(entry.data.mult).div(log10Mult);
         const powFrac = totalPosPow === 1 ? 0 : Math.log(entry.data.pow) / Math.log(totalPosPow);
 
         // Handle nerf powers differently from everything else in order to render them with the correct bar percentage
