@@ -41,7 +41,7 @@ export const v = {
       resource: () => player.records.thisReality.maxDT,
       requirement: DC.E320,
       format: x => format(x, 2),
-      progress: () => emphasizeEnd(player.records.thisReality.maxDT.pLog10() / 320),
+      progress: () => emphasizeEnd(player.records.thisReality.maxDT.pLog10().div(320)),
     },
     replicanti: {
       id: 5,
@@ -57,7 +57,7 @@ export const v = {
       resource: () => Currency.realityMachines.value,
       requirement: 1e60,
       format: x => format(x, 2),
-      progress: () => emphasizeEnd(Currency.realityMachines.value.pLog10() / 60),
+      progress: () => emphasizeEnd(Currency.realityMachines.value.pLog10().div(60)),
     },
   },
   runUnlocks: [
