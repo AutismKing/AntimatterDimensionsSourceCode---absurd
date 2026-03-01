@@ -25,7 +25,7 @@ export const v = {
       resource: () => Currency.eternities.value,
       requirement: 1e70,
       format: x => format(x, 2),
-      progress: () => emphasizeEnd(Currency.eternities.value.pLog10() / 70),
+      progress: () => emphasizeEnd(Currency.eternities.value.pLog10().div(70)),
     },
     infinities: {
       id: 3,
@@ -33,7 +33,7 @@ export const v = {
       resource: () => Currency.infinitiesTotal.value,
       requirement: 1e160,
       format: x => format(x, 2),
-      progress: () => emphasizeEnd(Currency.infinitiesTotal.value.pLog10() / 160),
+      progress: () => emphasizeEnd(Currency.infinitiesTotal.value.pLog10().div(160)),
     },
     dilatedTime: {
       id: 4,
@@ -41,7 +41,7 @@ export const v = {
       resource: () => player.records.thisReality.maxDT,
       requirement: DC.E320,
       format: x => format(x, 2),
-      progress: () => emphasizeEnd(player.records.thisReality.maxDT.pLog10() / 320),
+      progress: () => emphasizeEnd(player.records.thisReality.maxDT.pLog10().div(320)),
     },
     replicanti: {
       id: 5,
@@ -49,7 +49,7 @@ export const v = {
       resource: () => player.records.thisReality.maxReplicanti,
       requirement: DC.E320000,
       format: x => format(x, 2),
-      progress: () => emphasizeEnd(player.records.thisReality.maxReplicanti.pLog10() / 320000),
+      progress: () => emphasizeEnd(player.records.thisReality.maxReplicanti.pLog10().div(320000)),
     },
     realityMachines: {
       id: 6,
@@ -57,7 +57,7 @@ export const v = {
       resource: () => Currency.realityMachines.value,
       requirement: 1e60,
       format: x => format(x, 2),
-      progress: () => emphasizeEnd(Currency.realityMachines.value.pLog10() / 60),
+      progress: () => emphasizeEnd(Currency.realityMachines.value.pLog10().div(60)),
     },
   },
   runUnlocks: [

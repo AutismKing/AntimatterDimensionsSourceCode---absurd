@@ -95,7 +95,7 @@ export const dilationUpgrades = {
       const rep10 = replicantiMult().pLog10();
       let multiplier = "0.1";
       if (rep10 > 9000) {
-        const ratio = DilationUpgrade.tdMultReplicanti.effectValue.pLog10() / rep10;
+        const ratio = DilationUpgrade.tdMultReplicanti.effectValue.pLog10().div(rep10);
         if (ratio < 0.095) {
           multiplier = ratio.toFixed(2);
         }
@@ -104,8 +104,8 @@ export const dilationUpgrades = {
         effect above ${formatX(DC.E9000)}`;
     },
     effect: () => {
-      let rep10 = replicantiMult().pLog10() * 0.1;
-      rep10 = rep10 > 9000 ? 9000 + 0.5 * (rep10 - 9000) : rep10;
+      let rep10 = replicantiMult().pLog10().div(0.1);
+      rep10 = rep10 > 9000 ? Decimal.add(9000 , Decimal.times(0.5, (rep10.div(9000)))) : rep10;
       return Decimal.pow10(rep10);
     },
     formatEffect: value => formatX(value, 2, 1)
