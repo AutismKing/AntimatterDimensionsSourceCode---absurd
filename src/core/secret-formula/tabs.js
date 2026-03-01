@@ -41,7 +41,7 @@ export const tabs = [
         key: "Galactic",
         name: "Galactic Dimensions",
         hideAt: 2.5,
-        symbol: "꩜",
+        symbol: "𖥔",
         component: "GalacticDimensionsTab",
         // not yet: condition: () => PlayerProgress.AbsurdityUnlocked(),
         id: 3,
