@@ -69,7 +69,7 @@ export const Effarig = {
     return countValuesFromBitmask(genEffectBitmask) + countValuesFromBitmask(nongenEffectBitmask);
   },
   get shardsGained() {
-    if (!TeresaUnlocks.effarig.canBeApplied && !EndgameMilestone.celestialEarlyUnlock.isReached) return new Decimal(0);
+    if (!TeresaUnlocks.effarig.canBeApplied) return new Decimal(0);
     return Decimal.floor(Decimal.pow(Currency.eternityPoints.value.add(1).log10().div(7500), this.glyphEffectAmount)).times(
       AlchemyResource.effarig.effectValue);
   },
