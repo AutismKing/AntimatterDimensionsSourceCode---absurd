@@ -40,7 +40,7 @@ export class Galaxy {
   }
 
   static requirementAt(galaxies) {
-    let amount = Decimal.add(Galaxy.baseCost, (Decimal.times(galaxies, Galaxy.costMult));
+    let amount = Decimal.add(Galaxy.baseCost, (Decimal.times(galaxies, Galaxy.costMult)));
 
     const type = Galaxy.typeAt(galaxies);
 
