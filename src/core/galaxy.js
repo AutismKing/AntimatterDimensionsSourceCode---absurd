@@ -36,32 +36,32 @@ export class Galaxy {
       cumulative: false,
     }, player.galaxies);
     if (!bulk) throw new Error("Unexpected failure to calculate galaxy purchase");
-    return player.galaxies + bulk.quantity;
+    return player.galaxies.add(bulk.quantity);
   }
 
   static requirementAt(galaxies) {
-    let amount = Galaxy.baseCost + (galaxies * Galaxy.costMult);
+    let amount = Decimal.add(Galaxy.baseCost, (galaxies.times(Galaxy.costMult));
 
     const type = Galaxy.typeAt(galaxies);
 
     if (type === GALAXY_TYPE.DISTANT && EternityChallenge(5).isRunning) {
-      amount += Math.pow(galaxies, 2) + galaxies;
+      amount = Decimal.add(amount, Decimal.add(Decimal.pow(galaxies, 2), galaxies));
     } else if (type === GALAXY_TYPE.DISTANT || type === GALAXY_TYPE.REMOTE) {
       const galaxyCostScalingStart = this.costScalingStart;
-      const galaxiesBeforeDistant = Math.clampMin(galaxies - galaxyCostScalingStart + 1, 0);
-      amount += Math.pow(galaxiesBeforeDistant, 2) + galaxiesBeforeDistant;
+      const galaxiesBeforeDistant = Decimal.clampMin(galaxies.sub(galaxyCostScalingStart).add(1), 0);
+      amount = Decimal.add(Decimal.pow(galaxiesBeforeDistant, 2).add(galaxiesBeforeDistant), amount);
     }
 
     if (type === GALAXY_TYPE.REMOTE) {
-      amount *= Math.pow(1.002, galaxies - (Galaxy.remoteStart - 1));
+      amount = Decimal.times(amount, Decimal.pow(1.002, galaxies.sub(Galaxy.remoteStart.sub(1))));
     }
 
-    amount -= Effects.sum(InfinityUpgrade.resetBoost);
-    if (InfinityChallenge(5).isCompleted) amount -= 1;
+    amount = amount.sub(Effects.sum(InfinityUpgrade.resetBoost));
+    if (InfinityChallenge(5).isCompleted) amount = amount.sub(1);
 
-    if (GlyphAlteration.isAdded("power")) amount *= getSecondaryGlyphEffect("powerpow");
+    if (GlyphAlteration.isAdded("power")) amount = amount.times(getSecondaryGlyphEffect("powerpow"));
 
-    amount = Math.floor(amount);
+    amount = Decimal.floor(amount);
     const tier = Galaxy.requiredTier;
     return new GalaxyRequirement(tier, amount);
   }
@@ -109,10 +109,10 @@ export class Galaxy {
   }
 
   static typeAt(galaxies) {
-    if (galaxies >= Galaxy.remoteStart) {
+    if (galaxies.gte(Galaxy.remoteStart)) {
       return GALAXY_TYPE.REMOTE;
     }
-    if (EternityChallenge(5).isRunning || galaxies >= this.costScalingStart) {
+    if (EternityChallenge(5).isRunning || galaxies.gte(this.costScalingStart)) {
       return GALAXY_TYPE.DISTANT;
     }
     return GALAXY_TYPE.NORMAL;
@@ -121,7 +121,7 @@ export class Galaxy {
 
 function galaxyReset() {
   EventHub.dispatch(GAME_EVENT.GALAXY_RESET_BEFORE);
-  player.galaxies++;
+  player.galaxies = player.galaxies.add(1);
   if (!Achievement(143).isUnlocked || (Pelle.isDoomed && !PelleUpgrade.galaxyNoResetDimboost.canBeApplied)) {
     player.dimensionBoosts = 0;
   }
@@ -135,7 +135,7 @@ function galaxyReset() {
 export function manualRequestGalaxyReset(bulk) {
   if (!Galaxy.canBeBought || !Galaxy.requirement.isSatisfied) return;
   if (GameEnd.creditsEverClosed) return;
-  if (RealityUpgrade(7).isLockingMechanics && player.galaxies > 0) {
+  if (RealityUpgrade(7).isLockingMechanics && player.galaxies.gt(0)) {
     RealityUpgrade(7).tryShowWarningModal();
     return;
   }
@@ -151,28 +151,28 @@ export function manualRequestGalaxyReset(bulk) {
 export function requestGalaxyReset(bulk, limit = Number.MAX_VALUE) {
   const restrictedLimit = RealityUpgrade(7).isLockingMechanics ? 1 : limit;
   if (EternityMilestone.autobuyMaxGalaxies.isReached && bulk) return maxBuyGalaxies(restrictedLimit);
-  if (player.galaxies >= restrictedLimit || !Galaxy.canBeBought || !Galaxy.requirement.isSatisfied) return false;
+  if (player.galaxies.gte(restrictedLimit) || !Galaxy.canBeBought || !Galaxy.requirement.isSatisfied) return false;
   Tutorial.turnOffEffect(TUTORIAL_STATE.GALAXY);
   galaxyReset();
   return true;
 }
 
 function maxBuyGalaxies(limit = Number.MAX_VALUE) {
-  if (player.galaxies >= limit || !Galaxy.canBeBought) return false;
+  if (player.galaxies.gte(limit) || !Galaxy.canBeBought) return false;
   // Check for ability to buy one galaxy (which is pretty efficient)
   const req = Galaxy.requirement;
   if (!req.isSatisfied) return false;
   const dim = AntimatterDimension(req.tier);
-  const newGalaxies = Math.clampMax(
+  const newGalaxies = Decimal.clampMax(
     Galaxy.buyableGalaxies(Math.round(dim.totalAmount.toNumber())),
     limit);
   if (Notations.current === Notation.emoji) {
     player.requirementChecks.permanent.emojiGalaxies += newGalaxies - player.galaxies;
   }
   // Galaxy count is incremented by galaxyReset(), so add one less than we should:
-  player.galaxies = newGalaxies - 1;
+  player.galaxies = newGalaxies.sub(1);
   galaxyReset();
-  if (Enslaved.isRunning && player.galaxies > 1) EnslavedProgress.c10.giveProgress();
+  if (Enslaved.isRunning && player.galaxies.gt(1)) EnslavedProgress.c10.giveProgress();
   Tutorial.turnOffEffect(TUTORIAL_STATE.GALAXY);
   return true;
 }
