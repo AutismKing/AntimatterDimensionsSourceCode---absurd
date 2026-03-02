@@ -322,10 +322,10 @@ export function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride
     }
   }
 
-  let factor = 1;
+  let factor = new Decimal(1);
   if (effects.includes(GAME_SPEED_EFFECT.BLACK_HOLE)) {
     if (BlackHoles.areNegative) {
-      factor *= player.blackHoleNegative;
+      factor = factor.times(player.blackHoleNegative);
     } else if (!BlackHoles.arePaused) {
       for (const blackHole of BlackHoles.list) {
         if (!blackHole.isUnlocked) break;
