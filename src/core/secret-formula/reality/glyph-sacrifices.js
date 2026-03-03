@@ -5,7 +5,7 @@ export const glyphSacrifice = {
       if (Pelle.isDisabled("glyphsac")) return new Decimal(0);
       const sac = player.reality.glyphs.sac.power.add(added ?? 0);
       const capped = Decimal.clampMax(sac, GlyphSacrificeHandler.maxSacrificeForEffects);
-      const base = new Decimal(Decimal.log10(capped.add(1))).div(Math.log10(GlyphSacrificeHandler.maxSacrificeForEffects));
+      const base = new Decimal(Decimal.log10(capped.add(1))).div(Decimal.log10(GlyphSacrificeHandler.maxSacrificeForEffects));
       return Decimal.floor(Decimal.pow(base, 1.2).times(750));
     },
     description: amount => {
@@ -46,12 +46,12 @@ export const glyphSacrifice = {
       if (Pelle.isDisabled("glyphsac")) return new Decimal(0);
       const sac = player.reality.glyphs.sac.replication.add(added ?? 0);
       const capped = Decimal.clampMax(sac, GlyphSacrificeHandler.maxSacrificeForEffects);
-      const base = new Decimal(Decimal.log10(capped.add(1))).div(Math.log10(GlyphSacrificeHandler.maxSacrificeForEffects));
+      const base = new Decimal(Decimal.log10(capped.add(1))).div(Decimal.log10(GlyphSacrificeHandler.maxSacrificeForEffects));
       return Decimal.floor(Decimal.pow(base, 1.2).times(1500));
     },
     description: amount => {
       const sacCap = GlyphSacrificeHandler.maxSacrificeForEffects;
-      const nextDistantGalaxy = Decimal.pow(10, Decimal.pow((amount.add(1)).div(1500), new Decimal(1 / 1.2)).times(Math.log10(sacCap))).sub(1);
+      const nextDistantGalaxy = Decimal.pow(10, Decimal.pow((amount.add(1)).div(1500), new Decimal(1 / 1.2)).times(Decimal.log10(sacCap))).sub(1);
       const nextGalaxyText = amount.lt(1500)
         ? ` (next at ${format(nextDistantGalaxy, 2, 2)})`
         : "";
@@ -65,7 +65,7 @@ export const glyphSacrifice = {
       if (Pelle.isDisabled("glyphsac")) return new Decimal(1);
       const sac = player.reality.glyphs.sac.dilation.add(added ?? 0);
       const capped = Decimal.clampMax(sac, GlyphSacrificeHandler.maxSacrificeForEffects);
-      const exponent = Decimal.pow(new Decimal(Decimal.log10(capped.add(1))).div(Math.log10(GlyphSacrificeHandler.maxSacrificeForEffects)), 0.1).times(0.32);
+      const exponent = Decimal.pow(new Decimal(Decimal.log10(capped.add(1))).div(Decimal.log10(GlyphSacrificeHandler.maxSacrificeForEffects)), 0.1).times(0.32);
       return Decimal.pow(Decimal.clampMin(capped, 1), exponent);
     },
     description: amount => `Multiply Tachyon Particle gain by ${formatX(amount, 2, 2)}`,
