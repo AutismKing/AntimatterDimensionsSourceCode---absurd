@@ -101,7 +101,7 @@ export class Galaxy {
       TimeStudy(224),
       EternityChallenge(5).reward,
       GlyphSacrifice.power
-    ));
+    );
   }
 
   static get type() {
