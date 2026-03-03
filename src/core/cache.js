@@ -45,7 +45,7 @@ class Lazy {
 window.Lazy = Lazy;
 
 export const GameCache = {
-  worstChallengeTime: new Lazy(() => player.challenge.normal.bestTimes.max()),
+  worstChallengeTime: new Lazy(() => highestInArray(player.challenge.normal.bestTimes)),
 
   bestRunIPPM: new Lazy(() =>
     player.records.recentInfinities
@@ -111,9 +111,9 @@ export const GameCache = {
 
   totalIPMult: new Lazy(() => totalIPMult()),
 
-  challengeTimeSum: new Lazy(() => player.challenge.normal.bestTimes.sum()),
+  challengeTimeSum: new Lazy(() => player.challenge.normal.bestTimes.reduce(Decimal.sumReducer)),
 
-  infinityChallengeTimeSum: new Lazy(() => player.challenge.infinity.bestTimes.sum()),
+  infinityChallengeTimeSum: new Lazy(() => player.challenge.infinity.bestTimes.reduce(Decimal.sumReducer)),
 };
 
 EventHub.logic.on(GAME_EVENT.GLYPHS_CHANGED, () => {
