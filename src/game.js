@@ -340,7 +340,7 @@ export function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride
   }
 
   if (effects.includes(GAME_SPEED_EFFECT.SINGULARITY_MILESTONE)) {
-    factor *= SingularityMilestone.gamespeedFromSingularities.effectOrDefault(1);
+    factor = factor.times(SingularityMilestone.gamespeedFromSingularities.effectOrDefault(1));
   }
 
   if (effects.includes(GAME_SPEED_EFFECT.TIME_GLYPH)) {
@@ -357,7 +357,7 @@ export function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride
   // otherwise it gets applied twice
   if (effects.includes(GAME_SPEED_EFFECT.NERFS)) {
     if (Effarig.isRunning) {
-      factor = Effarig.multiplier(factor).toNumber();
+      factor = Effarig.multiplier(factor);
     } else if (Laitela.isRunning) {
       const nerfModifier = Decimal.clampMax(Time.thisRealityRealTime.totalMinutes / 10, 1);
       factor = Decimal.pow(factor, nerfModifier);
@@ -365,7 +365,7 @@ export function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride
   }
 
 
-  factor *= PelleUpgrade.timeSpeedMult.effectValue.toNumber();
+  factor = factor.times(PelleUpgrade.timeSpeedMult.effectValue.toNumber());
 
   // 1e-300 is now possible with max inverted BH, going below it would be possible with
   // an effarig glyph.
