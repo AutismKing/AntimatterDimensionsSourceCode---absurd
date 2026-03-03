@@ -96,7 +96,7 @@ export class Galaxy {
   }
 
   static get costScalingStart() {
-    return new Decimal(100).add(TimeStudy(302).effectOrDefault(0)).add(Effects.sum(
+    return new Decimal(100).add(TimeStudy(302).effectOrDefault(0)).plusEffectsOf(
       TimeStudy(223),
       TimeStudy(224),
       EternityChallenge(5).reward,
