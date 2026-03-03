@@ -412,7 +412,7 @@ Currency.perkPoints = new class extends NumberCurrency {
   set value(value) { player.reality.perkPoints = value; }
 }();
 
-Currency.relicShards = new class extends NumberCurrency {
+Currency.relicShards = new class extends DecimalCurrency {
   get value() { return player.celestials.effarig.relicShards; }
   set value(value) { player.celestials.effarig.relicShards = value; }
 }();
@@ -453,7 +453,7 @@ Currency.singularities = new class extends DecimalCurrency {
   set value(value) { player.celestials.laitela.singularities = value; }
 }();
 
-Currency.remnants = new class extends DecimalCurrency {
+Currency.remnants = new class extends NumberCurrency {
   get value() { return player.celestials.pelle.remnants; }
   set value(value) { player.celestials.pelle.remnants = value; }
 }();
