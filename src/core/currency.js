@@ -420,6 +420,7 @@ Currency.relicShards = new class extends NumberCurrency {
 Currency.imaginaryMachines = new class extends DecimalCurrency {
   get value() { return player.reality.imaginaryMachines; }
   set value(value) {
+    const newValue = new Decimal(value);
     player.reality.imaginaryMachines = Decimal.clampMax(newValue, MachineHandler.currentIMCap);
   }
 }();
