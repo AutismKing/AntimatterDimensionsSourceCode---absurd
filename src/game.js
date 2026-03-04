@@ -904,7 +904,7 @@ export function simulateTime(seconds, real, fast) {
   // - Otherwise, tick count will be limited to the offline tick count (which may be set externally during save import)
   // Tick count is never *increased*, and only ever decreased if needed.
   if (seconds < 0) return;
-  let ticks = Decimal.floor(seconds * 20);
+  let ticks = Math.floor(seconds * 20);
   GameUI.notify.showBlackHoles = false;
 
   // Limit the tick count (this also applies if the black hole is unlocked)

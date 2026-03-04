@@ -8,7 +8,7 @@ export const breaketernityupgrade = [
     {
       id: 3,
       cost: 100000000,
-      description: "Singularities are 500% stronger",
+      description: "Singularities bulk gain is 500% stronger",
       effect: () => 6
     },
     {
