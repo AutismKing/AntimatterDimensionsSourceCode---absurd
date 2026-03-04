@@ -6,7 +6,7 @@ import { Quotes } from "./quotes";
 export const Teresa = {
   timePoured: new Decimal(0),
   lastUnlock: "effarig",
-  pouredAmountCap: 1e24,
+  pouredAmountCap: new Decimal(1e24),
   displayName: "Teresa",
   possessiveName: "Teresa's",
   get isUnlocked() {
@@ -16,8 +16,9 @@ export const Teresa = {
     if (this.pouredAmount.gte(Teresa.pouredAmountCap)) return;
     this.timePoured = this.timePoured.add(diff);
     const rm = Currency.realityMachines.value;
-    const rmPoured = Decimal.min((this.pouredAmount.plus(1e6)).times(0.01).times(Decimal.pow(this.timePoured, 2)), rm);;
-    this.pouredAmount = this.pouredAmount.add(Decimal.min(rmPoured, Teresa.pouredAmountCap.sub(this.pouredAmount)))
+    const rmPoured = Decimal.min((this.pouredAmount.plus(1e6)).times(0.01).times(Decimal.pow(this.timePoured, 2)), rm);
+    const leftToCap = this.pouredAmount.gte(1e100) ? Teresa.pouredAmountCap.sub(this.pouredAmount) : new Decimal(Teresa.pouredAmountCap.toNumber() - this.pouredAmount.toNumber());
+    this.pouredAmount = this.pouredAmount.add(Decimal.min(rmPoured, leftToCap));
     Currency.realityMachines.subtract(rmPoured);
     this.checkForUnlocks();
   },
@@ -132,7 +133,7 @@ class TeresaUnlockState extends BitUpgradeState {
   }
 
   get canBeUnlocked() {
-    return !this.isUnlocked && Teresa.pouredAmount >= this.price;
+    return !this.isUnlocked && Teresa.pouredAmount.gte(new Decimal(this.price));
   }
 
   get description() {
