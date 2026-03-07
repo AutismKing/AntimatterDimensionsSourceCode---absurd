@@ -81,7 +81,7 @@ export default {
         <span v-if="unstable"> Unstable</span> Galactic Power,
         <br>
         <span>
-          increased by
+          decreased by
           <span :class="instabilityClassObject()">{{ formatPow(conversionExponent, 2, 3) }}</span>
         </span>
         to a
@@ -89,7 +89,7 @@ export default {
           {{ formatX(dimMultiplier, 2, 1) }}<span v-if="!isEffectActive"> (Disabled)</span>
         </span>
         multiplier to
-        <span>Game Speed.</span>
+        <span>Galaxy Strength.</span>
         <div v-if="unstable">
           You <i>would</i> have <span :class="instabilityClassObject()">{{ format(unnerfedGalacticPower, 2, 1) }}</span>
           Galactic Power, but you don't.
