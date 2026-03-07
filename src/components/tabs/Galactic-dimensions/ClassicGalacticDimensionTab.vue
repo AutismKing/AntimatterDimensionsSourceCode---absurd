@@ -67,13 +67,13 @@ export default {
         Galactic Power <span v-if="!isEffectActive">(Disabled)</span>,
         <br>
         <span>
-          increased by
+          decreased by
           <span class="c-Galactic-dim-description__accent">{{ formatPow(conversionExponent, 2, 3) }}</span>
         </span>
         to a
         <span class="c-Galactic-dim-description__accent">{{ formatX(dimMultiplier, 2, 1) }}</span>
         multiplier to
-        <span>Game Speed.</span>
+        <span>Galaxy Strength.</span>
       </p>
     </div>
     <div>
