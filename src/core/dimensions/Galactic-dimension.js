@@ -8,8 +8,8 @@ export function GalacticDimensionCommonMultiplier() {
 }
 // getting a constant and saying that that constant is enabled here
 export function toggleGalacticPower() {
-    const isEnabled = Player.Absurdity.GalacticPowerMultiplier.isActive;
-    Player.Absurdity.GalacticPowerMultiplier.isActive = !isEnabled
+    const isEnabled = Player.GalacticPowerMultiplier.isActive;
+    Player.GalacticPowerMultiplier.isActive = !isEnabled
 }
 
 class GalacticDimensionState extends DimensionState {
@@ -264,9 +264,9 @@ export const GalacticDimensions = {
     unlockedDimensions.forEach(dimension => dimension.buyMax(false));
   },
 
-  //NEED TO CHANGE TO TETRATION LATER
+
   get conversionExponent() {
-    let base = 2;
+    let base = 0.666;
   }
     
 

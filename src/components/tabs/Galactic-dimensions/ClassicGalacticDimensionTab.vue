@@ -77,7 +77,7 @@ export default {
       </p>
     </div>
     <div>
-      All Galactic Dimensions can be purchased until {{ format(totalDimCap, 2, 2) }} Tetration Points.
+      All Galactic Dimensions can be purchased until {{ format(totalDimCap, 2, 2) }} Galactic Points.
     </div>
     <div>You are getting {{ format(PowerPerSecond, 2, 0) }} {{ incomeType }} per second.</div>
     <div class="l-dimensions-container">
@@ -88,7 +88,7 @@ export default {
       />
     </div>
     <div v-if="showLockedDimCostNote">
-      Hold shift to see the Tetration Point cost for locked Galactic Dimensions.
+      Hold shift to see the Galactic Point cost for locked Galactic Dimensions.
     </div>
   </div>
 </template>

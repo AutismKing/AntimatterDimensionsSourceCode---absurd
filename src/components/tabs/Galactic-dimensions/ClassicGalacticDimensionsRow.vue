@@ -43,14 +43,14 @@ export default {
     costDisplay() {
       if (this.isUnlocked || this.shiftDown) {
         if (this.isCapped) return "Capped";
-        return this.showCostTitle ? `Cost: ${format(this.cost)} TetP` : `${format(this.cost)} TetP`;
+        return this.showCostTitle ? `Cost: ${format(this.cost)} GP` : `${format(this.cost)} GP`;
       }
 
       if (this.canUnlock) {
         return "Unlock";
       }
 
-      return `Reach ${format(GalacticDimension(this.tier).cpRequirement)} TetP`;
+      return `Reach ${format(GalacticDimension(this.tier).cpRequirement)} GP`;
     },
     hasLongText() {
       return this.costDisplay.length > 20;
@@ -59,7 +59,7 @@ export default {
       return format(this.hardcap, 1, 1);
     },
     capTooltip() {
-      if (this.isCapped) return `Cap reached at ${format(this.capTetP)} TetP`;
+      if (this.isCapped) return `Cap reached at ${format(this.capGP)} GP`;
       return `Purchased ${quantifyHybridLarge("time", this.purchases)}`;
     },
     showRow() {
@@ -85,7 +85,7 @@ export default {
       this.cost.copyFrom(dimension.cost);
       this.isAvailableForPurchase = dimension.isAvailableForPurchase;
       this.isCapped = dimension.isCapped;
-      this.capTetP.copyFrom(dimension.hardcapTetPAmount);
+      this.capGP.copyFrom(dimension.hardcapGPAmount);
       this.hardcap.copyFrom(dimension.purchaseCap);
     },
     buySingleGalacticDimension() {
