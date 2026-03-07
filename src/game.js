@@ -557,7 +557,7 @@ export function gameLoop(passedDiff, options = {}) {
   applyAutoprestige(realDiff);
   updateImaginaryMachines(realDiff);
 
-  const uncountabilityGain = AlchemyResource.uncountability.effectValue * Time.unscaledDeltaTime.totalSeconds;
+  const uncountabilityGain = AlchemyResource.uncountability.effectValue * Time.unscaledDeltaTime.totalSeconds.toNumber();
   Currency.realities.add(uncountabilityGain);
   Currency.perkPoints.add(uncountabilityGain);
 
@@ -943,6 +943,7 @@ export function simulateTime(seconds, real, fast) {
   EventHub.dispatch(GAME_EVENT.OFFLINE_CURRENCY_GAINED);
 
   let remainingRealSeconds = seconds;
+  if (remainingRealSeconds <= 0) return;
   // During async code the number of ticks remaining can go down suddenly
   // from "Speed up" which means tick length needs to go up, and thus
   // you can't just divide total time by total ticks to get tick length.
