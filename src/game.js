@@ -570,7 +570,7 @@ export function gameLoop(passedDiff, options = {}) {
   InfinityDimensions.tick(diff);
   AntimatterDimensions.tick(diff);
 
-  const gain = Decimal.clampMin(FreeTickspeed.fromShards(Currency.timeShards.value).newAmount - player.totalTickGained, 0);
+  const gain = Math.clampMin(FreeTickspeed.fromShards(Currency.timeShards.value).newAmount - player.totalTickGained, 0);
   player.totalTickGained += gain;
 
   updatePrestigeRates();
