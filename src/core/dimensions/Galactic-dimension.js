@@ -7,9 +7,9 @@ export function GalacticDimensionCommonMultiplier() {
     return mult;
 }
 // getting a constant and saying that that constant is enabled here
-export function toggleGalacticPower() {
-    const isEnabled = Player.GalacticPowerMultiplier.isActive;
-    Player.GalacticPowerMultiplier.isActive = !isEnabled
+export function toggleGalacticEssence() {
+    const isEnabled = Player.GalacticEssenceMultiplier.isActive;
+    Player.GalacticEssenceMultiplier.isActive = !isEnabled
 }
 
 class GalacticDimensionState extends DimensionState {
@@ -218,8 +218,8 @@ export const GalacticDimensions = {
   },
 
   resetAmount() {
-    Currency.unnerfedGalacticPower.reset();
-    Currency.GalacticPower.reset();
+    Currency.unnerfedGalacticEssence.reset();
+    Currency.GalacticEssence.reset();
     for (const dimension of GalacticDimensions.all) {
       dimension.resetAmount();
     }
@@ -246,7 +246,7 @@ export const GalacticDimensions = {
   tick(realDiff) {
     for (let tier = 8; tier > 1; tier--) {
       GalacticDimension(tier).produceDimensions(GalacticDimension(tier - 1), realDiff / 10);
-      GalacticDimension(1).produceCurrency(Currency.unnerfedGalacticPower, realDiff);
+      GalacticDimension(1).produceCurrency(Currency.unnerfedGalacticEssence, realDiff);
     }
   },
 

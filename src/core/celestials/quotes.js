@@ -175,12 +175,10 @@ export const Quotes = {
     GameDatabase.celestials.quotes.pelle,
     config => new CelQuotes(config, "pelle")
   ),
-   //Triton: mapGameDataToObject(       MOD QUOTES ALL HERE. ADD IN OTHER PLACES.
-    //GameDatabase.celestials.quotes.Triton,
-    //config => new CelQuotes(config, "Triton")
- // ),
-   //Genox: mapGameDataToObject(
-   // GameDatabase.celestials.quotes.Genox,
-    //config => new CelQuotes(config, "Genox")
- // ),
+   /*Genox: mapGameDataToObject(
+    GameDatabase.celestials.quotes.Genox,
+    config => new CelQuotes(config, "Genox")
+  ),
+   
+  ), */
 };

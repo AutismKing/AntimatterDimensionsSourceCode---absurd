@@ -10,8 +10,8 @@ export default {
   },
   data() {
     return {
-      GalacticPower: new Decimal(0),
-      unnerfedGalacticPower: new Decimal(0),
+      GalacticEssence: new Decimal(0),
+      unnerfedGalacticEssence: new Decimal(0),
       dimMultiplier: new Decimal(0),
       PowerPerSecond: new Decimal(0),
       incomeType: "",
@@ -29,24 +29,24 @@ export default {
   methods: {
     update() {
       this.showLockedDimCostNote = !GalacticDimension(8).isUnlocked;
-      this.GalacticPower.copyFrom(Currency.GalacticPower);
-      this.unnerfedGalacticPower.copyFrom(Currency.unnerfedGalacticPower);
+      this.GalacticEssence.copyFrom(Currency.GalacticEssence);
+      this.unnerfedGalacticEssence.copyFrom(Currency.unnerfedGalacticEssence);
       this.conversionExponent = GalacticDimensions.conversionExponent;
-      this.dimMultiplier.copyFrom(this.GalacticPower.pow(this.conversionExponent).max(1));
+      this.dimMultiplier.copyFrom(this.GalacticEssence.pow(this.conversionExponent).max(1));
       this.PowerPerSecond.copyFrom(GalacticDimension(1).productionPerSecond);
       this.incomeType = "Galactic Power";
       this.totalDimCap.copyFrom(GalacticDimensions.totalDimCap);
       this.creditsClosed = GameEnd.creditsEverClosed;
       this.softcapPow = GalacticDimensions.softcapPow;
       this.softcap.copyFrom(GalacticDimensions.SOFTCAP);
-      this.unstable = this.GalacticPower.gte(this.softcap);
-      this.isEffectActive = player.absurdity.GalacticPowerMultiplier.isActive;
+      this.unstable = this.GalacticEssence.gte(this.softcap);
+      this.isEffectActive = player.absurdity.GalacticEssenceMultiplier.isActive;
     },
     maxAll() {
       GalacticDimensions.buyMax();
     },
-    toggleGalacticPowerMultiplier() {
-      toggleGalacticPower();
+    toggleGalacticEssenceMultiplier() {
+      toggleGalacticEssence();
     },
     instabilityClassObject() {
       return {
@@ -69,7 +69,7 @@ export default {
       </PrimaryButton>
       <PrimaryButton
         class="o-primary-btn--subtab-option"
-        @click="toggleGalacticPowerMultiplier"
+        @click="toggleGalacticEssenceMultiplier"
       >
         Toggle Galactic Power
       </PrimaryButton>
@@ -77,7 +77,7 @@ export default {
     <div>
       <p>
         You have
-        <span :class="instabilityClassObject()">{{ format(GalacticPower, 2, 1) }}</span>
+        <span :class="instabilityClassObject()">{{ format(GalacticEssence, 2, 1) }}</span>
         <span v-if="unstable"> Unstable</span> Galactic Power,
         <br>
         <span>
@@ -91,7 +91,7 @@ export default {
         multiplier to
         <span>Galaxy Strength.</span>
         <div v-if="unstable">
-          You <i>would</i> have <span :class="instabilityClassObject()">{{ format(unnerfedGalacticPower, 2, 1) }}</span>
+          You <i>would</i> have <span :class="instabilityClassObject()">{{ format(unnerfedGalacticEssence, 2, 1) }}</span>
           Galactic Power, but you don't.
           <br>
           This is because at <span :class="instabilityClassObject()">{{ format(softcap, 2, 1) }}</span> Galactic Power, your

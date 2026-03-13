@@ -10,7 +10,7 @@ export default {
   },
   data() {
     return {
-      GalacticPower: new Decimal(0),
+      GalacticEssence: new Decimal(0),
       dimMultiplier: new Decimal(0),
       PowerPerSecond: new Decimal(0),
       incomeType: "",
@@ -25,20 +25,20 @@ export default {
   methods: {
     update() {
       this.showLockedDimCostNote = !GalacticDimension(8).isUnlocked;
-      this.GalacticPower.copyFrom(Currency.GalacticPower);
+      this.GalacticEssence.copyFrom(Currency.GalacticEssence);
       this.conversionExponent = GalacticDimensions.conversionExponent; 
-      this.dimMultiplier.copyFrom(this.GalacticPower.pow(this.conversionExponent).max(1));
+      this.dimMultiplier.copyFrom(this.GalacticEssence.pow(this.conversionExponent).max(1));
       this.matterPerSecond.copyFrom(GalacticDimension(1).productionPerRealSecond);
       this.incomeType = "Galactic Power";
       this.totalDimCap.copyFrom(GalacticDimensions.totalDimCap);
       this.creditsClosed = GameEnd.creditsEverClosed;
-      this.isEffectActive = player.endgame.GalacticPowerMultiplier.isActive;
+      this.isEffectActive = player.endgame.GalacticEssenceMultiplier.isActive;
     },
     maxAll() {
       GalacticDimensions.buyMax();
     },
-    toggleGalacticPowerMultiplier() {
-      toggleGalacticPower();
+    toggleGalacticEssenceMultiplier() {
+      toggleGalacticEssence();
     }
   }
 };
@@ -55,7 +55,7 @@ export default {
       </PrimaryButton>
       <PrimaryButton
         class="o-primary-btn--subtab-option"
-        @click="toggleGalacticPowerMultiplier"
+        @click="toggleGalacticEssenceMultiplier"
       >
         Toggle Galactic Power
       </PrimaryButton>
@@ -63,7 +63,7 @@ export default {
     <div>
       <p>
         You have
-        <span class="c-Galactic-dim-description__accent">{{ format(GalacticPower, 2, 1) }}</span>
+        <span class="c-Galactic-dim-description__accent">{{ format(GalacticEssence, 2, 1) }}</span>
         Galactic Power <span v-if="!isEffectActive">(Disabled)</span>,
         <br>
         <span>

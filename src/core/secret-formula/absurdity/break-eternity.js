@@ -45,7 +45,7 @@ export const breaketernityupgrade = [
      id: 12,
      cost: 100000,
      description: "All dark matter dimensions gain a power based on your galactic power",
-     effect: () => Decimal.pow(Decimal.log10(player.galacticPower), 0.05)
+     effect: () => Decimal.pow(Decimal.log10(player.GalacticEssence), 0.05)
    },
    {
      id: 13,
@@ -94,4 +94,35 @@ export const breaketernityupgrade = [
      cost: 10000,
      description: "Power DM annihalation mult based on galactic points"
      effect: () => Decimal.pow((player.GP.amount), 0.05)
-]
+   },
+   {
+     id: 21,
+     cost: 10000,
+     description: "Power all IC rewards based on IP"
+     effect: () => Decimal.pow((player.IP.amount), 0.05)
+   },
+   {
+     id: 22,
+     cost: 10000,
+     description: "Power all active, passive and idle time stuides based on replicanti galaxies.
+     effect: () => Decimal.pow((player.replicanti.galaxy.amount), 0.05)
+   },
+   {
+     id: 23,
+     cost: 10000,
+     description: "Power all light and dark studies based on total galaxy amount"
+     effect: () => Decimal.pow((player.total.galaxies.amount), 0.05)
+   },
+   {
+     id: 24,
+     cost: 10000,
+     description: "Ach Mult also affects Glyph Level"
+     effect: () => whatever formula gives x1.5 glyph level
+   },
+   {
+     id: 25,
+     cost: 10000,
+     description: "Ach Mult also affects: IP, EP, DT, RM and iM"
+     effect: () => whatever gives x100
+
+] */
