@@ -350,13 +350,15 @@ export default {
         class="c-stats-tab-doomed"
       >
         You have been Doomed for {{ realTimeDoomed.toStringShort() }}, real time.
+      </div>
       <div>
         Your best Reality Machines per minute 
         is {{ format(reality.bestRate, 2, 2) }}.
       </div>
       <div>
         Your best Glyph rarity
-        is {{ formatRarity(reality.bestRarity) }}.</div>
+        is {{ formatRarity(reality.bestRarity) }}.
+      </div>
       <br>
     </div>
   </div>
