@@ -275,6 +275,10 @@ window.player = {
     fullGameCompletions: 0,
     previousRunRealTime: 0,
     totalAntimatter: DC.E1,
+    totalAntimatterOutsideDoom: DC.E1,
+    totalRealityAntimatter: DC.E1,
+    totalEternityAntimatter: DC.E1,
+    totalInfinityAntimatter: DC.E1,
     recentInfinities: Array.range(0, 10).map(() =>
       [DC.BEMAX, Number.MAX_VALUE, DC.D1, DC.D1, ""]),
     recentEternities: Array.range(0, 10).map(() =>
