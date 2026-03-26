@@ -859,7 +859,7 @@ export function getTTPerSecond() {
     Achievement(137),
     Achievement(156),
   ));
-  if (GlyphAlteration.isAdded("dilation")) ttMult *= getSecondaryGlyphEffect("dilationTTgen");
+  if (GlyphAlteration.isAdded("dilation")) ttMult = ttMult.times(getSecondaryGlyphEffect("dilationTTgen"));
 
   // Glyph TT generation
   const glyphTT = Teresa.isRunning || Enslaved.isRunning || Pelle.isDoomed
