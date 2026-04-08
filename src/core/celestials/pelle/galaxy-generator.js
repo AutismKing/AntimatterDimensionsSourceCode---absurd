@@ -32,7 +32,7 @@ export const GalaxyGenerator = {
       GalaxyGeneratorUpgrades.antimatterMult,
       GalaxyGeneratorUpgrades.IPMult,
       GalaxyGeneratorUpgrades.EPMult,
-    ).toNumber();
+    );
   },
 
   get capObj() {
@@ -92,8 +92,9 @@ export const GalaxyGenerator = {
       }
 
     }
-    player.celestials.pelle.galaxyGenerator.generatedGalaxies += this.gainPerSecond * diff / 1000;
-    player.celestials.pelle.galaxyGenerator.generatedGalaxies = Math.min(
+    player.celestials.pelle.galaxyGenerator.generatedGalaxies = player.celestials.pelle.galaxyGenerator.generatedGalaxies.add(
+      this.gainPerSecond.times(new Decimal(diff).div(1000)));
+    player.celestials.pelle.galaxyGenerator.generatedGalaxies = Decimal.min(
       player.celestials.pelle.galaxyGenerator.generatedGalaxies,
       this.generationCap
     );
