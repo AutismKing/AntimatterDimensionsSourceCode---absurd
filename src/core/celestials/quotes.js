@@ -175,10 +175,4 @@ export const Quotes = {
     GameDatabase.celestials.quotes.pelle,
     config => new CelQuotes(config, "pelle")
   ),
-   /*Genox: mapGameDataToObject(
-    GameDatabase.celestials.quotes.Genox,
-    config => new CelQuotes(config, "Genox")
-  ),
-   
-  ), */
 };

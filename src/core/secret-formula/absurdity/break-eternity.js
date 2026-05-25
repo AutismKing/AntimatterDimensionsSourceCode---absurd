@@ -4,7 +4,7 @@ import { const } from "../../globals";
 
 
 
-export const breaketernityupgrade = [
+export const break_eternity_upgrade = [
     {
       id: 3,
       cost: 100000000,

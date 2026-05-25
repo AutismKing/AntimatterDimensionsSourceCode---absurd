@@ -1377,8 +1377,12 @@ export const normalAchievements = [
   {
     id: 188,
     name: "The End",
-    description: "Beat the game.",
+    description: "Beat Pelle's Reality.",
     checkRequirement: () => GameEnd.endState > END_STATE_MARKERS.GAME_END && !GameEnd.removeAdditionalEnd,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
+    /*
+    get reward() {
+      return `Unlock a new Time Study inside and outside of Pelle`
+    }, */
   },
 ];

@@ -43,7 +43,7 @@ export const tabs = [
         hideAt: 2.5,
         symbol: "🜸",
         component: "GalacticDimensionsTab",
-        // not yet: condition: () => PlayerProgress.AbsurdityUnlocked(),
+        //condition: () => PlayerProgress.absurdityUnlocked(),
         id: 3,
         hidable: true,
       },
@@ -489,6 +489,36 @@ export const tabs = [
     ]
   },
   {
+    /* key: "absurdity",
+    name: "Absurdity",
+    hideAt: 2.3,
+    UIClass: "o-tab-btn--absurdity",
+    condition: () => PlayerProgress.absurdityUnlocked() || TimeStudy.absurdity.isBought,
+    id: 9,
+    hidable: true,
+    subtabs: [
+      {
+        key: "break_eternity",
+        name: "Break Eternity",
+        symbol: "TBD",
+        component: "BreakEternityTab",
+        id: 0,
+        hidable: true, */
+    /* key: "colossals",
+    name: "Colossals",
+    hideAt: 2.3,
+    UIClass: "o-tab-btn--colossal",
+    condition: () => PlayerProgress.absurdityUnlocked() || TimeStudy.absurdity.isBought,
+    id: 9,
+    hidable: true,
+    subtabs: [
+      {
+        key: "genox",
+        name: "Genox",
+        symbol: "TBD",
+        component: "GenoxTab",
+        id: 0,
+        hidable: true, */
     key: "shop",
     name: "Shop",
     newUIClass: "shop",

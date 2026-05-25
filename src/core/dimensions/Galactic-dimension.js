@@ -266,7 +266,7 @@ export const GalacticDimensions = {
 
 
   get conversionExponent() {
-    let base = 0.666;
+    let base = 0.0666;
   }
     
 
