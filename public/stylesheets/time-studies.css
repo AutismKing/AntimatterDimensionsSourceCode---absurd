@@ -264,6 +264,17 @@
   background: var(--color-v--base);
 }
 
+.o-time-study-absurdity--available {
+  color: var(--color-absurdity);
+  background-color: white;
+  border-color: var(--color-absurdity);
+}
+
+.o-time-study-absurdity--available:hover {
+  color: white;
+  background-color: var(--color-absurdity);
+}
+
 @keyframes a-time-study-dilation {
   0% { box-shadow: inset 0.5rem  0       2rem; }
   25% { box-shadow: inset 0       0.5rem  2rem; }
