@@ -52,4 +52,11 @@ export const dilationTimeStudies = [
       (Perk.firstPerk.isBought || Achievements.preReality.every(a => a.isUnlocked)) &&
       !Pelle.isDoomed
   }
+  /*{
+    id: 7,
+    description: "Unlock Absurdity",
+    cost: 1e1500,
+    cost: 1e15,
+    requirement: () => achievment188.isBought 
+  } */
 ];

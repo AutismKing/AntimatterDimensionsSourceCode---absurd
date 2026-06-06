@@ -6,123 +6,80 @@ import { const } from "../../globals";
 
 export const break_eternity_upgrade = [
     {
+      name: "Galactic Acknowledgement"  
+      id: 1,
+      cost: 1,
+      description: "Empower Antimatter Dimensions based on best ever Antimatter Amount and most ever Galactic stars.",
+      effect: () => Decimal.pow(Decimal.log10(player.records.totalAntimatter), 0.001).add(Decimal.pow(Decimal.log2(player.records.bestGS),0.001).div(10))
+    },
+    {
+      name: "Demented Darkness"
+      id: 2,
+      cost: 50,
+      description: "Multiply Dimboost Multiplier by Dark Matter.",
+      effect: () => darkMatter
+    },
+    {
+      name: "Eternal and Infinite"
       id: 3,
-      cost: 100000000,
-      description: "Singularities bulk gain is 500% stronger",
-      effect: () => 6
-    },
-    {
-      id: 4,
-      cost: 10000,
-      description: "All NC, IC and EC times and time sums are always 1e-300ms.",
-      effect: 1
-    },
-    {
-      id: 5,
-      cost: 10000,
-      description: "All infinity, eternity and reality best times are always 1e-300ms.",
-      effect: 1
+      cost: 100,
+      description: "Multiply Infinity Dimension Multipliers based on Time Shards",
+      effect: () => Decimal.pow(player.timeShards, 0.75)
    },
    {
+     name: "Galactic Inception"
+     id: 4,
+     cost: 500,
+     description: "Multiply Galactic Dimensions based on Galaxy amount",
+     effect: () => Decimal.log10(player.total.galaxies.amount) 
+   },
+   {
+     name: "Sacrifical Supplement"
+     id: 5,
+     cost: 1000,
+     description: "Empower Antimatter Dimensions based on Glyph Sacrifice"
+     effect: () => Decimal.pow(Decimal.log10(player.glyphSacrifice), 0.1)
+   },
+   {
+     name: "Reality Particles"
+     id: 6,
+     cost: 1e6,
+     description: "Multiply the RM cap by Tachyon Particles",
+     effect: () => player.tachyonParticles
+   },
+   {
+     name: "Purpose of Perks"
+     id: 7,
+     cost: 5e6,
+     description: "Multiply Dimboosts multiplier based on Perk Points",
+     effect: () => Decimal.pow(player.perkPoints, 3)
+   },
+   {
+     name: "Spacial Evolution"
+     id: 8,
+     cost: 1e7,
+     description: "Multiply Space Theorems based on Evolved Theorems",
+     effect: () => Decimal.log10(player.evolvedTheorems)
+   },
+   {
+     name: "Acclimated Achievments"
      id: 9,
-     cost: 100000,
-     description: "All antimatter dimensions gain a power based on your infinity power",
-     effect: () => Decimal.pow(Decimal.log10(player.infinityPower), 0.05) 
+     cost: 5e7,
+     description: "Empower all achievment rewards based on Space Theorems",
+     effect: () => Decimal.log10(player.spaceTheorems)
    },
    {
+     name: "Dilated Speed"
      id: 10,
-     cost: 100000,
-     description: "All infinity dimensions gain a power based on your time shards"
-     effect: () => Decimal.pow(Decimal.log10(player.timeShards), 0.05)
+     cost: 1e8,
+     description: "Multiply Game Speed based on Dilated Time",
+     effect: () => Decimal.pow(player.dilatedTime, 0.02)
    },
    {
+     name: "Temporal Tribulations"
      id: 11,
-     cost: 100000,
-     description: "All time dimensions gain a power based on your dark matter",
-     effect: () => Decimal.pow(Decimal.log10(player.celestials.laitela.darkMatter), 0.05)
+     cost: 1e18,
+     description: "Empower Time Dimensions based on Tesseract Amount"
+     effect: () => Decimal.pow(Decimal.log10(player.tesseract), 0.25)
    },
-   {
-     id: 12,
-     cost: 100000,
-     description: "All dark matter dimensions gain a power based on your galactic power",
-     effect: () => Decimal.pow(Decimal.log10(player.GalacticEssence), 0.05)
-   },
-   {
-     id: 13,
-     cost: 100000,
-     description: "All galactic dimensions gain a multiplier based on your antimatter",
-     effect: () => Decimal.pow(Decimal.log10(player.antimatter), 0.025)
-   },
-   {
-     id: 14,
-     cost: 10000,
-     description: "IP is powered based on your replicanti"
-     effect: () => Decimal.pow(Decimal.log10(player.replicanti.amount), 0.05)
-   },
-   {
-     id: 15,
-     cost: 10000,
-     description: "replicanti is powered based on your time theorem"
-     effect: () => Decimal.pow(Decimal.log10(player.timeStudy.theorem), 0.05)
-   },
-   {
-     id: 16,
-     cost: 10000,
-     description: "EP is powered based on your TP"
-     effect: () => Decimal.pow(Decimal.log10(player.tachyonparticles.amount), 0.05)
-   },
-   {
-     id: 17,
-     cost: 10000,
-     description: "Power game speed based on your tesseract amount"
-     effect: () => Decimal.pow((player.tesseracts.amount), 0.05)
-   },
-   {
-     id: 18,
-     cost: 10000,
-     description: "Power glyph sac based on your highest ever glyph level"
-     effect: () => Decimal.pow((player.statistics.highest.glyph.level), 0.05)
-   },
-   {
-     id: 19,
-     cost: 10000,
-     description: "Power singularities based on dim boosts"
-     effect: () => Decimal.pow((player.dimensionboosts.amount), 0.05)
-   },
-   {
-     id: 20,
-     cost: 10000,
-     description: "Power DM annihalation mult based on galactic points"
-     effect: () => Decimal.pow((player.GP.amount), 0.05)
-   },
-   {
-     id: 21,
-     cost: 10000,
-     description: "Power all IC rewards based on IP"
-     effect: () => Decimal.pow((player.IP.amount), 0.05)
-   },
-   {
-     id: 22,
-     cost: 10000,
-     description: "Power all active, passive and idle time stuides based on replicanti galaxies.
-     effect: () => Decimal.pow((player.replicanti.galaxy.amount), 0.05)
-   },
-   {
-     id: 23,
-     cost: 10000,
-     description: "Power all light and dark studies based on total galaxy amount"
-     effect: () => Decimal.pow((player.total.galaxies.amount), 0.05)
-   },
-   {
-     id: 24,
-     cost: 10000,
-     description: "Ach Mult also affects Glyph Level"
-     effect: () => whatever formula gives x1.5 glyph level
-   },
-   {
-     id: 25,
-     cost: 10000,
-     description: "Ach Mult also affects: IP, EP, DT, RM and iM"
-     effect: () => whatever gives x100
-
 ] */
