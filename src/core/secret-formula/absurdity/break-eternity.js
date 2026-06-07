@@ -65,7 +65,7 @@ export const break_eternity_upgrade = [
      name: "Acclimated Achievments"
      id: 9,
      cost: 5e7,
-     description: "Empower all achievment rewards based on Space Theorems",
+     description: "Empower the achievment multipliers based on Space Theorems",
      effect: () => Decimal.log10(player.spaceTheorems)
    },
    {
