@@ -13,7 +13,7 @@ export default {
       GalacticEssence: new Decimal(0),
       unnerfedGalacticEssence: new Decimal(0),
       dimMultiplier: new Decimal(0),
-      PowerPerSecond: new Decimal(0),
+      EssencePerSecond: new Decimal(0),
       incomeType: "",
       conversionExponent: 0,
       nextDimCapIncrease: 0,
@@ -33,8 +33,8 @@ export default {
       this.unnerfedGalacticEssence.copyFrom(Currency.unnerfedGalacticEssence);
       this.conversionExponent = GalacticDimensions.conversionExponent;
       this.dimMultiplier.copyFrom(this.GalacticEssence.pow(this.conversionExponent).max(1));
-      this.PowerPerSecond.copyFrom(GalacticDimension(1).productionPerSecond);
-      this.incomeType = "Galactic Power";
+      this.EssencePerSecond.copyFrom(GalacticDimension(1).productionPerSecond);
+      this.incomeType = "Galactic Essence";
       this.totalDimCap.copyFrom(GalacticDimensions.totalDimCap);
       this.creditsClosed = GameEnd.creditsEverClosed;
       this.softcapPow = GalacticDimensions.softcapPow;
@@ -71,14 +71,14 @@ export default {
         class="o-primary-btn--subtab-option"
         @click="toggleGalacticEssenceMultiplier"
       >
-        Toggle Galactic Power
+        Toggle Galactic Essence
       </PrimaryButton>
     </div>
     <div>
       <p>
         You have
         <span :class="instabilityClassObject()">{{ format(GalacticEssence, 2, 1) }}</span>
-        <span v-if="unstable"> Unstable</span> Galactic Power,
+        <span v-if="unstable"> Unstable</span> Galactic Essence,
         <br>
         <span>
           decreased by
@@ -92,23 +92,23 @@ export default {
         <span>Galaxy Strength.</span>
         <div v-if="unstable">
           You <i>would</i> have <span :class="instabilityClassObject()">{{ format(unnerfedGalacticEssence, 2, 1) }}</span>
-          Galactic Power, but you don't.
+          Galactic Essence, but you don't.
           <br>
-          This is because at <span :class="instabilityClassObject()">{{ format(softcap, 2, 1) }}</span> Galactic Power, your
-          Galactic Power was softcapped.
+          This is because at <span :class="instabilityClassObject()">{{ format(softcap, 2, 1) }}</span> Galactic Essence, your
+          Galactic Essence was softcapped.
           <br>
-          Currently, Galactic Power above this amount is being raised to the power of
+          Currently, Galactic Essence above this amount is being raised to the Power of
           <span :class="instabilityClassObject()">{{ format(1 / softcapPow, 2, 3) }}</span>.
           <br>
-          The softcap to Galactic Power is solely based on your Galactic Power Softcap Magnitude, which is currently
+          The softcap to Galactic Essence is solely based on your Galactic Essence Softcap Magnitude, which is currently
           <span :class="instabilityClassObject()">{{ format(softcapPow, 2, 3) }}</span>.
         </div>
       </p>
     </div>
     <div>
-      All Galactic Dimensions can be purchased until {{ format(totalDimCap, 2, 2) }} Galactic Points.
+      All Galactic Dimensions can be purchased until {{ format(totalDimCap, 2, 2) }} Galactic Stars.
     </div>
-    <div>You are getting {{ format(PowerPerSecond, 2, 0) }} {{ incomeType }} per second.</div>
+    <div>You are getting {{ format(EssencePerSecond, 2, 0) }} {{ incomeType }} per second.</div>
     <div class="l-dimensions-container">
       <GalacticDimensionRow
         v-for="tier in 8"
@@ -117,7 +117,7 @@ export default {
       />
     </div>
     <div v-if="showLockedDimCostNote">
-      Hold shift to see the Galactic Point cost for locked Galactic Dimensions.
+      Hold shift to see the Galactic Star cost for locked Galactic Dimensions.
     </div>
   </div>
 </template>

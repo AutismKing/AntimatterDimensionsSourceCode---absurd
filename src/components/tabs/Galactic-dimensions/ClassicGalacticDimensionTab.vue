@@ -12,7 +12,7 @@ export default {
     return {
       GalacticEssence: new Decimal(0),
       dimMultiplier: new Decimal(0),
-      PowerPerSecond: new Decimal(0),
+      EssencePerSecond: new Decimal(0),
       incomeType: "",
       conversionExponent: 0,
       nextDimCapIncrease: 0,
@@ -29,10 +29,10 @@ export default {
       this.conversionExponent = GalacticDimensions.conversionExponent; 
       this.dimMultiplier.copyFrom(this.GalacticEssence.pow(this.conversionExponent).max(1));
       this.matterPerSecond.copyFrom(GalacticDimension(1).productionPerRealSecond);
-      this.incomeType = "Galactic Power";
+      this.incomeType = "Galactic Essence";
       this.totalDimCap.copyFrom(GalacticDimensions.totalDimCap);
       this.creditsClosed = GameEnd.creditsEverClosed;
-      this.isEffectActive = player.endgame.GalacticEssenceMultiplier.isActive;
+      this.isEffectActive = player.absurdity.GalacticEssenceMultiplier.isActive;
     },
     maxAll() {
       GalacticDimensions.buyMax();
@@ -57,14 +57,14 @@ export default {
         class="o-primary-btn--subtab-option"
         @click="toggleGalacticEssenceMultiplier"
       >
-        Toggle Galactic Power
+        Toggle Galactic Essence
       </PrimaryButton>
     </div>  
     <div>
       <p>
         You have
         <span class="c-Galactic-dim-description__accent">{{ format(GalacticEssence, 2, 1) }}</span>
-        Galactic Power <span v-if="!isEffectActive">(Disabled)</span>,
+        Galactic Essence <span v-if="!isEffectActive">(Disabled)</span>,
         <br>
         <span>
           decreased by
@@ -77,9 +77,9 @@ export default {
       </p>
     </div>
     <div>
-      All Galactic Dimensions can be purchased until {{ format(totalDimCap, 2, 2) }} Galactic Points.
+      All Galactic Dimensions can be purchased until {{ format(totalDimCap, 2, 2) }} Galactic Stars.
     </div>
-    <div>You are getting {{ format(PowerPerSecond, 2, 0) }} {{ incomeType }} per second.</div>
+    <div>You are getting {{ format(EssencePerSecond, 2, 0) }} {{ incomeType }} per second.</div>
     <div class="l-dimensions-container">
       <CelestialDimensionRow
         v-for="tier in 8"
@@ -88,7 +88,7 @@ export default {
       />
     </div>
     <div v-if="showLockedDimCostNote">
-      Hold shift to see the Galactic Point cost for locked Galactic Dimensions.
+      Hold shift to see the Galactic Star cost for locked Galactic Dimensions.
     </div>
   </div>
 </template>
