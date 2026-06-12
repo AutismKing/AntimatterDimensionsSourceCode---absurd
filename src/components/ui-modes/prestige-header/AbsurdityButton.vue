@@ -49,8 +49,8 @@ export default {
       this.nextStarRM = RMforGS(this.StarsGained.plus(1));
       this.nextStariM = iMforGS(this.StarsGained.plus(1));
       handleClick() {
-      if (this.canReality) {
-        requestManualReality();
+      if (this.canAbsurdity) {
+        requestManualAbsurdity();
       }
     },
    };
