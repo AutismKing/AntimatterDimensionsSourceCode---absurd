@@ -493,7 +493,7 @@ export const tabs = [
     name: "Absurdity",
     hideAt: 2.3,
     UIClass: "o-tab-btn--absurdity",
-    condition: () => PlayerProgress.absurdityUnlocked() || TimeStudy.absurdity.isBought,
+    // condition: () => PlayerProgress.absurdityUnlocked() || TimeStudy.absurdity.isBought,
     id: 10,
     hidable: true,
     subtabs: [
@@ -512,7 +512,7 @@ export const tabs = [
     name: "Colossals",
     hideAt: 2.4,
     UIClass: "o-tab-btn--colossal",
-    condition: () => PlayerProgress.absurdityUnlocked() || TimeStudy.absurdity.isBought,
+    // condition: () => PlayerProgress.absurdityUnlocked() || TimeStudy.absurdity.isBought,
     id: 11,
     hidable: true,
     subtabs: [
