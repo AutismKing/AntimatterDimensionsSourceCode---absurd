@@ -510,7 +510,7 @@ export const tabs = [
   {
     key: "colossals",
     name: "Colossals",
-    hideAt: 2.3,
+    hideAt: 2.4,
     UIClass: "o-tab-btn--colossal",
     condition: () => PlayerProgress.absurdityUnlocked() || TimeStudy.absurdity.isBought,
     id: 11,
