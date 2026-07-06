@@ -1,4 +1,4 @@
-/* <script>
+<script>
 export default {
   name: "BreakEternityButton",
   data() {
@@ -48,4 +48,4 @@ export default {
 
 <style scoped>
 
-</style> */
+</style>

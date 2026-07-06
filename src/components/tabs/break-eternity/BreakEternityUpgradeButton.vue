@@ -1,4 +1,4 @@
-/* <script>
+<script>
 import CostDisplay from "@/components/CostDisplay";
 import DescriptionDisplay from "@/components/DescriptionDisplay";
 import EffectDisplay from "@/components/EffectDisplay";
@@ -93,4 +93,4 @@ export default {
 
 <style scoped>
 
-</style> */
+</style>

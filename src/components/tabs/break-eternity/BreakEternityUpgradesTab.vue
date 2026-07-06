@@ -1,4 +1,4 @@
-/* <script>
+<script>
 import BreakEternityButton from "./BreakEternityButton";
 import BreakEternityUpgradeButton from "./BreakEternityUpgradeButton";
 
@@ -89,4 +89,4 @@ export default {
 
 <style scoped>
 
-</style> */
+</style>

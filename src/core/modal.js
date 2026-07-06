@@ -97,7 +97,7 @@ export class Modal {
     // Most of the time the close event will be a prestige event, in which case we want it to trigger on all higher
     // prestiges as well
     const prestigeOrder = [GAME_EVENT.DIMBOOST_AFTER, GAME_EVENT.GALAXY_RESET_AFTER, GAME_EVENT.BIG_CRUNCH_AFTER,
-      GAME_EVENT.ETERNITY_RESET_AFTER, GAME_EVENT.REALITY_RESET_AFTER];
+      GAME_EVENT.ETERNITY_RESET_AFTER, GAME_EVENT.REALITY_RESET_AFTER, GAME_EVENT.ABSURDITY_RESET_AFTER];
     let shouldClose = false;
     for (const prestige of prestigeOrder) {
       if (prestige === closeEvent) shouldClose = true;
@@ -212,6 +212,7 @@ Modal.exitDilation = new Modal(ExitDilationModal, 1, GAME_EVENT.REALITY_RESET_AF
 Modal.reality = new Modal(RealityModal, 1, GAME_EVENT.REALITY_RESET_AFTER);
 Modal.resetReality = new Modal(ResetRealityModal, 1, GAME_EVENT.REALITY_RESET_AFTER);
 Modal.celestials = new Modal(EnterCelestialsModal, 1);
+// Modal.absurdity = new Modal(AbsurdityModal, 1, GAME_EVENT.ABSURDITY_RESET_AFTER);
 Modal.hardReset = new Modal(HardResetModal, 1);
 Modal.backupWindows = new Modal(BackupWindowModal, 1);
 Modal.enterSpeedrun = new Modal(SpeedrunModeModal);
