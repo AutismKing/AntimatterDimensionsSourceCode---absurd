@@ -180,6 +180,14 @@ body.t-s12 {
   border-left-color: var(--color-celestials);
 }
 
+.o-tab-btn--absurdity::after {
+  border-left-color: var(--color-absurdity);
+}
+
+.o-tab-btn--colossal::after {
+  border-left-color: var(--color-colossals);
+}
+
 .tab-button.shop {
   background-color: #d9bb26;
 }
@@ -332,6 +340,26 @@ body.t-s12 {
 
 .o-tab-btn--celestial .o-subtab__tooltip::after {
   border-top-color: var(--color-celestials);
+}
+
+.o-tab-btn--absurdity .o-subtab__tooltip {
+  color: var(--color-absurdity);
+  background: var(--color-prestige--accent);
+  border-color: var(--color-absurdity);
+}
+
+.o-tab-btn--absurdity .o-subtab__tooltip::after {
+  border-top-color: var(--color-absurdity);
+}
+
+.o-tab-btn--colossal .o-subtab__tooltip {
+  color: var(--color-colossals);
+  background: var(--color-prestige--accent);
+  border-color: var(--color-colossals);
+}
+
+.o-tab-btn--colossal .o-subtab__tooltip::after {
+  border-top-color: var(--color-colossals);
 }
 
 .active {

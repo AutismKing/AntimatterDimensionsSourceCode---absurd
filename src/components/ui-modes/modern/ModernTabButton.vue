@@ -136,6 +136,14 @@ export default {
   background-color: var(--color-celestials);
 }
 
+.o-tab-btn--absurdity::before {
+  background-color: var(--color-absurdity);
+}
+
+.o-tab-btn--colossal::before {
+  background-color: var(--color-colossals);
+}
+
 .o-subtab-btn--active {
   border-bottom-width: 0.5rem;
 }
