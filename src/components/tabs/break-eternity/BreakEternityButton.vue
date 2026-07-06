@@ -5,7 +5,7 @@ export default {
     return {
       isBroken: false,
       isUnlocked: false,
-      galacticStarReq: new Decimal(0)
+      galacticStarReq: new Decimal(0),
       galacticStarReqIncrement: new Decimal(0)
     };
   },
