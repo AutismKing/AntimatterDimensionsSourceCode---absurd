@@ -206,8 +206,8 @@ export const Tabs = (function() {
       Tab.eternity,
       Tab.reality,
       Tab.celestials,
-      /* Tab.absurdity,
-      Tab.colossals, */
+      Tab.absurdity,
+      Tab.colossals,
       Tab.shop
     ],
     newUI: [
@@ -218,8 +218,8 @@ export const Tabs = (function() {
       Tab.eternity,
       Tab.reality,
       Tab.celestials,
-   /* Tab.absurdity,
-      Tab.colossals, */
+      Tab.absurdity,
+      Tab.colossals,
       Tab.achievements,
       Tab.statistics,
       Tab.options,

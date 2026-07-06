@@ -489,7 +489,7 @@ export const tabs = [
     ]
   },
   {
-    /* key: "absurdity",
+    key: "absurdity",
     name: "Absurdity",
     hideAt: 2.3,
     UIClass: "o-tab-btn--absurdity",
@@ -503,8 +503,12 @@ export const tabs = [
         symbol: "TBD",
         component: "BreakEternityTab",
         id: 0,
-        hidable: true, */
-    /* key: "colossals",
+        hidable: true,
+      }
+    ]
+  },
+  {
+    key: "colossals",
     name: "Colossals",
     hideAt: 2.3,
     UIClass: "o-tab-btn--colossal",
@@ -518,7 +522,11 @@ export const tabs = [
         symbol: "TBD",
         component: "GenoxTab",
         id: 0,
-        hidable: true, */
+        hidable: true,
+      }
+    ]
+  },
+    { 
     key: "shop",
     name: "Shop",
     newUIClass: "shop",
