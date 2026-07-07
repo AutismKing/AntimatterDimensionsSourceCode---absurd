@@ -153,7 +153,7 @@ export default {
       this.canChangeStoreRealTime = Enslaved.canModifyRealTimeStorage;
       this.canDischarge = Enslaved.canRelease(false);
       this.canAutoRelease = Enslaved.canRelease(true);
-      this.hasNoCharge = player.celestials.enslaved.stored === new Decimal(0);
+      this.hasNoCharge = player.celestials.enslaved.stored.eq(0);
       this.hasReachedCurrentCap = this.storedReal === this.storedRealCap;
     },
     toggleStoreBlackHole() {
