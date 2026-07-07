@@ -500,7 +500,7 @@ export const tabs = [
       {
         key: "break_eternity",
         name: "Break Eternity",
-        symbol: "TBD",
+        symbol: "🜃",
         component: "BreakEternityTab",
         id: 0,
         hidable: true,
@@ -519,7 +519,7 @@ export const tabs = [
       {
         key: "genox",
         name: "Genox",
-        symbol: "TBD",
+        symbol: "Ⰿ",
         component: "GenoxTab",
         id: 0,
         hidable: true,
