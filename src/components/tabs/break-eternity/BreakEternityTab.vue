@@ -30,13 +30,6 @@ export default {
           BreakEternityUpgrade.spacialEvolution,
           BreakEternityUpgrade.acclimatedAchievments,
           BreakEternityUpgrade.dilatedSpeed,
-        ],
-        [
-          BreakEternityUpgrade.doubleIPUncap,
-          BreakEternityUpgrade.tgThresholdUncap,
-          BreakEternityUpgrade.tesseractMultiplier,
-          BreakEternityUpgrade.glyphSacrificeUncap,
-          BreakEternityUpgrade.glyphSlotImprovement
         ]
       ];
     }

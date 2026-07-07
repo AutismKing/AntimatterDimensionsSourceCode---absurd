@@ -1385,4 +1385,18 @@ export const normalAchievements = [
       return `Unlock a new Time Study inside and outside of Pelle`
     }, */
   },
+  {
+    id: 191,
+    name: "Is never the end is never the end is never...",
+    description: "Reach Absurdity.",
+    checkRequirement: () => true,
+    checkEvent: GAME_EVENT.ABSURDITY_RESET_BEFORE,  
+  },
+  {
+    id: 192,
+    name: "Baby Steps",
+    description: "Infinity in Omega's Absurdity",
+    checkRequirement: () => true,
+    checkEvent: GAME_EVENT.ABSURDITY_RESET_BEFORE, // this currently has the same requirement as 191 cause idk how do it properly yet  
+  },
 ];
