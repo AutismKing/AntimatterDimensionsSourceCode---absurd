@@ -10,7 +10,7 @@ export default {
   },
   data() {
     return {
-      currentStored: 0,
+      currentStored: new Decimal(),
       nextHintCost: 0,
       canGetHint: false,
       shownEntries: [],
@@ -57,7 +57,7 @@ export default {
   },
   methods: {
     update() {
-      this.currentStored = player.celestials.enslaved.stored;
+      this.currentStored.copyFrom(player.celestials.enslaved.stored);
       this.nextHintCost = Enslaved.nextHintCost;
       this.canGetHint = this.currentStored.gte(new Decimal(this.nextHintCost));
       this.shownEntries = [];
@@ -133,7 +133,7 @@ export default {
         divide the cost by {{ formatInt(2) }}. The cost can't be reduced below {{ format(1e40) }} years.
         <br><br>
         The next hint will cost {{ hintCost }} of Stored Time. You currently have {{ formattedStored }}.
-        <span v-if="currentStored < nextHintCost">
+        <span v-if="currentStored.lt(nextHintCost)">
           You will reach this if you charge your Black Hole for {{ timeEstimate }}.
         </span>
         <br><br>
