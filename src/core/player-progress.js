@@ -17,7 +17,11 @@ export class PlayerProgress {
   }
 
   get isRealityUnlocked() {
-    return this._player.realities > 0;
+    return this._player.realities > 0 || this.isAbsurdityUnlocked;
+  }
+
+  get isAbsurdityUnlocked() {
+    return this._player.absurdities > 0;
   }
 
   get hasFullCompletion() {
@@ -54,6 +58,10 @@ export class PlayerProgress {
 
   static realityUnlocked() {
     return PlayerProgress.current.isRealityUnlocked;
+  }
+
+  static absurdityUnlocked() {
+    return PlayerProgress.current.isAbsurdityUnlocked;
   }
 
   static seenAlteredSpeed() {
