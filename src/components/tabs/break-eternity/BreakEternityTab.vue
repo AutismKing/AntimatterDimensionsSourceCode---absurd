@@ -55,7 +55,7 @@ export default {
 <template>
   <div class="l-break-eternity-tab">
     <div v-if="!isUnlocked">
-      Reach {{ format(galacticStarrReq, 2, 1) }} with at least one Absurdity to unlock Break Eternity
+      Reach {{ format(galacticStarReq, 2, 1) }} with at least one Absurdity to unlock Break Eternity
     </div>
     <BreakEternityButton class="l-break-eternity-tab__break-btn" />
     <div
