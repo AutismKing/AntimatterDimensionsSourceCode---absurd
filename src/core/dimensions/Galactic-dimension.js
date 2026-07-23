@@ -27,11 +27,11 @@ class GalacticDimensionState extends DimensionState {
             DC.E21
         ];
         this._unlockRequirement = UNLOCK_REQUIREMENTS[tier];
-        const COST_MULTS = [null, 1e3, 1e4, 1e6, 1e9, 1e12, 1e15, 1e18, 1e21];
+        const COST_MULTS = [null, 1e2, 1e8, 1e14, 1e20, 1e26, 1e32, 1e38, 1e44];
         this._costMultiplier = COST_MULTS[tier];
-        const POWER_EXPONENTS = [null, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1];
-        this._powerExponent = POWER_EXPONENTS[tier];
-        const BASE_COSTS = [null, 1, 10, 1e6, 1e9, 1e12, 1e15, 1e18, 1e21]
+        const POWER_MULTS = [null, 6, 6, 6, 6, 6, 6, 6, 6];
+        this._powerMultiplier = POWER_MULTS[tier];  
+        const BASE_COSTS = [null, 1, 1e6, 1e12, 1e18, 1e24, 1e30, 1e36, 1e42]
         this._basecost = new Decimal(BASE_COSTS[tier]);
     }
 
@@ -56,16 +56,16 @@ class GalacticDimensionState extends DimensionState {
         this.data.isUnlocked = value;
     }
 
-    get GPRequirement() {
+    get GSRequirement() {
         return this._unlockRequirement;
     }
 
-    get GalacticPointRequirementReached() {
-        return player.GalacticPoints.gte(this.GPRequirement);
+    get GalacticStarRequirementReached() {
+        return player.GalacticStars.gte(this.GSRequirement);
     }
 
     get canUnlock() {
-        return this.TetrationPointRequirementReached;
+        return this.GalacticStarRequirementReached;
     }
 
     get isAvailableForPurchase() {
@@ -73,7 +73,7 @@ class GalacticDimensionState extends DimensionState {
     }
 
     get isAffordable() {
-        return Currency.GalacticPoints.gte(this.cost);
+        return Currency.GalacticStars.gte(this.cost);
     }
 
     get rateofChange() {
@@ -183,7 +183,7 @@ class GalacticDimensionState extends DimensionState {
 
     if (costScaling.purchases <= 0) return false;
 
-    Currency.GalacticPoints.purchase(costScaling.totalCost);
+    Currency.GalacticStars.purchase(costScaling.totalCost);
     this.cost = this.cost.times(costScaling.totalCostMultiplier);
     this.amount = this.amount.plus(costScaling.purchases);
     this.baseAmount += costScaling.purchases;

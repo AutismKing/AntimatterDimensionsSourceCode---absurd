@@ -43,14 +43,14 @@ export default {
     costDisplay() {
       if (this.isUnlocked || this.shiftDown) {
         if (this.isCapped) return "Capped";
-        return this.showCostTitle ? `Cost: ${format(this.cost)} GP` : `${format(this.cost)} GP`;
+        return this.showCostTitle ? `Cost: ${format(this.cost)} GS` : `${format(this.cost)} GS`;
       }
 
       if (this.canUnlock) {
         return "Unlock";
       }
 
-      return `Reach ${format(GalacticDimension(this.tier).cpRequirement)} GP`;
+      return `Reach ${format(GalacticDimension(this.tier).cpRequirement)} GS`;
     },
     hasLongText() {
       return this.costDisplay.length > 20;
@@ -59,7 +59,7 @@ export default {
       return format(this.hardcap, 1, 1);
     },
     capTooltip() {
-      if (this.isCapped) return `Cap reached at ${format(this.capGP)} GP`;
+      if (this.isCapped) return `Cap reached at ${format(this.capGS)} GS`;
       return `Purchased ${quantifyHybridLarge("time", this.purchases)}`;
     },
     showRow() {
