@@ -903,12 +903,12 @@ export function simulateTime(seconds, real, fast) {
   // - Calling with fast === true will only simulate it with a max of 50 ticks
   // - Otherwise, tick count will be limited to the offline tick count (which may be set externally during save import)
   // Tick count is never *increased*, and only ever decreased if needed.
-  if (seconds < 0) return;
+  if (seconds <= 0) return;
   let ticks = Math.floor(seconds * 20);
   GameUI.notify.showBlackHoles = false;
 
   // Limit the tick count (this also applies if the black hole is unlocked)
-  const maxTicks = GameStorage.maxOfflineTicks(1000 * seconds, GameStorage.offlineTicks ?? player.options.offlineTicks);
+  let maxTicks = GameStorage.maxOfflineTicks(1000 * seconds, GameStorage.offlineTicks ?? player.options.offlineTicks);
   if (ticks > maxTicks && !fast) {
     ticks = maxTicks;
   } else if (ticks > 50 && !real && fast) {
@@ -969,7 +969,8 @@ export function simulateTime(seconds, real, fast) {
       const [realTickTime, blackHoleSpeedup] = BlackHoles.calculateOfflineTick(remainingRealSeconds,
         i, 0.0001);
       remainingRealSeconds -= realTickTime;
-      gameLoop(1000 * realTickTime, { blackHoleSpeedup });
+      if (realTickTime <= 0) throw Error("The game tries to simulate " + realTickTime + " seconds and this will cause game to randomly crash.");
+      else gameLoop(1000 * realTickTime, { blackHoleSpeedup });
     };
   }
 
@@ -1014,7 +1015,7 @@ export function simulateTime(seconds, real, fast) {
               text: "Speed up",
               condition: (current, max) => max - current > 500,
               click: () => {
-                const newRemaining = Decimal.clampMin(Decimal.floor(progress.remaining / 2), 500);
+                const newRemaining = Math.clampMin(Math.floor(progress.remaining / 2), 500);
                 // We subtract the number of ticks we skipped, which is progress.remaining - newRemaining.
                 // This, and the below similar code in "SKIP", are needed or the progress bar to be accurate
                 // (both with respect to the number of ticks it shows and with respect to how full it is).
