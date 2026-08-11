@@ -361,13 +361,13 @@ export const EternityChallenges = {
 
     get interval() {
       if (!Perk.autocompleteEC1.canBeApplied) return Infinity;
-      let minutes = Effects.min(
-        Number.MAX_VALUE,
+      let minutes = new Decimal(Effects.min(
+        startingmin,
         Perk.autocompleteEC1,
         Perk.autocompleteEC2,
         Perk.autocompleteEC3
-      );
-      minutes /= VUnlocks.fastAutoEC.effectOrDefault(1);
+      ));
+      minutes = minutes.div(VUnlocks.fastAutoEC.effectOrDefault(1));
       return TimeSpan.fromMinutes(minutes).totalMilliseconds.toNumber();
     }
   }

@@ -90,7 +90,7 @@ export default {
           : Pelle.realityShardGainPerSecond))
         .toTimeEstimate();
       this.projectedTimeEstimate = TimeSpan
-        .fromSeconds(this.secondsUntilCost(Pelle.nextRealityShardGain).toNumber())
+        .fromSeconds(this.secondsUntilCost(Pelle.nextRealityShardGain))
         .toTimeEstimate();
       this.hasRemnants = Pelle.cel.remnants > 0;
       this.galaxyCap = GalaxyGenerator.generationCap;
@@ -99,7 +99,7 @@ export default {
         (Decimal.gt(this.upgrade.cost, new Decimal(this.galaxyCap).sub(GalaxyGenerator.generatedGalaxies).add(player.galaxies).add(GalaxyGenerator.galaxies)));
     },
     secondsUntilCost(rate) {
-      const value = this.galaxyGenerator ? player.galaxies + GalaxyGenerator.galaxies : Currency.realityShards.value;
+      const value = this.galaxyGenerator ? player.galaxies.add(GalaxyGenerator.galaxies) : Currency.realityShards.value;
       return Decimal.sub(this.upgrade.cost, value).div(rate);
     },
   }
