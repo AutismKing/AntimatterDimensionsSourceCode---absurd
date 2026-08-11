@@ -1,4 +1,5 @@
 // Temporarily aggregate tab components here until GameUI is migrated to SFC
+import AbsurdityMilestonesTab from "./absurdity-milestones/AbsurdityMilestonesTab";
 import AlchemyTab from "./alchemy/AlchemyTab";
 import AntimatterDimensionsTab from "./antimatter-dimensions/AntimatterDimensionsTab";
 import AutobuyersTab from "./autobuyers/AutobuyersTab";

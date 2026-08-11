@@ -6,10 +6,10 @@ import { const } from "../../globals";
 
 export const break_eternity_upgrade = [
     {
-      name: "Galactic Acknowledgement"  
+      name: "Anti^2"  
       id: 1,
       cost: 1,
-      description: "Empower Antimatter Dimensions based on best ever Antimatter Amount and most ever Galactic stars.",
+      description: "Multiply and Empower your Antimatter Dimensions based on best ever antimatter this absurdity.",
       effect: () => Decimal.pow(Decimal.log10(player.records.totalAntimatter), 0.001).add(Decimal.pow(Decimal.log2(player.records.bestGS),0.001).div(10))
     },
     {

@@ -18,7 +18,7 @@ export default {
     grid() {
       return [
         [
-          BreakEternityUpgrade.galacticAcknowledgement,
+          BreakEternityUpgrade.anti^2,
           BreakEternityUpgrade.dementedDarkness,
           BreakEternityUpgrade.eternalAndInfinite,
           BreakEternityUpgrade.galacticInception,
