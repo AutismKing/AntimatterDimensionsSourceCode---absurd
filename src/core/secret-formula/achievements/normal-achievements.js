@@ -1379,11 +1379,10 @@ export const normalAchievements = [
     name: "The End",
     description: "Beat Pelle's Reality.",
     checkRequirement: () => GameEnd.endState > END_STATE_MARKERS.GAME_END && !GameEnd.removeAdditionalEnd,
-    checkEvent: GAME_EVENT.GAME_TICK_AFTER
-    /*
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     get reward() {
       return `Unlock a new Time Study inside and outside of Pelle`
-    }, */
+    }
   },
   {
     id: 191,
@@ -1398,5 +1397,47 @@ export const normalAchievements = [
     description: "Infinity in Omega's Absurdity",
     checkRequirement: () => true,
     checkEvent: GAME_EVENT.ABSURDITY_RESET_BEFORE, // this currently has the same requirement as 191 cause idk how do it properly yet  
+  },
+  {
+    id: 193,
+    name: "NYI",
+    description: "NYI",
+    checkRequirement: () => false,
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER
+  },
+  {
+    id: 194,
+    name: "NYI",
+    description: "NYI",
+    checkRequirement: () => false,
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER
+  },
+  {
+    id: 195,
+    name: "NYI",
+    description: "NYI",
+    checkRequirement: () => false,
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER
+  },
+  {
+    id: 196,
+    name: "NYI",
+    description: "NYI",
+    checkRequirement: () => false,
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER
+  },
+  {
+    id: 197,
+    name: "NYI",
+    description: "NYI",
+    checkRequirement: () => false,
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER
+  },
+  {
+    id: 198,
+    name: "NYI",
+    description: "NYI",
+    checkRequirement: () => false,
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
 ];
