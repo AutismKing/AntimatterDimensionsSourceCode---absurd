@@ -120,7 +120,7 @@ export default {
       return this.renderedRowIndices.includes(row);
     },
     isObscured(row) {
-      if (!PlayerProgress.absurdityUnlocked()) return row >= 19;
+      if (PlayerProgress.absurdityUnlocked()) return row >= 19;
       if (this.isDoomed) return row >= 18;
       return row >= 17;
     },
