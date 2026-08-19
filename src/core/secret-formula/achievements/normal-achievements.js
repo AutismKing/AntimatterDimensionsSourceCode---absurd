@@ -889,7 +889,7 @@ export const normalAchievements = [
     reward: "Infinity Point multiplier based on time spent this Infinity.",
     effect() {
       const thisInfinity = Time.thisInfinity.totalSeconds.times(10).add(1);
-      return DC.D2.pow(Decimal.log(thisInfinity).times(Decimal.min(Decimal.pow(thisInfinity, 0.11)), 500));
+      return DC.D2.pow(Decimal.ln(thisInfinity).times(Decimal.min(Decimal.pow(thisInfinity, 0.11)), 500));
     },
     cap: () => Effarig.eternityCap,
     formatEffect: value => `${formatX(value, 2, 2)}`
@@ -948,7 +948,7 @@ export const normalAchievements = [
     checkRequirement: () => player.galaxies.gte(569) && player.requirementChecks.eternity.noRG,
     checkEvent: GAME_EVENT.GALAXY_RESET_AFTER,
     reward: "Gain a multiplier to Tachyon Particle and Dilated Time gain based on Antimatter Galaxies.",
-    effect: () => 1.22 * Math.max(Math.pow(player.galaxies, 0.04), 1),
+    effect: () => Decimal.max(Decimal.pow(player.galaxies, 0.04), 1).times(1.22),
     formatEffect: value => `${formatX(value, 2, 2)}`
   },
   {
