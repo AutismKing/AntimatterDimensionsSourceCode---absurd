@@ -124,6 +124,12 @@ export class TimeStudyTreeLayout {
       normalRow(          TimeStudy.timeDimension(7), TimeStudy.timeDimension(8)      ),
       normalRow(                          TimeStudy.reality                           )
     );
+
+    if (Achievement(188).isUnlocked) {
+      this.rows.push(
+        normalRow(                        TimeStudy.absurdity                         )
+      );
+    }
     /* eslint-enable no-multi-spaces, space-in-parens, func-call-spacing */
 
     /**
