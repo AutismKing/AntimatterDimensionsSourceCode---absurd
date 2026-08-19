@@ -51,12 +51,12 @@ export const dilationTimeStudies = [
       player.records.thisReality.maxEP.exponent >= 4000 &&
       (Perk.firstPerk.isBought || Achievements.preReality.every(a => a.isUnlocked)) &&
       !Pelle.isDoomed
-  }
-  /*{
+  },
+  {
     id: 7,
     description: "Unlock Absurdity",
-    cost: 1e1500,
-    cost: 1e15,
-    requirement: () => achievment188.isBought 
-  } */
+    cost: 1,
+    requirement: () => player.reality.realityMachines.gte(new Decimal("1e1500")) &&
+      player.reality.imaginaryMachines.gte(1e15) && Achievement(188).isUnlocked
+  }
 ];
