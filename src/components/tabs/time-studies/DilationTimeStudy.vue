@@ -39,6 +39,9 @@ export default {
         const achRows = Perk.firstPerk.isBought ? "" : ` and ${formatInt(13)} rows of Achievements`;
         return `Requirement: ${format("1e4000")} Eternity Points${achRows}`;
       }
+      if (this.id === 7) {
+        return `Requirement: ${format("1e1500")} Reality Machines and ${format(1e15)} Imaginary Machines`;
+      }
       return "";
     },
     theoremTimeEstimate() {
@@ -70,6 +73,8 @@ export default {
           return () => Tab.dimensions.time.show();
         case 6:
           return () => Tab.reality.glyphs.show();
+        case 7:
+          return true;
         default:
           throw new Error("Unrecognized Dilation study was clicked");
       }
