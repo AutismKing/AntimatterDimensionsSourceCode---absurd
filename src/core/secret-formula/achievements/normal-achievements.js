@@ -889,7 +889,7 @@ export const normalAchievements = [
     reward: "Infinity Point multiplier based on time spent this Infinity.",
     effect() {
       const thisInfinity = Time.thisInfinity.totalSeconds.times(10).add(1);
-      return DC.D2.pow(Decimal.log(thisInfinity).times(Decimal.min(Decimap.pow(thisInfinity, 0.11)), 500));
+      return DC.D2.pow(Decimal.ln(thisInfinity).times(Decimal.min(Decimal.pow(thisInfinity, 0.11)), 500));
     },
     cap: () => Effarig.eternityCap,
     formatEffect: value => `${formatX(value, 2, 2)}`
@@ -948,7 +948,7 @@ export const normalAchievements = [
     checkRequirement: () => player.galaxies.gte(569) && player.requirementChecks.eternity.noRG,
     checkEvent: GAME_EVENT.GALAXY_RESET_AFTER,
     reward: "Gain a multiplier to Tachyon Particle and Dilated Time gain based on Antimatter Galaxies.",
-    effect: () => 1.22 * Math.max(Math.pow(player.galaxies, 0.04), 1),
+    effect: () => Decimal.max(Decimal.pow(player.galaxies, 0.04), 1).times(1.22),
     formatEffect: value => `${formatX(value, 2, 2)}`
   },
   {
@@ -1379,11 +1379,10 @@ export const normalAchievements = [
     name: "The End",
     description: "Beat Pelle's Reality.",
     checkRequirement: () => GameEnd.endState > END_STATE_MARKERS.GAME_END && !GameEnd.removeAdditionalEnd,
-    checkEvent: GAME_EVENT.GAME_TICK_AFTER
-    /*
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     get reward() {
       return `Unlock a new Time Study inside and outside of Pelle`
-    }, */
+    }
   },
   {
     id: 191,
@@ -1398,5 +1397,47 @@ export const normalAchievements = [
     description: "Infinity in Omega's Absurdity",
     checkRequirement: () => true,
     checkEvent: GAME_EVENT.ABSURDITY_RESET_BEFORE, // this currently has the same requirement as 191 cause idk how do it properly yet  
+  },
+  {
+    id: 193,
+    name: "NYI",
+    description: "NYI",
+    checkRequirement: () => false,
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER
+  },
+  {
+    id: 194,
+    name: "NYI",
+    description: "NYI",
+    checkRequirement: () => false,
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER
+  },
+  {
+    id: 195,
+    name: "NYI",
+    description: "NYI",
+    checkRequirement: () => false,
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER
+  },
+  {
+    id: 196,
+    name: "NYI",
+    description: "NYI",
+    checkRequirement: () => false,
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER
+  },
+  {
+    id: 197,
+    name: "NYI",
+    description: "NYI",
+    checkRequirement: () => false,
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER
+  },
+  {
+    id: 198,
+    name: "NYI",
+    description: "NYI",
+    checkRequirement: () => false,
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
 ];
