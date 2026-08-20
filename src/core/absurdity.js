@@ -124,13 +124,13 @@ export const Absurdity = {
     EventHub.dispatch(GAME_EVENT.ENDGAME_RESET_BEFORE);
 
     // Modify beaten-game quantities before doing a carryover reset
-    if (player.RM.gte(DC.E9E15)) && (player.iM.gte(DC.E15)); {
-      giveEndgameRewards();
-      updateEndgameRecords();
+    if (player.RM.gte(DC.E9E15) && player.iM.gte(DC.E15)) {
+      giveAbsurdityRewards();
+      updateAbsurdityRecords();
       GlyphAppearanceHandler.unlockSet();
     }
     this.resetStuff();
-    EventHub.dispatch(GAME_EVENT.ENDGAME_RESET_AFTER);
+    EventHub.dispatch(GAME_EVENT.ABSURDITY_RESET_AFTER);
 
     // The ending animation ends at 12.5, although the value continues to increase after that. We set it to a bit above
     // 12.5 when we start the rollback animation to hide some of the unavoidable lag from all the reset functions
@@ -391,10 +391,6 @@ export const Absurdity = {
     if (ImaginaryUpgrade(16).isBought) DarkMatterDimension(2).amount = DC.D1;
     if (ImaginaryUpgrade(17).isBought) DarkMatterDimension(3).amount = DC.D1;
     if (ImaginaryUpgrade(18).isBought) DarkMatterDimension(4).amount = DC.D1;
-    if (ImaginaryUpgrade(26).isBought) DarkMatterDimension(5).amount = DC.D1;
-    if (ImaginaryUpgrade(27).isBought) DarkMatterDimension(6).amount = DC.D1;
-    if (ImaginaryUpgrade(28).isBought) DarkMatterDimension(7).amount = DC.D1;
-    if (ImaginaryUpgrade(29).isBought) DarkMatterDimension(8).amount = DC.D1;
     player.celestials.laitela.entropy = DC.D0;
     player.celestials.laitela.thisCompletion = 3600;
     player.celestials.laitela.fastestCompletion = 3600;

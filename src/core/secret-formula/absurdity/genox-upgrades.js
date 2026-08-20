@@ -2,7 +2,7 @@
      {
       id: 1,
       cost: 1,
-      description: "Multiply Antimatter Dimensions Buy 10 Purchase Mult by Time Theorems.",
+      description: "Give TS 201 a new effect.",
       effect: () => none?
     },
 

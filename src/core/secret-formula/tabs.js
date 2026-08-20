@@ -519,7 +519,7 @@ export const tabs = [
       {
         key: "genox",
         name: "Genox",
-        symbol: "Ⰿ",
+        symbol: "boo",
         component: "GenoxTab",
         id: 0,
         hidable: true,
