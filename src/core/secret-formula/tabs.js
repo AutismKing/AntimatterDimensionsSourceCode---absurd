@@ -513,7 +513,7 @@ export const tabs = [
     hideAt: 2.4,
     UIClass: "o-tab-btn--colossal",
     // condition: () => PlayerProgress.absurdityUnlocked() || TimeStudy.absurdity.isBought,
-    //committ work?
+    //co
     id: 11,
     hidable: true,
     subtabs: [
