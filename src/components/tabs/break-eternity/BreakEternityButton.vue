@@ -20,7 +20,7 @@ export default {
       };
     },
     text() {
-      return this.isBroken ? "ETERNITY IS BROKEN" : "ETERNITY IS FRACTURED" : "FRACTURE ETERNITY";
+      return this.isBroken ? "ETERNITY IS FRACTURED" : "FRACTURE ETERNITY";
     }
   },
   methods: {
