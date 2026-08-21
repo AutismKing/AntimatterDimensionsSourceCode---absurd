@@ -20,14 +20,14 @@ export default {
       };
     },
     text() {
-      return this.isBroken ? "ETERNITY IS FRACTURED" : "FRACTURE ETERNITY";
+      return this.isBroken ? "ETERNITY IS BROKEN" : "ETERNITY IS FRACTURED" : "FRACTURE ETERNITY";
     }
   },
   methods: {
     update() {
       this.isBroken = player.break2;
       this.isUnlocked = PlayerProgress.absurdityUnlocked() && player.antimatter.gte(this.galacticStarReq) || this.isBroken;
-      this.galacticStarReq = new Decimal("1");
+      this.galacticStarReq = new Decimal("10");
       this.galacticStarReqIncrement = new Decimal("1e15");
     },
     clicked() {

@@ -91,7 +91,7 @@ export const Absurdity = {
     // Without the delay, this causes the saving (and its notification) to occur during the credits rollback
     setTimeout(() => GameStorage.save(), 10000);
   },
-  newEndgame() {
+  newAbsurdity() {
     GameEnd.creditsClosed = false;
     GameEnd.creditsEverClosed = false;
     player.isGameEnd = false;
@@ -142,18 +142,6 @@ export const Absurdity = {
   // Reset the game, but carry over some post-completion stats. We also call this when starting a speedrun, so make sure
   // any stats which are updated due to completion happen in startNewGame() instead of in here
   resetStuff() {
-    let remains = 0;
-    if (ImaginaryUpgrade(26).isAvailableForPurchase) remains += 67108864;
-    if (ImaginaryUpgrade(27).isAvailableForPurchase) remains += 134217728;
-    if (ImaginaryUpgrade(28).isAvailableForPurchase) remains += 268435456;
-    if (ImaginaryUpgrade(29).isAvailableForPurchase) remains += 536870912;
-    if (ImaginaryUpgrade(30).isAvailableForPurchase) remains += 1073741824;
-    let darkremains = 0;
-    if (ImaginaryUpgrade(26).isBought) darkremains += 67108864;
-    if (ImaginaryUpgrade(27).isBought) darkremains += 134217728;
-    if (ImaginaryUpgrade(28).isBought) darkremains += 268435456;
-    if (ImaginaryUpgrade(29).isBought) darkremains += 536870912;
-    if (ImaginaryUpgrade(30).isBought) darkremains += 1073741824;
     let maxPerkCharges = 0;
     maxPerkCharges = player.celestials.teresa.perkShop[6];
     let charge1 = 0;
