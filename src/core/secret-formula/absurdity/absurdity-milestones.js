@@ -15,7 +15,7 @@ export const absurdityMilestones = {
   },
   aamount4: {
     absurdities: 4,
-    reward: "Reduce the time for achievments to come back after absurdity by 15 minutes.",
+    reward: "Reduce the time for achievements to come back after absurdity by 15 minutes.",
     effect: () => 15
   },
   aamount5: {

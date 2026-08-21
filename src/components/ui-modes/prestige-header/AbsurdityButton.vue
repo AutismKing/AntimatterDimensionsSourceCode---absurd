@@ -31,21 +31,23 @@ export default {
       classObject() {
       return {
         "c-absurdity-button--unlocked": this.canAbsurdity,
-        "c-absurdity-button--locked": !this.canAbsurdity,
-        "c-absurdity-button--special": this.showSpecialEffect,
       };
     }
       function RMforGS(gs) {
         const adjusted = Decimal.divide(gs, StarHandler.galacticStarMultiplier);
-        let result = Decimal.pow10(4000 * (adjusted.log10() / 3 + 1));
+        let result = Decimal.pow10(1500);
+        }
+        return result;
+      function iMforGS(gs) {
+        const adjusted = Decimal.divide(gs, StarHandler.galacticStarMultiplier);
+        let result = Decimal.pow10(15);
         }
         return result;
       }
         const multiplier = simulatedAbsurdityCount(false) + 1;
       this.projectedGS = StarHandler.gainedGalacticStars.times(multiplier)
-      this.StarGained = this.projectedRM.clampMax(MachineHandler.distanceToRMCap);
-      this.realityTime = Time.thisRealityRealTime.totalMinutes;
-      this.glyphLevel = gainedGlyphLevel().actualLevel;
+      this.StarGained = this.projectedGS.clampMax;
+      this.absurdityTime = Time.thisAbsurdityRealTime.totalMinutes;
       this.nextStarRM = RMforGS(this.StarsGained.plus(1));
       this.nextStariM = iMforGS(this.StarsGained.plus(1));
       handleClick() {

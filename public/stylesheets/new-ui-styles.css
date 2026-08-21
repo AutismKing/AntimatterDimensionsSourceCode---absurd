@@ -544,6 +544,18 @@ body.t-s12 {
   background: #525252;
 }
 
+.o-eternity-upgrade-btn--unavailable {
+  color: white;
+  background: black;
+  border: 0.1rem solid var(--color-absurdity);
+  cursor: default;
+}
+
+.o-eternity-upgrade-btn--unavailable:hover {
+  color: var(--color-text-inverted);
+  background: black
+}
+
 .o-primary-btn--option,
 .o-primary-btn--option-wide,
 .c-select-theme__item,

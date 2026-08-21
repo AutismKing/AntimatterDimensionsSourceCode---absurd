@@ -1073,6 +1073,10 @@ export const migrations = {
     player.records.bestEternity.time = player.bestEternity;
     player.records.thisReality.time = player.thisReality;
     player.records.thisReality.realTime = player.thisReality;
+    player.records.bestReality.time = player.bestReality;
+    player.records.thisAbsurdity.time = player.thisAbsurdity;
+    player.records.thisAbsurdity.realTime = player.thisAbsurdity;
+    player.records.bestAbsurdity.time = player.bestAbsurdity;
   },
 
   deleteOldRecords(player) {
@@ -1087,6 +1091,9 @@ export const migrations = {
     delete player.thisEternity;
     delete player.bestEternity;
     delete player.thisReality;
+    delete player.bestReality;
+    delete player.thisAbsurdity;
+    delete player.bestAbsurdity
   },
 
   migrateAutobuyers(player) {
