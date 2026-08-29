@@ -88,6 +88,7 @@ const TabComponents = {
   AlchemyTab,
   CelestialNavigationTab,
   BreakEternityTab,
+  AbsurdityMilestonesTab,
   ShopTab,
   MultiplierBreakdownTab
 };
