@@ -70,17 +70,7 @@ export const Absurdity = {
       const prevRunIndices = Object.keys(speedrun.previousRuns).map(k => Number(k));
       if (prevRunIndices.length > 100) player.speedrun.previousRuns[prevRunIndices.min()] = undefined;
     }
-    EventHub.dispatch(GAME_EVENT.ENDGAME_RESET_BEFORE);
-
-    // Modify beaten-game quantities before doing a carryover reset
-    if (player.endgame.respec) {
-      respecEndgameMasteries();
-      player.endgame.respec = false;
-    }
-    if (player.celestials.teresa.disCharge) {
-      disChargeAllPerkUpgrades();
-      player.celestials.teresa.disCharge = false;
-    }
+    EventHub.dispatch(GAME_EVENT.ABSURDITY_RESET_BEFORE);
     this.resetStuff();
     EventHub.dispatch(GAME_EVENT.ABSURDITY_RESET_AFTER);
 
@@ -142,17 +132,6 @@ export const Absurdity = {
   // Reset the game, but carry over some post-completion stats. We also call this when starting a speedrun, so make sure
   // any stats which are updated due to completion happen in startNewGame() instead of in here
   resetStuff() {
-    let maxPerkCharges = 0;
-    maxPerkCharges = player.celestials.teresa.perkShop[6];
-    let charge1 = 0;
-    charge1 = player.celestials.teresa.perkShop[0];
-    let charge2 = 0;
-    charge2 = player.celestials.teresa.perkShop[1];
-    let charge3 = 0;
-    charge3 = player.celestials.teresa.perkShop[2];
-    let charge4 = 0;
-    charge4 = player.celestials.teresa.perkShop[3];
-    let rowProtect = 0;
     rowProtect = player.reality.glyphs.protectedRows;
     player.isGameEnd = false;
     Tab.dimensions.antimatter.show();
@@ -591,3 +570,7 @@ export const Absurdity = {
     }
   }
 };
+
+function lockAchievementsOnAbsurdity() {
+  player.absurdity.achTimer = 0;
+}

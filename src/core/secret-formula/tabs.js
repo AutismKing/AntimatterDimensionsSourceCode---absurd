@@ -498,11 +498,29 @@ export const tabs = [
     hidable: true,
     subtabs: [
       {
-        key: "break_eternity",
+        key: "break eternity",
         name: "Break Eternity",
         symbol: "🜃",
         component: "BreakEternityTab",
         id: 0,
+        hidable: true,
+      },
+      {
+        key: "moons",
+        name: "Moons",
+        symbol: "⏾",
+        component: "MoonTab",
+        // condition: () => PlayerProgress.absurdityUnlocked() || TimeStudy.absurdity.isBought,
+        id: 1,
+        hidable: true,
+      },
+      {
+        key: "absurdity milestones",
+        name: "Absurdity Milestones",
+        symbol: "🟌",
+        component: "AbsurdityMilestonesTab",
+        // condition: () => PlayerProgress.absurdityUnlocked() || TimeStudy.absurdity.isBought,
+        id: 2,
         hidable: true,
       }
     ]
@@ -519,7 +537,7 @@ export const tabs = [
       {
         key: "genox",
         name: "Genox",
-        symbol: "boo",
+        symbol: "Ⰿ",
         component: "GenoxTab",
         id: 0,
         hidable: true,
