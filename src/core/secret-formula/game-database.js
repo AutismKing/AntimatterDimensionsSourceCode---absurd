@@ -1,5 +1,6 @@
 import { multiplierTabTree, multiplierTabValues } from "./multiplier-tab";
 
+import { absurdity } from "./absurdity";
 import { achievements } from "./achievements";
 import { awayProgressTypes } from "./away-progress-types";
 import { catchupResources } from "./catchup-resources";
@@ -22,6 +23,7 @@ import { tabNotifications } from "./tab-notifications";
 import { tabs } from "./tabs";
 
 export const GameDatabase = {
+  absurdity,
   achievements,
   awayProgressTypes,
   catchupResources,
