@@ -539,7 +539,53 @@ export const tabs = [
         name: "Genox",
         symbol: "Ⰿ",
         component: "GenoxTab",
+        // condition
         id: 0,
+        hidable: true,
+      },
+      {
+        key: "omega",
+        name: "Omega",
+        symbol: "Ω",
+        component: "OmegaTab",
+        // condition
+        id: 1,
+        hidable: true,
+      },
+      {
+        key: "apophis",
+        name: "Apophis",
+        symbol: "§",
+        component: "ApophisTab",
+        // condition
+        id: 2,
+        hidable: true,
+      },
+      {
+        key: "hextick",
+        name: "Hextick",
+        symbol: "ϣ",
+        component: "HextickTab",
+        // condition
+        id: 3,
+        hidable: true,
+      },
+      {
+        key: "triton",
+        name: "Triton",
+        symbol: "⮃",
+        component: "TritonTab",
+        // condition
+        id: 4,
+        hidable: true,
+      },
+      {
+        key: "bounce",
+        name: "Bounce",
+        symbol: "⋉",
+        component: "BounceTab",
+        // condition
+        id: 5,
         hidable: true,
       }
     ]
