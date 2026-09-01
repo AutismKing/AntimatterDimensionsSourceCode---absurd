@@ -619,6 +619,7 @@ export function gameLoop(passedDiff, options = {}) {
   }
 
   laitelaRealityTick(realDiff);
+  Achievements.autoAchieveAbsurdUpdate(diff);
   Achievements.autoAchieveUpdate(diff);
   V.checkForUnlocks();
   AutomatorBackend.update(realDiff);

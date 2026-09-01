@@ -32,6 +32,10 @@ class AchievementState extends GameMechanicState {
     return this.row < 18;
   }
 
+  get isPreAbsurdity() {
+    return this.row < 19;
+  }
+
   get isUnlocked() {
     return (player.achievementBits[this.row - 1] & this._bitmask) !== 0;
   }
@@ -110,6 +114,13 @@ export const Achievements = {
     return Achievements.all.filter(ach => ach.isPrePelle);
   },
 
+  /**
+   * @type {AchievementState[]}
+   */
+  get preAbsurdity() {
+    return Achievements.all.filter(ach => ach.isPreAbsurdity);
+  },
+
   get allRows() {
     const count = Achievements.all.map(a => a.row).max();
     return Achievements.rows(1, count);
@@ -122,6 +133,11 @@ export const Achievements = {
 
   get prePelleRows() {
     const count = Achievements.prePelle.map(a => a.row).max();
+    return Achievements.rows(1, count);
+  },
+
+  get preAbsurdityRows() {
+    const count = Achievements.preAbsurdity.map(a => a.row).max();
     return Achievements.rows(1, count);
   },
 
@@ -162,6 +178,32 @@ export const Achievements = {
     if (GameCache.achievementPeriod.value === 0) return 0;
     if (Achievements.preReality.countWhere(a => !a.isUnlocked) === 0) return 0;
     return this.period - player.reality.achTimer;
+  },
+
+  autoAchieveAbsurdUpdate(diff) {
+    if (!PlayerProgress.absurdityUnlocked()) return;
+    if (!player.absurdity.autoAchieve) {
+      player.absurdity.achTimer = Decimal.clampMax(player.absurdity.achTimer.plus(diff), this.period);
+      return;
+    }
+    if (Achievements.preAbsurdity.every(a => a.isUnlocked)) return;
+
+    player.absurdity.achTimer += diff;
+    if (player.absurdity.achTimer < this.period) return;
+
+    for (const achievement of Achievements.preAbsurdity.filter(a => !a.isUnlocked)) {
+      achievement.unlock(true);
+      player.absurdity.achTimer -= this.period;
+      if (player.absurdity.achTimer < this.period) break;
+    }
+    player.absurdity.gainedAutoAchievements = true;
+  },
+
+  get timeToNextAutoAchieve() {
+    if (!PlayerProgress.absurdityUnlocked()) return 0;
+    if (GameCache.achievementPeriod.value === 0) return 0;
+    if (Achievements.preAbsurdity.countWhere(a => !a.isUnlocked) === 0) return 0;
+    return this.period - player.absurdity.achTimer;
   },
 
   _power: new Lazy(() => {
